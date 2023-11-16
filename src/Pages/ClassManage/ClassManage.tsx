@@ -162,7 +162,6 @@ function ClassManage() {
           },
         }
       );
-      console.log('res', res);
       getMClasss();
       onClose();
     } catch (error) {

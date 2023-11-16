@@ -2,36 +2,49 @@ import {
   Button,
   Checkbox,
   Flex,
-  Text,
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
   Stack,
-  Image,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { updateToken } from '../../redux/feature/tokenSlice';
 import { Auth } from '../../shared/api/__generated__/Auth';
+import { RootState } from '../../redux/store';
 
 export default function SplitScreen() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const token = useSelector((store: RootState) => store.token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleTokenExist = () => {
+    if (token.token) {
+      dispatch(updateToken(token.token));
+      navigate('/education');
+    }
+  };
+
   const handleLogin = async () => {
     const res = await new Auth({ baseURL: axios.defaults.baseURL }).login({
       userName: username,
       password: password,
     });
 
-    dispatch(updateToken(res.data.data?.token));
-
-    navigate('/education');
+    const token = res.data.data?.token;
+    if (token) {
+      dispatch(updateToken(token));
+      navigate('/education');
+    }
   };
+
+  useEffect(() => handleTokenExist(), [token]);
 
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>

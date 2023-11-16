@@ -14,8 +14,6 @@ import { RootState } from '../../redux/store';
 
 const EventManage = () => {
   const token = useSelector((store: RootState) => store.token.token);
-  console.log('token', token);
-  console.log('alo');
   const data = [
     {
       Id: 1,

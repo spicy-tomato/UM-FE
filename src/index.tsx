@@ -1,14 +1,12 @@
 import { registerLicense } from '@syncfusion/ej2-base';
-import React from 'react';
+import axios from 'axios';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import './index.css';
 import { store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
-import axios from 'axios';
 
-// axios.defaults.baseURL = 'https://um-be.laptrinhkhongvui.com';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 registerLicense(

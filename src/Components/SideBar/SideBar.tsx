@@ -123,10 +123,6 @@ function SideBar() {
 }
 const SidebarContent = ({ onClose, ...rest }: any) => {
   const role = useSelector((store: RootState) => store.user.role);
-  console.log('role', role);
-
-  // const check = role === 'Teacher'
-  // console.log('check',check);
 
   const LinkItems = [
     { name: 'Education', icon: AiFillHome, navigateTo: '/education' },
