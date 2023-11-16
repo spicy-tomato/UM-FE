@@ -9,110 +9,89 @@
  * ---------------------------------------------------------------
  */
 
-export type AcademicYearListData = UMApplicationCommonModelsResultSystemString;
+export type AddStudentsData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type AcademicYearUpdateData = UMApplicationCommonModelsResultSystemBoolean;
+export type ApproveData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type AccountDetailData = UMApplicationCommonModelsResultUMApplicationAccountQueriesGetByIdGetByIdDto;
+export type AssignToManagementClassesData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type AccountPartialUpdateData = UMApplicationCommonModelsResultUMApplicationAccountQueriesGetByIdGetByIdDto;
+export type AssignToStudentsData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type AuthListData = UMApplicationCommonModelsResultUMApplicationAuthQueriesMySummaryInfoMySummaryInfoDto;
+export type AssignToTeacherData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type AuthPartialUpdateData = UMApplicationCommonModelsResultSystemBoolean;
+export type CreateChangeRequestData =
+  UMApplicationCommonModelsResultUMApplicationChangeSessionRequestQueriesGetByIdGetByIdDto;
 
-export type ChangeApproveCreateData = UMApplicationCommonModelsResultSystemBoolean;
+export type DeleteCourseClassData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type ChangeCreateData = UMApplicationCommonModelsResultUMApplicationChangeSessionRequestQueriesGetByIdGetByIdDto;
+export type DeleteCourseData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type ChangeDenyCreateData = UMApplicationCommonModelsResultSystemBoolean;
+export type DeleteManagementClassData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type ChangeDetailData = UMApplicationCommonModelsResultUMApplicationChangeSessionRequestQueriesGetByIdGetByIdDto;
+export type DeleteProgramData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type ChangeListData =
+export type DenyData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type GetAcademicYearData = UMApplicationCommonModelsResultSystemString;
+
+export type GetAccountByIdData = UMApplicationCommonModelsResultUMApplicationAccountQueriesGetByIdGetByIdDto;
+
+export type GetAccountData =
+  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto;
+
+export type GetAllChangeRequestData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationChangeSessionRequestQueriesGetAllGetAllDto;
 
-export interface ChangeListParams {
+export interface GetAllChangeRequestParams {
   /** @format int32 */
   Status?: number;
 }
 
-export type CourseClassCreateData = UMApplicationCommonModelsResultSystemBoolean;
+export type GetChangeRequestByIdData =
+  UMApplicationCommonModelsResultUMApplicationChangeSessionRequestQueriesGetByIdGetByIdDto;
 
-export type CourseClassDeleteData = UMApplicationCommonModelsResultSystemBoolean;
+export type GetCourseByIdData = UMApplicationCommonModelsResultUMApplicationCourseQueriesGetByIdGetByIdDto;
 
-export type CourseClassDetailData = UMApplicationCommonModelsResultUMApplicationCourseClassQueriesGetByIdGetByIdDto;
-
-export type CourseClassListData =
+export type GetCourseClassData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMDomainDtosCourseClassICourseClass;
 
-export interface CourseClassListParams {
+export interface GetCourseClassParams {
   AcademicYear?: string;
   /** @format int32 */
   Status?: number;
 }
 
-export type CourseClassUpdateData = UMApplicationCommonModelsResultSystemBoolean;
-
-export type CourseCreateData = UMApplicationCommonModelsResultUMApplicationCourseQueriesGetByIdGetByIdDto;
-
-export type CourseDeleteData = UMApplicationCommonModelsResultSystemBoolean;
-
-export type CourseDetailData = UMApplicationCommonModelsResultUMApplicationCourseQueriesGetByIdGetByIdDto;
-
-export type CourseListData =
+export type GetCourseData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseQueriesGetAllGetAllDto;
 
-export type CourseUpdateData = UMApplicationCommonModelsResultSystemBoolean;
+export type GetCoursecClassByIdData = UMApplicationCommonModelsResultUMApplicationCourseClassQueriesGetByIdGetByIdDto;
 
-export type ImportCreateData = UMApplicationCommonModelsResultSystemBoolean;
-
-export type LoginCreateData = UMApplicationCommonModelsResultUMDomainDtosGeneratedToken;
-
-export type ManagementClassCreateData = UMApplicationCommonModelsResultSystemBoolean;
-
-export type ManagementClassCreateResult = UMApplicationCommonModelsResultSystemBoolean;
-
-export type ManagementClassDeleteData = UMApplicationCommonModelsResultSystemBoolean;
-
-export type ManagementClassDetailData =
+export type GetManagementClassByIdData =
   UMApplicationCommonModelsResultUMApplicationManagementClassQueriesGetByIdGetByIdDto;
 
-export type ManagementClassListData =
+export type GetManagementClassData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationManagementClassQueriesGetAllGetAllDto;
 
-export interface ManagementClassListParams {
+export interface GetManagementClassParams {
   AcademicYear?: string;
 }
 
-export type ManagementClassUpdateData = UMApplicationCommonModelsResultSystemBoolean;
+export type GetMySummaryInfoData = UMApplicationCommonModelsResultUMApplicationAuthQueriesMySummaryInfoMySummaryInfoDto;
 
-export type ProgramCreateData = UMApplicationCommonModelsResultUMApplicationProgramQueriesGetByIdGetByIdDto;
+export type GetProgramByIdData = UMApplicationCommonModelsResultUMApplicationProgramQueriesGetByIdGetByIdDto;
 
-export type ProgramDeleteData = UMApplicationCommonModelsResultSystemBoolean;
-
-export type ProgramDetailData = UMApplicationCommonModelsResultUMApplicationProgramQueriesGetByIdGetByIdDto;
-
-export type ProgramListData =
+export type GetProgramData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationProgramQueriesGetAllGetAllDto;
 
-export type ProgramUpdateData = UMApplicationCommonModelsResultSystemBoolean;
+export type GetRecommendationsData = UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableSystemString;
 
-export type RecommendationsListData = UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableSystemString;
-
-export type ScoreDetailData =
+export type GetScoresData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseClassQueriesGetScoresGetScoresDto;
 
-export type ScoreDetailResult =
-  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto;
-
-export type ScoreListData =
-  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto;
-
-export type SessionListData =
+export type GetSessionData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationSessionQueriesGetAllGetAllDto;
 
-export interface SessionListParams {
+export interface GetSessionParams {
   /** @format date-time */
   Date?: string;
   /** @format date-time */
@@ -123,11 +102,34 @@ export interface SessionListParams {
   Slot?: number;
 }
 
-export type StudentCreateData = UMApplicationCommonModelsResultSystemBoolean;
+export type GetStudentData =
+  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto;
 
-export type StudentCreateResult = UMApplicationCommonModelsResultSystemBoolean;
+export type ImportData = UMApplicationCommonModelsResultSystemBoolean;
 
-export type StudentUpdateData = UMApplicationCommonModelsResultSystemBoolean;
+export type LoginData = UMApplicationCommonModelsResultUMDomainDtosGeneratedToken;
+
+export type PatchAccountData = UMApplicationCommonModelsResultUMApplicationAccountQueriesGetByIdGetByIdDto;
+
+export type PostCourseClassData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type PostCourseData = UMApplicationCommonModelsResultUMApplicationCourseQueriesGetByIdGetByIdDto;
+
+export type PostManagementClassData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type PostProgramData = UMApplicationCommonModelsResultUMApplicationProgramQueriesGetByIdGetByIdDto;
+
+export type PostTeacherData = UMApplicationCommonModelsResultUMApplicationAccountQueriesGetByIdGetByIdDto;
+
+export type PutAcademicYearData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type PutCourseClassData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type PutCourseData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type PutManagementClassData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type PutProgramData = UMApplicationCommonModelsResultSystemBoolean;
 
 /** @format int32 */
 export enum SystemDayOfWeek {
@@ -204,10 +206,6 @@ export enum SystemNetHttpStatusCode {
   Value510 = 510,
   Value511 = 511,
 }
-
-export type TeacherCreateData = UMApplicationCommonModelsResultSystemBoolean;
-
-export type TeacherCreateResult = UMApplicationCommonModelsResultUMApplicationAccountQueriesGetByIdGetByIdDto;
 
 export interface UMApplicationAcademicYearCommandsUpdateCurrentUpdateCurrentCommand {
   academicYear?: string | null;
@@ -754,3 +752,7 @@ export enum UMDomainEnumsCourseClassEChangeSessionRequestStatus {
   Value2 = 2,
   Value4 = 4,
 }
+
+export type UpdateInformationData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type UpdateScoreData = UMApplicationCommonModelsResultSystemBoolean;

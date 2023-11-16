@@ -9,7 +9,6 @@ generateApi({
   httpClientType: 'axios',
   cleanOutput: true,
   modular: true,
-  singleHttpClient: true,
   extractRequestBody: true,
   extractRequestParams: true,
   extractResponseBody: true,
@@ -18,11 +17,18 @@ generateApi({
   sortTypes: true,
   hooks: {
     onFormatRouteName: (routeInfo, templateRouteName) => {
-      // if (!routeInfo.operationId) {
-      //   return generateOperationId(routeInfo);
-      // }
+      if (!routeInfo.operationId) {
+        return generateOperationId(routeInfo);
+      }
 
       return templateRouteName;
     },
+    onPrepareConfig: (currentConfiguration) => ({
+      ...currentConfiguration,
+      apiConfig: {
+        ...currentConfiguration.apiConfig,
+        baseUrl: 'https://um-be.laptrinhkhongvui.com',
+      },
+    }),
   },
 });
