@@ -54,6 +54,7 @@ paths:
     get:
       tags:
         - AcademicYear
+      operationId: GetRecommendations
       responses:
         '200':
           description: Success
@@ -88,6 +89,7 @@ paths:
     get:
       tags:
         - Account
+      operationId: GetAccountById
       parameters:
         - name: userId
           in: path
@@ -133,6 +135,7 @@ paths:
     get:
       tags:
         - Auth
+      operationId: GetMySummaryInfo
       responses:
         '200':
           description: Success
@@ -149,6 +152,7 @@ paths:
     patch:
       tags:
         - Auth
+      operationId: UpdateInformation
       requestBody:
         content:
           application/json-patch+json:
@@ -180,6 +184,7 @@ paths:
     post:
       tags:
         - Auth
+      operationId: Login
       requestBody:
         content:
           application/json-patch+json:
@@ -258,6 +263,7 @@ paths:
     get:
       tags:
         - Course
+      operationId: GetCourseById
       parameters:
         - name: id
           in: path
@@ -396,6 +402,7 @@ paths:
     get:
       tags:
         - CourseClass
+      operationId: GetCoursecClassById
       parameters:
         - name: id
           in: path
@@ -477,6 +484,7 @@ paths:
     post:
       tags:
         - CourseClass
+      operationId: AssignToManagementClasses
       parameters:
         - name: id
           in: path
@@ -514,6 +522,7 @@ paths:
     get:
       tags:
         - CourseClass
+      operationId: GetScores
       parameters:
         - name: id
           in: path
@@ -537,6 +546,7 @@ paths:
     post:
       tags:
         - CourseClass
+      operationId: AssignToStudents
       parameters:
         - name: id
           in: path
@@ -574,6 +584,7 @@ paths:
     put:
       tags:
         - CourseClass
+      operationId: UpdateScore
       parameters:
         - name: id
           in: path
@@ -616,6 +627,7 @@ paths:
     post:
       tags:
         - CourseClass
+      operationId: AssignToTeacher
       parameters:
         - name: id
           in: path
@@ -696,6 +708,7 @@ paths:
     get:
       tags:
         - ManagementClass
+      operationId: GetManagementClassById
       parameters:
         - name: id
           in: path
@@ -777,6 +790,7 @@ paths:
     post:
       tags:
         - ManagementClass
+      operationId: AddStudents
       parameters:
         - name: id
           in: path
@@ -861,6 +875,7 @@ paths:
     get:
       tags:
         - Program
+      operationId: GetProgramById
       parameters:
         - name: id
           in: path
@@ -980,6 +995,7 @@ paths:
     get:
       tags:
         - Session
+      operationId: GetAllChangeRequest
       parameters:
         - name: Status
           in: query
@@ -1003,6 +1019,7 @@ paths:
     get:
       tags:
         - Session
+      operationId: GetChangeRequestById
       parameters:
         - name: id
           in: path
@@ -1026,6 +1043,7 @@ paths:
     post:
       tags:
         - Session
+      operationId: Approve
       parameters:
         - name: id
           in: path
@@ -1049,6 +1067,7 @@ paths:
     post:
       tags:
         - Session
+      operationId: Deny
       parameters:
         - name: id
           in: path
@@ -1072,6 +1091,7 @@ paths:
     post:
       tags:
         - Session
+      operationId: CreateChangeRequest
       parameters:
         - name: id
           in: path
@@ -1132,6 +1152,7 @@ paths:
     post:
       tags:
         - Student
+      operationId: Import
       responses:
         '200':
           description: Success

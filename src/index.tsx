@@ -6,6 +6,10 @@ import App from './App';
 import './index.css';
 import { store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+
+// axios.defaults.baseURL = 'https://um-be.laptrinhkhongvui.com';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 registerLicense(
   'Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1JpQnxbf1xzZFJMYlxbRHFPMyBoS35RdURjWXZedHZQQ2dZWERw'

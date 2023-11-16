@@ -23,8 +23,7 @@ import { RootState } from '../../redux/store';
 import {
   UMApplicationProgramCommandsCreateCreateCommand,
   UMApplicationProgramQueriesGetAllGetAllDto,
-  UMApplicationProgramQueriesGetByIdGetByIdDto,
-} from '../../myApi';
+} from '../../shared/api';
 
 function ProgramManage() {
   const initialRef = React.useRef(null);

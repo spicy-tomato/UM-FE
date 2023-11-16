@@ -9,26 +9,20 @@
  * ---------------------------------------------------------------
  */
 
-import { ImportCreateData, ScoreDetailResult } from "./data-contracts";
+import { GetStudentData, ImportData } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
-export class Student<SecurityDataType = unknown> {
-  http: HttpClient<SecurityDataType>;
-
-  constructor(http: HttpClient<SecurityDataType>) {
-    this.http = http;
-  }
-
+export class Student<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
   /**
    * No description
    *
    * @tags Student
-   * @name ScoreDetail
+   * @name GetStudent
    * @request GET:/Student/{id}/score
-   * @response `200` `ScoreDetailResult` Success
+   * @response `200` `GetStudentData` Success
    */
-  scoreDetail = (id: string, params: RequestParams = {}) =>
-    this.http.request<ScoreDetailResult, any>({
+  getStudent = (id: string, params: RequestParams = {}) =>
+    this.request<GetStudentData, any>({
       path: `/Student/${id}/score`,
       method: "GET",
       ...params,
@@ -37,12 +31,12 @@ export class Student<SecurityDataType = unknown> {
    * No description
    *
    * @tags Student
-   * @name ImportCreate
+   * @name Import
    * @request POST:/Student/import
-   * @response `200` `ImportCreateData` Success
+   * @response `200` `ImportData` Success
    */
-  importCreate = (params: RequestParams = {}) =>
-    this.http.request<ImportCreateData, any>({
+  import = (params: RequestParams = {}) =>
+    this.request<ImportData, any>({
       path: `/Student/import`,
       method: "POST",
       ...params,
