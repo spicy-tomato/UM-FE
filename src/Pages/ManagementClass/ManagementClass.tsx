@@ -1,29 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import './ClassManage.css';
-import { AiOutlineSearch } from 'react-icons/ai';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  Button,
+  Button as ChakraButton,
   FormControl,
   FormLabel,
-  Input,
-  Button as ChakraButton,
-  Button,
   HStack,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { useDisclosure } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { RootState } from '../../redux/store';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { ManagementClass } from '../../shared/api';
+import './ManagementClass.css';
 
-function ClassManage() {
-  const token = useSelector((store: RootState) => store);
-  const [mclasss, setMClasss] = useState<any[]>([]);
+function ManagementClassComponent() {
+  const [managementClass, setManagementClass] = useState<any[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
 
@@ -32,43 +29,17 @@ function ClassManage() {
     mclassName: '',
   });
 
-  const isMClassNameExists = async (mclassName: any) => {
+  const getManagementClass = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5123/ManagentClass?mclassName=${mclassName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token?.token?.token}`,
-          },
-        }
-      );
-
-      return response.data.data.length > 0;
-    } catch (error) {
-      console.error('Error checking class name:', error);
-      return false;
-    }
-  };
-
-  const getMClasss = async () => {
-    try {
-      const response = await axios.get(
-        'http://localhost:5123/ManagementClass',
-        {
-          headers: {
-            Authorization: `Bearer ${token?.token?.token}`,
-          },
-        }
-      );
-
-      setMClasss(response.data.data);
+      const response = await new ManagementClass().getManagementClass({});
+      if (response.data.data) setManagementClass(response.data.data);
     } catch (e) {
       console.error('Error getting Classes:', e);
     }
   };
 
   useEffect(() => {
-    getMClasss();
+    getManagementClass();
   }, []);
 
   const handleAddMClass = () => {
@@ -88,54 +59,25 @@ function ClassManage() {
     }
   };
 
-  const handleCancel = () => {
-    onClose();
-  };
-
   const handleFormSubmit = async () => {
-    const isNameExists = await isMClassNameExists(newMClass.mclassNameName);
+    try {
+      const response = await new ManagementClass().postManagementClass(
+        newMClass
+      );
 
-    if (isNameExists) {
-      alert('Class name already exists. Please choose a different name.');
-    } else {
-      try {
-        const response = await axios.post(
-          'http://localhost:5123/ManagementClass',
-          newMClass,
-          {
-            headers: {
-              Authorization: `Bearer ${token?.token?.token}`,
-            },
-          }
-        );
-
-        setMClasss([...mclasss, response.data.data]);
-        onClose();
-      } catch (error) {
-        console.error('Error adding class:', error);
-      }
+      setManagementClass([...managementClass, response.data.data]);
+      onClose();
+    } catch (error) {
+      console.error('Error adding class:', error);
     }
   };
 
   const handleDelete = async (mclassId: any) => {
-    if (window.confirm('Are you sure you want to delete this class?')) {
-      try {
-        await axios.delete(
-          `http://localhost:5123/ManagementClass/${mclassId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token?.token?.token}`,
-            },
-          }
-        );
-
-        const updatedMClasss = mclasss.filter(
-          (mclass: any) => mclass.mclassId !== mclassId
-        );
-        setMClasss(updatedMClasss);
-      } catch (error) {
-        console.error('Error deleting class:', error);
-      }
+    try {
+      await new ManagementClass().deleteManagementClass(mclassId);
+      getManagementClass();
+    } catch (error) {
+      console.error('Error deleting class:', error);
     }
   };
 
@@ -147,22 +89,12 @@ function ClassManage() {
   };
 
   const handleEdit = async () => {
-    const payload = {
-      mclassId: selectedMClass.mclassId,
-      name: selectedMClass.name,
-    };
-
     try {
-      const res = await axios.put(
-        `http://localhost:5123/ManagementClass/${selectedMClass.id}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token?.token?.token}`,
-          },
-        }
-      );
-      getMClasss();
+      await new ManagementClass().putManagementClass(selectedMClass.id, {
+        name: selectedMClass.name,
+      });
+
+      getManagementClass();
       onClose();
     } catch (error) {
       console.error('Error editing class:', error);
@@ -288,7 +220,7 @@ function ClassManage() {
           </tr>
         </thead>
         <tbody>
-          {mclasss.map((mclass: any, idx) => (
+          {managementClass.map((mclass: any, idx) => (
             <tr key={mclass.mclassId}>
               <td>{idx + 1}</td>
               <td>{mclass.mclassId}</td>
@@ -317,4 +249,4 @@ function ClassManage() {
   );
 }
 
-export default ClassManage;
+export default ManagementClassComponent;

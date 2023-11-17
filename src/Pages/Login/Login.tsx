@@ -26,7 +26,7 @@ export default function SplitScreen() {
   const handleTokenExist = () => {
     if (token) {
       dispatch(updateToken(token));
-      navigate('/education');
+      navigate('/home');
     }
   };
 
@@ -39,7 +39,7 @@ export default function SplitScreen() {
     const token = res.data.data?.token;
     if (token) {
       dispatch(updateToken(token));
-      navigate('/education');
+      navigate('/home');
     }
   };
 

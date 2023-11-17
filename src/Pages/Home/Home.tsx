@@ -1,13 +1,12 @@
-import React from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaArrowTurnUp, FaHeart, FaShare, FaStar } from 'react-icons/fa6';
 import Useravatar from '../../Images/User-avatar.svg.png';
 import logo_1 from '../../Images/logo_1.png';
 import musicclub from '../../Images/music-club.png';
 import univer from '../../Images/univer.png';
-import './Education.css';
+import './Home.css';
 
-const Education = () => {
+const Home = () => {
   // const dispatch = useDispatch()
   // const navigate = useNavigate();
 
@@ -419,4 +418,4 @@ const Education = () => {
   );
 };
 
-export default Education;
+export default Home;

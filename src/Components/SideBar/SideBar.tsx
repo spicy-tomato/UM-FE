@@ -5,20 +5,18 @@ import {
   Flex,
   Icon,
   IconButton,
+  Spinner,
   Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import {
-  AiFillHome,
-  AiOutlineBook,
-  AiOutlineCalendar,
-  AiOutlineUser,
-  AiTwotoneFileImage,
-} from 'react-icons/ai';
+import { useEffect, useState } from 'react';
+import { AiFillHome } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { RootState } from '../../redux/store';
+import { SideBarItem } from '../../shared/models';
+import { routeIcon, routesByRole } from '../../shared/routes';
 import './SideBar.css';
 
 function SideBar() {
@@ -47,67 +45,14 @@ function SideBar() {
   );
 }
 const SidebarContent = ({ onClose, ...rest }: any) => {
-  const user = useSelector((store: RootState) => store.auth.user);
+  const role = useSelector((store: RootState) => store.auth.user?.role);
+  const [items, setItems] = useState<SideBarItem[]>([]);
 
-  const LinkItems = [
-    { name: 'Education', icon: AiFillHome, navigateTo: '/education' },
-    { name: 'Event', icon: AiOutlineCalendar, navigateTo: '/event' },
-    { name: 'Professor', icon: AiOutlineBook, navigateTo: '/professor' },
-    { name: 'Student', icon: AiOutlineUser, navigateTo: '/student' },
-    { name: 'Course', icon: AiTwotoneFileImage, navigateTo: '/course' },
-    {
-      name: 'StudentManage',
-      icon: AiOutlineBook,
-      navigateTo: '/student-manage',
-    },
-    {
-      name: 'TeacherManage',
-      icon: AiOutlineUser,
-      navigateTo: '/teacher-manage',
-    },
-    { name: 'Teacher', icon: AiTwotoneFileImage, navigateTo: '/teacher' },
-    {
-      name: 'ProgramManage',
-      icon: AiTwotoneFileImage,
-      navigateTo: '/program-manage',
-    },
-    {
-      name: 'ClassManage',
-      icon: AiTwotoneFileImage,
-      navigateTo: '/class-manage',
-    },
-  ];
-
-  // Filter LinkItems based on the role
-  const filteredLinkItems = LinkItems.filter((link) => {
-    if (user?.role === 'Admin') {
-      return (
-        link.name === 'Education' ||
-        link.name === 'StudentManage' ||
-        link.name === 'TeacherManage' ||
-        link.name === 'EventManage' ||
-        link.name === 'CourseManage' ||
-        link.name === 'ProgramManage' ||
-        link.name === 'ClassManage'
-      );
-    } else if (user?.role === 'Teacher') {
-      return (
-        link.name === 'Education' ||
-        link.name === 'EventTeacher' ||
-        link.name === 'Teacher' ||
-        link.name === 'CourseTeacher'
-      );
-    } else if (user?.role === 'Student') {
-      return (
-        link.name === 'Education' ||
-        link.name === 'Event' ||
-        link.name === 'Professor' ||
-        link.name === 'Course' ||
-        link.name === 'Student'
-      );
+  useEffect(() => {
+    if (role) {
+      setItems(routesByRole[role] ?? []);
     }
-    return true;
-  });
+  }, [role]);
 
   return (
     <Box
@@ -118,16 +63,22 @@ const SidebarContent = ({ onClose, ...rest }: any) => {
       h='full'
       {...rest}
     >
-      {filteredLinkItems.map((link) => (
-        <NavItem
-          key={link.name}
-          icon={link.icon}
-          as={ReactRouterLink}
-          to={link.navigateTo}
-        >
-          {link.name}
-        </NavItem>
-      ))}
+      {items.length ? (
+        items.map((item) => (
+          <NavItem
+            key={item.name}
+            icon={routeIcon[item.url]}
+            as={ReactRouterLink}
+            to={item.url}
+          >
+            {item.name}
+          </NavItem>
+        ))
+      ) : (
+        <Flex justify='center' py='2'>
+          <Spinner></Spinner>
+        </Flex>
+      )}
     </Box>
   );
 };

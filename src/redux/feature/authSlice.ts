@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { LocalStorageConstant } from '../../shared/constants';
+import {
+  LocalStorageConstant,
+  RoleConstantValue,
+} from '../../shared/constants';
 
 type User = {
   extraData: Record<string, string>;
@@ -10,7 +13,7 @@ type User = {
   lastName: string;
   isMale: boolean;
   address: string | null;
-  role: string;
+  role: RoleConstantValue;
   phoneNumber: string | null;
 };
 

@@ -17,7 +17,7 @@ import {
   Session,
   UMApplicationSessionQueriesGetAllGetAllDto,
 } from '../../shared/api';
-import './Event.css';
+import './Calendar.css';
 
 const fieldsData: FieldModel = {
   subject: { name: 'courseClassName', title: 'Class' },
@@ -29,7 +29,7 @@ const EditorFooterTemplate = () => {
   return <></>;
 };
 
-const Event = () => {
+const Calendar = () => {
   const scheduleObj = useRef<ScheduleComponent | null>(null);
   const user = useSelector((store: RootState) => store.auth.user);
   const [sessions, setSessions] = useState<
@@ -86,4 +86,4 @@ const Event = () => {
   );
 };
 
-export default Event;
+export default Calendar;
