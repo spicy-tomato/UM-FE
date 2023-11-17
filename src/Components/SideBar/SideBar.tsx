@@ -9,7 +9,6 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
 import {
   AiFillHome,
   AiOutlineBook,
@@ -22,84 +21,10 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 import './SideBar.css';
 
-// const SideBar = () => {
-//   return (
-//     <div className="sidebar">
-//     <ul>
-//       <li>
-//           <NavLink to={'/'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//                 <AiFillHome/>
-//             </i>
-//             Education
-//           </NavLink>
-//       </li>
-//       <li>
-//           <NavLink to={'/event'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//                     <AiOutlineCalendar/>
-//             </i>
-//             Event
-//           </NavLink>
-//       </li>
-//       <li>
-//           <NavLink to={'/professor'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//                 <AiOutlineBook/>
-//             </i>
-//             Professor
-//           </NavLink>
-
-//       </li>
-//       <li>
-//           <NavLink to={'/student'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//                 <AiOutlineUser/>
-//             </i>
-//             Student
-//           </NavLink>
-//       </li>
-//       <li>
-//           <NavLink to={'/course'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//               <AiTwotoneFileImage/>
-//             </i>
-//             Course
-//           </NavLink>
-//       </li>
-//       <li>
-//           <NavLink to={'/login'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//               <AiTwotoneFileImage/>
-//             </i>
-//             Login
-//           </NavLink>
-//       </li>
-//       <li>
-//           <NavLink to={'/student-manage'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//               <AiTwotoneFileImage/>
-//             </i>
-//             Student Manage
-//           </NavLink>
-//       </li>
-//       <li>
-//           <NavLink to={'/teacher-manage'} className="nav-link-custom">
-//             <i className="icon-navbar">
-//               <AiTwotoneFileImage/>
-//             </i>
-//             Teacher Manage
-//           </NavLink>
-//       </li>
-//     </ul>
-//   </div>
-//   )
-// }
-
 function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')}>
+    <>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
@@ -118,11 +43,11 @@ function SideBar() {
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
-    </Box>
+    </>
   );
 }
 const SidebarContent = ({ onClose, ...rest }: any) => {
-  const role = useSelector((store: RootState) => store.user.role);
+  const user = useSelector((store: RootState) => store.auth.user);
 
   const LinkItems = [
     { name: 'Education', icon: AiFillHome, navigateTo: '/education' },
@@ -140,27 +65,7 @@ const SidebarContent = ({ onClose, ...rest }: any) => {
       icon: AiOutlineUser,
       navigateTo: '/teacher-manage',
     },
-    {
-      name: 'EventManage',
-      icon: AiTwotoneFileImage,
-      navigateTo: '/event-manage',
-    },
-    {
-      name: 'CourseManage',
-      icon: AiTwotoneFileImage,
-      navigateTo: '/course-manage',
-    },
-    {
-      name: 'EventTeacher',
-      icon: AiTwotoneFileImage,
-      navigateTo: '/event-teacher',
-    },
     { name: 'Teacher', icon: AiTwotoneFileImage, navigateTo: '/teacher' },
-    {
-      name: 'CourseTeacher',
-      icon: AiTwotoneFileImage,
-      navigateTo: '/course-teacher',
-    },
     {
       name: 'ProgramManage',
       icon: AiTwotoneFileImage,
@@ -175,7 +80,7 @@ const SidebarContent = ({ onClose, ...rest }: any) => {
 
   // Filter LinkItems based on the role
   const filteredLinkItems = LinkItems.filter((link) => {
-    if (role === 'Admin') {
+    if (user?.role === 'Admin') {
       return (
         link.name === 'Education' ||
         link.name === 'StudentManage' ||
@@ -185,14 +90,14 @@ const SidebarContent = ({ onClose, ...rest }: any) => {
         link.name === 'ProgramManage' ||
         link.name === 'ClassManage'
       );
-    } else if (role === 'Teacher') {
+    } else if (user?.role === 'Teacher') {
       return (
         link.name === 'Education' ||
         link.name === 'EventTeacher' ||
         link.name === 'Teacher' ||
         link.name === 'CourseTeacher'
       );
-    } else if (role === 'Student') {
+    } else if (user?.role === 'Student') {
       return (
         link.name === 'Education' ||
         link.name === 'Event' ||

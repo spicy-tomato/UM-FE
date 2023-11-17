@@ -10,7 +10,7 @@ import reportWebVitals from './reportWebVitals';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 registerLicense(
-  'Ngo9BigBOggjHTQxAR8/V1NHaF5cXmVCf1JpQnxbf1xzZFJMYlxbRHFPMyBoS35RdURjWXZedHZQQ2dZWERw'
+  'Ngo9BigBOggjHTQxAR8/V1NHaF5cXmpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH5fdnVRRWhZV0xyWkQ='
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);

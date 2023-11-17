@@ -45,7 +45,7 @@ function CourseManage() {
     try {
       const response = await axios.get('http://localhost:5123/Course', {
         headers: {
-          Authorization: `Bearer ${token?.token?.token}`, // Add the 'token' variable
+          Authorization: `Bearer ${token?.token?.token}`,
         },
       });
 
@@ -72,7 +72,7 @@ function CourseManage() {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token?.token?.token}`, // Add the 'token' variable
+            Authorization: `Bearer ${token?.token?.token}`,
           },
         }
       );

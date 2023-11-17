@@ -56,7 +56,7 @@ export class HttpClient<SecurityDataType = unknown> {
   constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
-      baseURL: axiosConfig.baseURL || "https://um-be.laptrinhkhongvui.com",
+      baseURL: axiosConfig.baseURL || "http://localhost:5123",
     });
     this.secure = secure;
     this.format = format;

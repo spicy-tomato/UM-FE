@@ -1,22 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Header from '../Components/Header/Header';
 import SideBar from '../Components/SideBar/SideBar';
-import { updateToken } from '../redux/feature/tokenSlice';
-import { updateUser } from '../redux/feature/userSlice';
+import { updateToken, updateUser } from '../redux/feature/authSlice';
 import { RootState } from '../redux/store';
 import { Auth } from '../shared/api';
 import './Layout.css';
+import { Divider, Flex, Grid, GridItem } from '@chakra-ui/react';
 
 const Layout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = useSelector((store: RootState) => store.token);
+  const token = useSelector((store: RootState) => store.auth.token);
+  const first = useRef(true);
 
   const getDataUser = async () => {
-    if (!token.token) {
-      dispatch(updateToken(''));
+    if (first.current && !token) {
+      first.current = false;
+      return;
+    }
+
+    if (!token) {
+      dispatch(updateToken(null));
       navigate('/login');
       return;
     }
@@ -25,7 +31,7 @@ const Layout = () => {
       const response = await new Auth().getMySummaryInfo();
       dispatch(updateUser(response.data.data));
     } catch (e) {
-      dispatch(updateToken(''));
+      dispatch(updateToken(null));
       navigate('/login');
     }
   };
@@ -35,21 +41,17 @@ const Layout = () => {
   }, [token]);
 
   return (
-    <div className='portal-homepage'>
-      <div className='wrap'>
-        <div className='header'>
-          <Header />
-        </div>
-        <div className='main-content'>
-          <div className='sidebar'>
-            <SideBar />
-          </div>
-          <div className='content'>
-            <Outlet />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Grid gridTemplateRows='60px 1fr' gridTemplateColumns='250px 1fr' h='100vh'>
+      <GridItem colSpan={2}>
+        <Header />
+      </GridItem>
+      <GridItem>
+        <SideBar />
+      </GridItem>
+      <GridItem overflow='auto'>
+        <Outlet />
+      </GridItem>
+    </Grid>
   );
 };
 
