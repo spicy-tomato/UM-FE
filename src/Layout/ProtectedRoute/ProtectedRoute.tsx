@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 import NotFound from '../../Pages/Errors/NotFound/NotFound';
 import { RoleConstantValue } from '../../shared/constants';
+import { Spinner } from '@chakra-ui/react';
 
 type ProtectedRouteProps =
   | {
@@ -18,7 +19,7 @@ const ProtectedRoute = (props: ProtectedRouteProps) => {
   const role = useSelector((store: RootState) => store.auth.user?.role);
 
   if (!role) {
-    return <Navigate to='/login' replace />;
+    return <Spinner />;
   }
 
   if (

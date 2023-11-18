@@ -9,7 +9,7 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { updateToken } from '../../redux/feature/authSlice';
@@ -30,7 +30,9 @@ export default function SplitScreen() {
     }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: FormEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
     const res = await new Auth().login({
       userName: username,
       password: password,
@@ -47,13 +49,12 @@ export default function SplitScreen() {
 
   return (
     <Stack minH='100vh' direction={{ base: 'column', md: 'row' }}>
-      <Flex p={8} flex={1} align='center' justify='center'>
-        <Stack spacing={4} w='full' maxW='md'>
+      <Flex p='8' flex='1' align='center' justify='center'>
+        <Stack as='form' spacing={4} w='full' maxW='md' onSubmit={handleLogin}>
           <Heading fontSize='2xl'>Sign in to your account</Heading>
           <FormControl id='email'>
             <FormLabel>Email address</FormLabel>
             <Input
-              type='email'
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -74,7 +75,7 @@ export default function SplitScreen() {
             >
               <Checkbox>Remember me</Checkbox>
             </Stack>
-            <Button colorScheme='blue' variant='solid' onClick={handleLogin}>
+            <Button colorScheme='blue' variant='solid' type='submit'>
               Sign in
             </Button>
           </Stack>

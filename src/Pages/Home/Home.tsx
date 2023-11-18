@@ -7,32 +7,6 @@ import univer from '../../Images/univer.png';
 import './Home.css';
 
 const Home = () => {
-  // const dispatch = useDispatch()
-  // const navigate = useNavigate();
-
-  // const token = useSelector((store) => store);
-
-  //   const getDataUser = async () => {
-  //     try {
-  //         const response = await axios.get("http://localhost:5123/auth", {
-  //             headers: {
-  //                 Authorization: `Bearer ${token?.token?.token}`,
-  //             },
-  //         })
-
-  //         console.log('response',response);
-  //         dispatch( updateUser( response.data.data ) )
-
-  //     } catch (e) {
-  //         // dispatch( updateUser( response.data.data ) )
-  //         dispatch( updateToken( '' ) )
-  //         navigate("/login");
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     getDataUser();
-  //   }, []);
-
   return (
     <div className='container'>
       <div className='search-bar'>

@@ -1,3 +1,4 @@
+import { Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -7,23 +8,21 @@ import { updateToken, updateUser } from '../redux/feature/authSlice';
 import { RootState } from '../redux/store';
 import { Auth } from '../shared/api';
 import './Layout.css';
-import { Divider, Flex, Grid, GridItem } from '@chakra-ui/react';
+import { LocalStorageConstant } from '../shared/constants';
 
 const Layout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((store: RootState) => store.auth.token);
-  const first = useRef(true);
 
   const getDataUser = async () => {
-    if (first.current && !token) {
-      first.current = false;
+    if (!localStorage.getItem(LocalStorageConstant.token)) {
+      dispatch(updateToken(null));
+      navigate('/login');
       return;
     }
 
     if (!token) {
-      dispatch(updateToken(null));
-      navigate('/login');
       return;
     }
 
@@ -48,7 +47,7 @@ const Layout = () => {
       <GridItem>
         <SideBar />
       </GridItem>
-      <GridItem overflow='auto'>
+      <GridItem overflow='auto' p='2'>
         <Outlet />
       </GridItem>
     </Grid>

@@ -6,6 +6,7 @@ import {
   AiFillGold,
   AiFillHome,
 } from 'react-icons/ai';
+import { PiExamFill } from 'react-icons/pi';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Navigate, RouteObject } from 'react-router-dom';
 import Layout from '../Layout/Layout';
@@ -17,6 +18,7 @@ import Login from '../Pages/Login/Login';
 import ManagementClassComponent from '../Pages/ManagementClass/ManagementClass';
 import PersonalInformation from '../Pages/PersonalInformation/PersonalInformation';
 import ProgramComponent from '../Pages/Program/Program';
+import Score from '../Pages/Score/Score';
 import { RoleConstant, RoleConstantValue, ValidRoutes } from './constants';
 import { SideBarItem } from './models';
 
@@ -65,6 +67,14 @@ export const routes: RouteObject[] = [
         path: 'me',
         element: <PersonalInformation />,
       },
+      {
+        path: 'score',
+        element: (
+          <ProtectedRoute role='Student'>
+            <Score />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ];
@@ -83,6 +93,7 @@ export const routesByRole: Record<RoleConstantValue, SideBarItem[]> = {
     { name: 'Calendar', url: '/calendar' },
     // { name: 'Course class', url: '/course-class' },
     { name: 'Management class', url: '/management-class' },
+    { name: 'Score', url: '/score' },
   ],
   [RoleConstant.teacher]: [
     { name: 'Home', url: '/home' },
@@ -99,4 +110,5 @@ export const routeIcon: Record<ValidRoutes, IconType> = {
   '/program': AiFillBook,
   '/management-class': SiGoogleclassroom,
   '/course-class': SiGoogleclassroom,
+  '/score': PiExamFill,
 };

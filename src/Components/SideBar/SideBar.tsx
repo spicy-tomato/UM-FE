@@ -13,11 +13,11 @@ import {
 import { useEffect, useState } from 'react';
 import { AiFillHome } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { NavLink as ReactRouterLink } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 import { SideBarItem } from '../../shared/models';
 import { routeIcon, routesByRole } from '../../shared/routes';
-import './SideBar.css';
+import './Sidebar.css';
 
 function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -61,6 +61,7 @@ const SidebarContent = ({ onClose, ...rest }: any) => {
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full' }}
       h='full'
+      pt='2'
       {...rest}
     >
       {items.length ? (
@@ -70,6 +71,7 @@ const SidebarContent = ({ onClose, ...rest }: any) => {
             icon={routeIcon[item.url]}
             as={ReactRouterLink}
             to={item.url}
+            className='nav-item'
           >
             {item.name}
           </NavItem>
@@ -88,11 +90,13 @@ const NavItem = ({ icon, children, ...rest }: any) => {
     <Box style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align='center'
-        p='4'
+        px='4'
+        py='3'
         mx='4'
         borderRadius='lg'
         role='group'
         cursor='pointer'
+        transition='all 100ms ease-in-out'
         _hover={{
           bg: 'cyan.400',
           color: 'white',
@@ -101,12 +105,9 @@ const NavItem = ({ icon, children, ...rest }: any) => {
       >
         {icon && (
           <Icon
+            as={icon}
             mr='4'
             fontSize='16'
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
           />
         )}
         {children}

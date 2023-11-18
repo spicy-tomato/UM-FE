@@ -1,0 +1,4 @@
+.nav-item.active {
+  background: var(--chakra-colors-cyan-500);
+  color: var(--chakra-colors-white);
+}

@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { GetAccountByIdData, GetAccountData, PatchAccountData } from "./data-contracts";
+import { GetAccountByIdData, GetMyScoresData, PatchAccountData } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
 export class Account<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
@@ -17,12 +17,12 @@ export class Account<SecurityDataType = unknown> extends HttpClient<SecurityData
    * No description
    *
    * @tags Account
-   * @name GetAccount
+   * @name GetMyScores
    * @request GET:/Account/score
-   * @response `200` `GetAccountData` Success
+   * @response `200` `GetMyScoresData` Success
    */
-  getAccount = (params: RequestParams = {}) =>
-    this.request<GetAccountData, any>({
+  getMyScores = (params: RequestParams = {}) =>
+    this.request<GetMyScoresData, any>({
       path: `/Account/score`,
       method: "GET",
       ...params,

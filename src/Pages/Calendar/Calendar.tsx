@@ -25,10 +25,6 @@ const fieldsData: FieldModel = {
   endTime: { name: 'endAt' },
 };
 
-const EditorFooterTemplate = () => {
-  return <></>;
-};
-
 const Calendar = () => {
   const scheduleObj = useRef<ScheduleComponent | null>(null);
   const user = useSelector((store: RootState) => store.auth.user);
@@ -36,6 +32,7 @@ const Calendar = () => {
     UMApplicationSessionQueriesGetAllGetAllDto[]
   >([]);
   const [eventSettings, setEventSettings] = useState<EventSettingsModel>({});
+  const timeScale = { enable: true, interval: 60, slotCount: 1 };
 
   const getSessions = async () => {
     const res = await new Session().getSession({});
@@ -47,16 +44,6 @@ const Calendar = () => {
         }))
       );
     }
-  };
-
-  const onPopupOpen = (args: PopupOpenEventArgs) => {
-    // let isEmptyCell =
-    //   !args.target ||
-    //   args.target.classList.contains('e-work-cells') ||
-    //   args.target.classList.contains('e-header-cells'); // checking whether the cell is empty or not
-    // if ((args.type === 'QuickInfo' || args.type === 'Editor') && isEmptyCell) {
-    //   args.cancel = true;
-    // }
   };
 
   useEffect(() => {
@@ -77,8 +64,7 @@ const Calendar = () => {
     <ScheduleComponent
       ref={scheduleObj}
       eventSettings={eventSettings}
-      editorFooterTemplate={EditorFooterTemplate}
-      popupOpen={onPopupOpen}
+      timeScale={timeScale}
       height='100%'
     >
       <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />

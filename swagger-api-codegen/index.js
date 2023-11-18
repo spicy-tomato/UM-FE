@@ -4,7 +4,7 @@ const path = require('path');
 const generateOperationId = require('./generateOperationId');
 
 generateApi({
-  input: path.resolve(__dirname, '../swagger.yaml'),
+  input: path.resolve(__dirname, './swagger.yaml'),
   output: path.resolve(__dirname, '../src/shared/api/__generated__'),
   httpClientType: 'axios',
   cleanOutput: true,
