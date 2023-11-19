@@ -57,6 +57,7 @@ export default function SplitScreen() {
             <Input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              autoComplete='username'
             />
           </FormControl>
           <FormControl id='password'>
@@ -65,6 +66,7 @@ export default function SplitScreen() {
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete='current-password'
             />
           </FormControl>
           <Stack spacing={6}>

@@ -30,7 +30,7 @@ export class Program<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetProgramData` Success
    */
   getProgram = (params: RequestParams = {}) =>
-    this.request<GetProgramData, any>({
+    this.request<GetProgramData>({
       path: `/Program`,
       method: "GET",
       ...params,
@@ -44,7 +44,7 @@ export class Program<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `PostProgramData` Success
    */
   postProgram = (data: UMApplicationProgramCommandsCreateCreateCommand, params: RequestParams = {}) =>
-    this.request<PostProgramData, any>({
+    this.request<PostProgramData>({
       path: `/Program`,
       method: "POST",
       body: data,
@@ -60,7 +60,7 @@ export class Program<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetProgramByIdData` Success
    */
   getProgramById = (id: string, params: RequestParams = {}) =>
-    this.request<GetProgramByIdData, any>({
+    this.request<GetProgramByIdData>({
       path: `/Program/${id}`,
       method: "GET",
       ...params,
@@ -74,7 +74,7 @@ export class Program<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `PutProgramData` Success
    */
   putProgram = (id: string, data: UMApplicationProgramCommandsUpdateUpdateCommandData, params: RequestParams = {}) =>
-    this.request<PutProgramData, any>({
+    this.request<PutProgramData>({
       path: `/Program/${id}`,
       method: "PUT",
       body: data,
@@ -90,7 +90,7 @@ export class Program<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `DeleteProgramData` Success
    */
   deleteProgram = (id: string, params: RequestParams = {}) =>
-    this.request<DeleteProgramData, any>({
+    this.request<DeleteProgramData>({
       path: `/Program/${id}`,
       method: "DELETE",
       ...params,

@@ -403,7 +403,7 @@ paths:
     get:
       tags:
         - CourseClass
-      operationId: GetCoursecClassById
+      operationId: GetCourseClassById
       parameters:
         - name: id
           in: path
@@ -1353,7 +1353,6 @@ components:
       properties:
         academicYear:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Account.Queries.GetById.GetByIdDto:
       type: object
@@ -1363,13 +1362,10 @@ components:
           format: uuid
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
           nullable: true
@@ -1378,7 +1374,6 @@ components:
           nullable: true
         role:
           type: string
-          nullable: true
         phoneNumber:
           type: string
           nullable: true
@@ -1388,20 +1383,16 @@ components:
       properties:
         userName:
           type: string
-          nullable: true
         password:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Auth.Commands.UpdateMyInfo.UpdateMyInfoCommand:
       type: object
       properties:
         phoneNumber:
           type: string
-          nullable: true
         address:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Auth.Queries.MySummaryInfo.MySummaryInfoDto:
       type: object
@@ -1411,13 +1402,10 @@ components:
           format: uuid
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
           nullable: true
@@ -1426,7 +1414,6 @@ components:
           nullable: true
         role:
           type: string
-          nullable: true
         phoneNumber:
           type: string
           nullable: true
@@ -1475,10 +1462,8 @@ components:
       properties:
         name:
           type: string
-          nullable: true
         academicYear:
           type: string
-          nullable: true
         teacher:
           $ref: '#/components/schemas/UM.Application.ChangeSessionRequest.Queries.GetAll.GetByIdDtoTeacher'
       additionalProperties: false
@@ -1499,16 +1484,12 @@ components:
           format: uuid
         teacherId:
           type: string
-          nullable: true
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
       additionalProperties: false
@@ -1546,10 +1527,8 @@ components:
       properties:
         name:
           type: string
-          nullable: true
         academicYear:
           type: string
-          nullable: true
         teacher:
           $ref: '#/components/schemas/UM.Application.ChangeSessionRequest.Queries.GetById.GetByIdDtoTeacher'
       additionalProperties: false
@@ -1570,16 +1549,12 @@ components:
           format: uuid
         teacherId:
           type: string
-          nullable: true
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
       additionalProperties: false
@@ -1590,7 +1565,6 @@ components:
           $ref: '#/components/schemas/System.Net.HttpStatusCode'
         message:
           type: string
-          nullable: true
         property:
           type: string
           nullable: true
@@ -1616,7 +1590,6 @@ components:
           type: array
           items:
             type: string
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1632,7 +1605,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.ChangeSessionRequest.Queries.GetAll.GetAllDto'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1648,7 +1620,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.Course.Queries.GetAll.GetAllDto'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1664,7 +1635,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.CourseClass.Queries.GetScores.GetScoresDto'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1680,7 +1650,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.ManagementClass.Queries.GetAll.GetAllDto'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1696,7 +1665,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.Program.Queries.GetAll.GetAllDto'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1712,7 +1680,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.Session.Queries.GetAll.GetAllDto'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1728,7 +1695,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.Student.Queries.GetScores.GetScoresDto'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1744,7 +1710,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UM.Domain.Dtos.CourseClass.ICourseClass'
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1758,7 +1723,6 @@ components:
       properties:
         data:
           type: string
-          nullable: true
         success:
           type: boolean
         errors:
@@ -1876,25 +1840,20 @@ components:
       properties:
         name:
           type: string
-          nullable: true
         courseId:
           type: string
-          nullable: true
         programs:
           type: array
           items:
             type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Course.Commands.Update.UpdateCommandData:
       type: object
       properties:
         name:
           type: string
-          nullable: true
         courseId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Course.Queries.GetAll.GetAllDto:
       type: object
@@ -1904,10 +1863,8 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         courseId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Course.Queries.GetById.GetByIdDto:
       type: object
@@ -1917,15 +1874,12 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         courseId:
           type: string
-          nullable: true
         courseClasses:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.Course.Queries.GetById.GetByIdDtoCourseClass'
-          nullable: true
       additionalProperties: false
     UM.Application.Course.Queries.GetById.GetByIdDtoCourseClass:
       type: object
@@ -1935,7 +1889,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         startAt:
           type: string
           format: date-time
@@ -1947,7 +1900,6 @@ components:
           format: int32
         academicYear:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.CourseClass.Commands.AssignToManagementClasses.AssignToManagementClassesCommandData:
       type: object
@@ -1956,7 +1908,6 @@ components:
           type: array
           items:
             type: string
-          nullable: true
       additionalProperties: false
     UM.Application.CourseClass.Commands.AssignToStudents.AssignToStudentsCommandData:
       type: object
@@ -1965,14 +1916,12 @@ components:
           type: array
           items:
             type: string
-          nullable: true
       additionalProperties: false
     UM.Application.CourseClass.Commands.BulkCreate.BulkCreateCommand:
       type: object
       properties:
         courseId:
           type: string
-          nullable: true
         numberOfClasses:
           type: integer
           format: int32
@@ -1988,7 +1937,6 @@ components:
       properties:
         name:
           type: string
-          nullable: true
         startAt:
           type: string
           format: date-time
@@ -2000,7 +1948,6 @@ components:
           nullable: true
         slots:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.CourseClass.Commands.UpdateScore.UpdateScoreCommandData:
       type: object
@@ -2017,7 +1964,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         startAt:
           type: string
           format: date-time
@@ -2029,22 +1975,29 @@ components:
           format: int32
         academicYear:
           type: string
-          nullable: true
         teacher:
           $ref: '#/components/schemas/UM.Application.CourseClass.Queries.GetById.GetByIdDtoTeacher'
-        courseId:
-          type: string
-          nullable: true
+        course:
+          $ref: '#/components/schemas/UM.Application.CourseClass.Queries.GetById.GetByIdDtoCourse'
         sessions:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.CourseClass.Queries.GetById.GetByIdDtoSession'
-          nullable: true
         slots:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.CourseClass.Queries.GetById.GetByIdDtoSlot'
-          nullable: true
+      additionalProperties: false
+    UM.Application.CourseClass.Queries.GetById.GetByIdDtoCourse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        courseId:
+          type: string
       additionalProperties: false
     UM.Application.CourseClass.Queries.GetById.GetByIdDtoSession:
       type: object
@@ -2075,26 +2028,20 @@ components:
       properties:
         name:
           type: string
-          nullable: true
         academicYear:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.CourseClass.Queries.GetById.GetByIdDtoTeacher:
       type: object
       properties:
         teacherId:
           type: string
-          nullable: true
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
       additionalProperties: false
@@ -2119,10 +2066,8 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         academicYear:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.CourseClass.Queries.GetScores.GetScoresDtoStudent:
       type: object
@@ -2132,16 +2077,12 @@ components:
           format: uuid
         studentId:
           type: string
-          nullable: true
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
         managementClass:
@@ -2154,14 +2095,12 @@ components:
           type: array
           items:
             type: string
-          nullable: true
       additionalProperties: false
     UM.Application.ManagementClass.Commands.BulkCreate.BulkCreateCommand:
       type: object
       properties:
         programId:
           type: string
-          nullable: true
         numberOfClasses:
           type: integer
           format: int32
@@ -2171,7 +2110,6 @@ components:
       properties:
         name:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.ManagementClass.Queries.GetAll.GetAllDto:
       type: object
@@ -2181,7 +2119,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.ManagementClass.Queries.GetById.GetByIdDto:
       type: object
@@ -2191,15 +2128,12 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         academicYear:
           type: string
-          nullable: true
         students:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.ManagementClass.Queries.GetById.GetByIdDtoStudent'
-          nullable: true
       additionalProperties: false
     UM.Application.ManagementClass.Queries.GetById.GetByIdDtoStudent:
       type: object
@@ -2209,16 +2143,12 @@ components:
           format: uuid
         studentId:
           type: string
-          nullable: true
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
       additionalProperties: false
@@ -2227,20 +2157,16 @@ components:
       properties:
         name:
           type: string
-          nullable: true
         programId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Program.Commands.Update.UpdateCommandData:
       type: object
       properties:
         name:
           type: string
-          nullable: true
         programId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Program.Queries.GetAll.GetAllDto:
       type: object
@@ -2250,10 +2176,8 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         programId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Program.Queries.GetById.GetByIdDto:
       type: object
@@ -2263,12 +2187,10 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         courses:
           type: array
           items:
             $ref: '#/components/schemas/UM.Application.Program.Queries.GetById.GetByIdDtoCourse'
-          nullable: true
       additionalProperties: false
     UM.Application.Program.Queries.GetById.GetByIdDtoCourse:
       type: object
@@ -2278,13 +2200,10 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         programId:
           type: string
-          nullable: true
         courseId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Session.Queries.GetAll.GetAllDto:
       type: object
@@ -2312,10 +2231,8 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         courseId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Session.Queries.GetAll.GetAllDtoCourseClass:
       type: object
@@ -2325,7 +2242,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         course:
           $ref: '#/components/schemas/UM.Application.Session.Queries.GetAll.GetAllDtoCourse'
       additionalProperties: false
@@ -2350,10 +2266,8 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         courseId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Application.Student.Queries.GetScores.GetScoresDtoCourseClass:
       type: object
@@ -2363,7 +2277,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         sessionsCount:
           type: integer
           format: int32
@@ -2379,16 +2292,12 @@ components:
       properties:
         teacherId:
           type: string
-          nullable: true
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         isMale:
           type: boolean
       additionalProperties: false
@@ -2397,37 +2306,46 @@ components:
       properties:
         firstName:
           type: string
-          nullable: true
         middleName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         userName:
           type: string
-          nullable: true
         email:
           type: string
-          nullable: true
         isMale:
           type: boolean
         address:
           type: string
-          nullable: true
         teacherId:
           type: string
-          nullable: true
       additionalProperties: false
     UM.Domain.Dtos.CourseClass.ICourseClass:
       type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        sessionsCount:
+          type: integer
+          format: int32
+        status:
+          type: integer
+          format: int32
+        academicYear:
+          type: string
       additionalProperties: false
     UM.Domain.Dtos.GeneratedToken:
       type: object
       properties:
         token:
           type: string
-          nullable: true
         expiration:
           type: string
           format: date-time

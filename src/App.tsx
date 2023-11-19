@@ -7,7 +7,6 @@ import { updateToken } from './redux/feature/authSlice';
 import { LocalStorageConstant } from './shared/constants';
 import { routes } from './shared/routes';
 
-// 2. Call `extendTheme` and pass your custom values
 const theme = extendTheme({
   components: {
     Table: {

@@ -33,7 +33,7 @@ export class ManagementClass<SecurityDataType = unknown> extends HttpClient<Secu
    * @response `200` `GetManagementClassData` Success
    */
   getManagementClass = (query: GetManagementClassParams, params: RequestParams = {}) =>
-    this.request<GetManagementClassData, any>({
+    this.request<GetManagementClassData>({
       path: `/ManagementClass`,
       method: "GET",
       query: query,
@@ -51,7 +51,7 @@ export class ManagementClass<SecurityDataType = unknown> extends HttpClient<Secu
     data: UMApplicationManagementClassCommandsBulkCreateBulkCreateCommand,
     params: RequestParams = {},
   ) =>
-    this.request<PostManagementClassData, any>({
+    this.request<PostManagementClassData>({
       path: `/ManagementClass`,
       method: "POST",
       body: data,
@@ -67,7 +67,7 @@ export class ManagementClass<SecurityDataType = unknown> extends HttpClient<Secu
    * @response `200` `GetManagementClassByIdData` Success
    */
   getManagementClassById = (id: string, params: RequestParams = {}) =>
-    this.request<GetManagementClassByIdData, any>({
+    this.request<GetManagementClassByIdData>({
       path: `/ManagementClass/${id}`,
       method: "GET",
       ...params,
@@ -85,7 +85,7 @@ export class ManagementClass<SecurityDataType = unknown> extends HttpClient<Secu
     data: UMApplicationManagementClassCommandsUpdateUpdateCommandData,
     params: RequestParams = {},
   ) =>
-    this.request<PutManagementClassData, any>({
+    this.request<PutManagementClassData>({
       path: `/ManagementClass/${id}`,
       method: "PUT",
       body: data,
@@ -101,7 +101,7 @@ export class ManagementClass<SecurityDataType = unknown> extends HttpClient<Secu
    * @response `200` `DeleteManagementClassData` Success
    */
   deleteManagementClass = (id: string, params: RequestParams = {}) =>
-    this.request<DeleteManagementClassData, any>({
+    this.request<DeleteManagementClassData>({
       path: `/ManagementClass/${id}`,
       method: "DELETE",
       ...params,
@@ -119,7 +119,7 @@ export class ManagementClass<SecurityDataType = unknown> extends HttpClient<Secu
     data: UMApplicationManagementClassCommandsAddStudentsAddStudentsCommandData,
     params: RequestParams = {},
   ) =>
-    this.request<AddStudentsData, any>({
+    this.request<AddStudentsData>({
       path: `/ManagementClass/${id}/student`,
       method: "POST",
       body: data,

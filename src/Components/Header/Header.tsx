@@ -11,6 +11,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   Stack,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,10 +57,12 @@ const Header = () => {
               minW={0}
             >
               <Flex align='center' gap='2'>
-                {user && (
+                {user ? (
                   <>
                     {user.firstName} {user.lastName}
                   </>
+                ) : (
+                  <Spinner></Spinner>
                 )}
                 <Avatar
                   size={'sm'}

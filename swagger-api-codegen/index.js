@@ -14,6 +14,7 @@ generateApi({
   extractResponseBody: true,
   extractResponseError: true,
   generateResponses: true,
+  templates: path.resolve(__dirname, './templates'),
   sortTypes: true,
   hooks: {
     onFormatRouteName: (routeInfo, templateRouteName) => {
@@ -27,7 +28,7 @@ generateApi({
       ...currentConfiguration,
       apiConfig: {
         ...currentConfiguration.apiConfig,
-        baseUrl: 'https://um-be.laptrinhkhongvui.com',
+        baseUrl: 'http://localhost:5123',
       },
     }),
   },

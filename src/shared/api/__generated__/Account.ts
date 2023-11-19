@@ -22,7 +22,7 @@ export class Account<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetMyScoresData` Success
    */
   getMyScores = (params: RequestParams = {}) =>
-    this.request<GetMyScoresData, any>({
+    this.request<GetMyScoresData>({
       path: `/Account/score`,
       method: "GET",
       ...params,
@@ -36,7 +36,7 @@ export class Account<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetAccountByIdData` Success
    */
   getAccountById = (userId: string, params: RequestParams = {}) =>
-    this.request<GetAccountByIdData, any>({
+    this.request<GetAccountByIdData>({
       path: `/Account/${userId}`,
       method: "GET",
       ...params,
@@ -50,7 +50,7 @@ export class Account<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `PatchAccountData` Success
    */
   patchAccount = (userId: string, params: RequestParams = {}) =>
-    this.request<PatchAccountData, any>({
+    this.request<PatchAccountData>({
       path: `/Account/${userId}`,
       method: "PATCH",
       ...params,

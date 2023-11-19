@@ -21,6 +21,9 @@ import ProgramComponent from '../Pages/Program/Program';
 import Score from '../Pages/Score/Score';
 import { RoleConstant, RoleConstantValue, ValidRoutes } from './constants';
 import { SideBarItem } from './models';
+import CourseClassList from '../Pages/CourseClass/List/CourseClassList';
+import CourseClassDetails from '../Pages/CourseClass/Details/CourseClassDetails';
+import BackToPage from '../Layout/BackToPage/BackToPage';
 
 export const routes: RouteObject[] = [
   {
@@ -64,6 +67,26 @@ export const routes: RouteObject[] = [
         element: <ManagementClassComponent />,
       },
       {
+        path: 'course-class',
+        children: [
+          {
+            path: '',
+            element: <CourseClassList />,
+          },
+          {
+            path: ':courseClassId',
+            element: (
+              <BackToPage
+                url='/course-class'
+                text='Back to course classes list'
+              >
+                <CourseClassDetails />
+              </BackToPage>
+            ),
+          },
+        ],
+      },
+      {
         path: 'me',
         element: <PersonalInformation />,
       },
@@ -85,20 +108,20 @@ export const routesByRole: Record<RoleConstantValue, SideBarItem[]> = {
     { name: 'Calendar', url: '/calendar' },
     { name: 'Program', url: '/program' },
     { name: 'Course', url: '/course' },
-    // { name: 'Course class', url: '/course-class' },
+    { name: 'Course class', url: '/course-class' },
     { name: 'Management class', url: '/management-class' },
   ],
   [RoleConstant.student]: [
     { name: 'Home', url: '/home' },
     { name: 'Calendar', url: '/calendar' },
-    // { name: 'Course class', url: '/course-class' },
+    { name: 'Course class', url: '/course-class' },
     { name: 'Management class', url: '/management-class' },
     { name: 'Score', url: '/score' },
   ],
   [RoleConstant.teacher]: [
     { name: 'Home', url: '/home' },
     { name: 'Calendar', url: '/calendar' },
-    // { name: 'Course class', url: '/course-class' },
+    { name: 'Course class', url: '/course-class' },
     { name: 'Management class', url: '/management-class' },
   ],
 };

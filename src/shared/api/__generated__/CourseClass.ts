@@ -14,9 +14,9 @@ import {
   AssignToStudentsData,
   AssignToTeacherData,
   DeleteCourseClassData,
+  GetCourseClassByIdData,
   GetCourseClassData,
   GetCourseClassParams,
-  GetCoursecClassByIdData,
   GetScoresData,
   PostCourseClassData,
   PutCourseClassData,
@@ -39,7 +39,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
    * @response `200` `GetCourseClassData` Success
    */
   getCourseClass = (query: GetCourseClassParams, params: RequestParams = {}) =>
-    this.request<GetCourseClassData, any>({
+    this.request<GetCourseClassData>({
       path: `/CourseClass`,
       method: "GET",
       query: query,
@@ -54,7 +54,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
    * @response `200` `PostCourseClassData` Success
    */
   postCourseClass = (data: UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand, params: RequestParams = {}) =>
-    this.request<PostCourseClassData, any>({
+    this.request<PostCourseClassData>({
       path: `/CourseClass`,
       method: "POST",
       body: data,
@@ -65,12 +65,12 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
    * No description
    *
    * @tags CourseClass
-   * @name GetCoursecClassById
+   * @name GetCourseClassById
    * @request GET:/CourseClass/{id}
-   * @response `200` `GetCoursecClassByIdData` Success
+   * @response `200` `GetCourseClassByIdData` Success
    */
-  getCoursecClassById = (id: string, params: RequestParams = {}) =>
-    this.request<GetCoursecClassByIdData, any>({
+  getCourseClassById = (id: string, params: RequestParams = {}) =>
+    this.request<GetCourseClassByIdData>({
       path: `/CourseClass/${id}`,
       method: "GET",
       ...params,
@@ -88,7 +88,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
     data: UMApplicationCourseClassCommandsUpdateUpdateCommandData,
     params: RequestParams = {},
   ) =>
-    this.request<PutCourseClassData, any>({
+    this.request<PutCourseClassData>({
       path: `/CourseClass/${id}`,
       method: "PUT",
       body: data,
@@ -104,7 +104,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
    * @response `200` `DeleteCourseClassData` Success
    */
   deleteCourseClass = (id: string, params: RequestParams = {}) =>
-    this.request<DeleteCourseClassData, any>({
+    this.request<DeleteCourseClassData>({
       path: `/CourseClass/${id}`,
       method: "DELETE",
       ...params,
@@ -122,7 +122,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
     data: UMApplicationCourseClassCommandsAssignToManagementClassesAssignToManagementClassesCommandData,
     params: RequestParams = {},
   ) =>
-    this.request<AssignToManagementClassesData, any>({
+    this.request<AssignToManagementClassesData>({
       path: `/CourseClass/${id}/management-class`,
       method: "POST",
       body: data,
@@ -138,7 +138,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
    * @response `200` `GetScoresData` Success
    */
   getScores = (id: string, params: RequestParams = {}) =>
-    this.request<GetScoresData, any>({
+    this.request<GetScoresData>({
       path: `/CourseClass/${id}/score`,
       method: "GET",
       ...params,
@@ -156,7 +156,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
     data: UMApplicationCourseClassCommandsAssignToStudentsAssignToStudentsCommandData,
     params: RequestParams = {},
   ) =>
-    this.request<AssignToStudentsData, any>({
+    this.request<AssignToStudentsData>({
       path: `/CourseClass/${id}/student`,
       method: "POST",
       body: data,
@@ -177,7 +177,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
     data: UMApplicationCourseClassCommandsUpdateScoreUpdateScoreCommandData,
     params: RequestParams = {},
   ) =>
-    this.request<UpdateScoreData, any>({
+    this.request<UpdateScoreData>({
       path: `/CourseClass/${id}/student/${studentId}`,
       method: "PUT",
       body: data,
@@ -193,7 +193,7 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
    * @response `200` `AssignToTeacherData` Success
    */
   assignToTeacher = (id: string, teacherId: string, params: RequestParams = {}) =>
-    this.request<AssignToTeacherData, any>({
+    this.request<AssignToTeacherData>({
       path: `/CourseClass/${id}/teacher/${teacherId}`,
       method: "POST",
       ...params,

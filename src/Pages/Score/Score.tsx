@@ -7,31 +7,27 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { useState } from 'react';
 import {
   Account,
   UMApplicationStudentQueriesGetScoresGetScoresDto,
   UMDomainEnumsCourseClassECourseClassStatus,
 } from '../../shared/api';
+import { useWaitUserInfo } from '../../shared/hooks';
 
 const Score = () => {
-  const user = useSelector((store: RootState) => store.auth.user);
   const [scores, setScores] = useState<
     UMApplicationStudentQueriesGetScoresGetScoresDto[]
   >([]);
 
-  const getSessions = async () => {
+  const getScores = async () => {
     const res = await new Account().getMyScores();
     if (res.data.data) {
       setScores(res.data.data);
     }
   };
 
-  useEffect(() => {
-    if (user) getSessions();
-  }, [user]);
+  useWaitUserInfo(() => getScores());
 
   return (
     <TableContainer>
@@ -39,14 +35,14 @@ const Score = () => {
         <Thead>
           <Tr>
             <Th>#</Th>
+            <Th>Class name</Th>
             <Th>Course code</Th>
             <Th>Course name</Th>
-            <Th>Class name</Th>
             <Th textAlign='center'>Sessions</Th>
             <Th textAlign='center'>Status</Th>
             <Th textAlign='center'>Number score</Th>
             <Th textAlign='center'>Letter score</Th>
-            <Th>Giảng viên</Th>
+            <Th>Teacher</Th>
           </Tr>
         </Thead>
 
@@ -61,9 +57,9 @@ const Score = () => {
             return (
               <Tr key={idx}>
                 <Td>{idx + 1}</Td>
+                <Td>{courseClass?.name}</Td>
                 <Td>{course?.courseId}</Td>
                 <Td>{course?.name}</Td>
-                <Td>{courseClass?.name}</Td>
                 <Td textAlign='center'>{courseClass?.sessionsCount}</Td>
                 <Td textAlign='center'>{status}</Td>
                 <Td textAlign='center'>{score.score}</Td>

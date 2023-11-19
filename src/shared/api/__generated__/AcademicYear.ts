@@ -27,7 +27,7 @@ export class AcademicYear<SecurityDataType = unknown> extends HttpClient<Securit
    * @response `200` `GetAcademicYearData` Success
    */
   getAcademicYear = (params: RequestParams = {}) =>
-    this.request<GetAcademicYearData, any>({
+    this.request<GetAcademicYearData>({
       path: `/AcademicYear`,
       method: "GET",
       ...params,
@@ -44,7 +44,7 @@ export class AcademicYear<SecurityDataType = unknown> extends HttpClient<Securit
     data: UMApplicationAcademicYearCommandsUpdateCurrentUpdateCurrentCommand,
     params: RequestParams = {},
   ) =>
-    this.request<PutAcademicYearData, any>({
+    this.request<PutAcademicYearData>({
       path: `/AcademicYear`,
       method: "PUT",
       body: data,
@@ -60,7 +60,7 @@ export class AcademicYear<SecurityDataType = unknown> extends HttpClient<Securit
    * @response `200` `GetRecommendationsData` Success
    */
   getRecommendations = (params: RequestParams = {}) =>
-    this.request<GetRecommendationsData, any>({
+    this.request<GetRecommendationsData>({
       path: `/AcademicYear/recommendations`,
       method: "GET",
       ...params,

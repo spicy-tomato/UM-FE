@@ -141,8 +141,8 @@ const Course = () => {
         </div>
       </div>
       <div className='course-area'>
-        {courses.map((course) => (
-          <div key={course.id} className='course-row'>
+        {courses.map((course, idx) => (
+          <div key={idx} className='course-row'>
             <div className='course-item'>
               <div
                 className='course-item-title'
