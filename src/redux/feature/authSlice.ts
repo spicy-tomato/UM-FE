@@ -5,7 +5,7 @@ import {
   RoleConstantValue,
 } from '../../shared/constants';
 
-type User = {
+export type User = {
   extraData: Record<string, string>;
   id: string;
   firstName: string;

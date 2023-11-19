@@ -19,6 +19,7 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Select,
   Table,
   TableContainer,
   Tbody,
@@ -27,16 +28,18 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import MainData from '../../../Layout/MainData/MainData';
 import {
   Course,
   CourseClass,
+  UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand,
   UMApplicationCourseQueriesGetAllGetAllDto,
   UMDomainDtosCourseClassICourseClass,
   UMDomainEnumsCourseClassECourseClassStatus,
@@ -44,6 +47,7 @@ import {
 import { ValidationMessage } from '../../../shared/constants';
 import { setStateWithApiFallback } from '../../../shared/functions';
 import { useWaitUserInfo } from '../../../shared/hooks';
+import { User } from '../../../redux/feature/authSlice';
 
 type CourseClassType = UMDomainDtosCourseClassICourseClass & {
   teacher: {
@@ -68,26 +72,27 @@ type CreateFormData = {
   sessionsCount: number;
 };
 
-const AddButton = () => {
+type AddButtonProps = {
+  reload: () => void;
+};
+
+const AddButton = ({ reload }: AddButtonProps) => {
   const {
     handleSubmit,
     register,
     setValue,
     watch,
     reset,
-    formState: { errors, isSubmitting },
-  } = useForm<CreateFormData>({
-    defaultValues: {
-      startAt: new Date(),
-    },
-  });
+    formState: { errors },
+  } = useForm<CreateFormData>();
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const watchStartAt = watch('startAt');
   const user = useWaitUserInfo();
-  const [course, setCourses] =
-    useState<UMApplicationCourseQueriesGetAllGetAllDto[]>();
-
-    // (await new Course().getCourse()).data.data
+  const [courses, setCourses] = useState<
+    UMApplicationCourseQueriesGetAllGetAllDto[] | undefined
+  >([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -95,7 +100,29 @@ const AddButton = () => {
     }
   }, [user]);
 
-  const onSubmit = () => {};
+  const onSubmit: SubmitHandler<CreateFormData> = async (data) => {
+    setIsSubmitting(true);
+
+    const body: UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand = {
+      ...data,
+      startAt: data.startAt.toISOString(),
+    };
+
+    try {
+      await new CourseClass().postCourseClass(body);
+
+      toast({
+        title: `Created ${data.numberOfClasses} classes`,
+        status: 'success',
+        isClosable: true,
+      });
+      onClickClose();
+      reload();
+    } catch {
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const onClickClose = () => {
     reset();
@@ -115,6 +142,25 @@ const AddButton = () => {
           <ModalCloseButton />
           <ModalBody>
             <Flex direction='column' rowGap='3'>
+              <FormControl isInvalid={!!errors.courseId}>
+                <FormLabel>Course</FormLabel>
+                <Select
+                  placeholder='Select course'
+                  {...register('courseId', {
+                    required: ValidationMessage.required,
+                  })}
+                >
+                  {courses?.map((course) => (
+                    <option value={course.id} key={course.id}>
+                      {course.name} ({course.courseId})
+                    </option>
+                  ))}
+                </Select>
+                <FormErrorMessage>
+                  {errors.courseId && errors.courseId.message}
+                </FormErrorMessage>
+              </FormControl>
+
               <FormControl isInvalid={!!errors.numberOfClasses}>
                 <FormLabel>Number of classes</FormLabel>
                 <NumberInput min={1}>
@@ -179,88 +225,105 @@ const AddButton = () => {
   );
 };
 
-const Actions = () => {
+type ActionsProps = {
+  reload: () => void;
+};
+
+const Actions = ({ reload }: ActionsProps) => {
   return (
     <Flex justify='end'>
-      <AddButton></AddButton>
+      <AddButton reload={reload}></AddButton>
     </Flex>
   );
 };
 
-const List = () => {
+type ListProps = {
+  courseClasses: CourseClassType[];
+  user: User;
+};
+
+const List = ({ courseClasses, user }: ListProps) => {
+  return (
+    <TableContainer>
+      <Table variant='striped' size='sm'>
+        <Thead>
+          <Tr>
+            <Th>#</Th>
+            <Th>Class name</Th>
+            <Th>Course code</Th>
+            <Th>Course name</Th>
+            <Th textAlign='center'>Sessions</Th>
+            <Th textAlign='center'>Status</Th>
+            {user?.role !== 'Teacher' && <Th>Teacher</Th>}
+          </Tr>
+        </Thead>
+
+        <Tbody>
+          {courseClasses?.map((courseClass, idx) => {
+            const status = courseClass.status
+              ? UMDomainEnumsCourseClassECourseClassStatus[courseClass.status]
+              : null;
+
+            return (
+              <Tr key={idx}>
+                <Td>{idx + 1}</Td>
+                <Td>
+                  <Link as={ReactRouterLink} to={courseClass.id}>
+                    {courseClass?.name}
+                  </Link>
+                </Td>
+                <Td>{courseClass.course?.courseId}</Td>
+                <Td>{courseClass.course?.name}</Td>
+                <Td textAlign='center'>{courseClass?.sessionsCount}</Td>
+                <Td textAlign='center'>{status}</Td>
+                {user?.role !== 'Teacher' && (
+                  <Td>
+                    {courseClass?.teacher?.firstName}{' '}
+                    {courseClass?.teacher?.lastName}
+                  </Td>
+                )}
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+const CourseClassList = () => {
   const user = useWaitUserInfo();
-  const [courseClasses, setCourseClasses] = useState<CourseClassType[]>();
+  const [courseClasses, setCourseClasses] = useState<
+    CourseClassType[] | undefined
+  >();
+
+  const getCourseClasses = () => {
+    setStateWithApiFallback(
+      new CourseClass().getCourseClass({}) as Promise<AxiosResponse<any>>,
+      setCourseClasses,
+      []
+    );
+  };
 
   useEffect(() => {
     if (user) {
-      setStateWithApiFallback(
-        new CourseClass().getCourseClass({}) as Promise<AxiosResponse<any>>,
-        setCourseClasses,
-        []
-      );
+      getCourseClasses();
     }
   }, [user]);
 
   return (
     <MainData data={courseClasses}>
-      <TableContainer>
-        <Table variant='striped' size='sm'>
-          <Thead>
-            <Tr>
-              <Th>#</Th>
-              <Th>Class name</Th>
-              <Th>Course code</Th>
-              <Th>Course name</Th>
-              <Th textAlign='center'>Sessions</Th>
-              <Th textAlign='center'>Status</Th>
-              {user?.role !== 'Teacher' && <Th>Teacher</Th>}
-            </Tr>
-          </Thead>
-
-          <Tbody>
-            {courseClasses?.map((courseClass, idx) => {
-              const status = courseClass.status
-                ? UMDomainEnumsCourseClassECourseClassStatus[courseClass.status]
-                : null;
-
-              return (
-                <Tr key={idx}>
-                  <Td>{idx + 1}</Td>
-                  <Td>
-                    <Link as={ReactRouterLink} to={courseClass.id}>
-                      {courseClass?.name}
-                    </Link>
-                  </Td>
-                  <Td>{courseClass.course?.courseId}</Td>
-                  <Td>{courseClass.course?.name}</Td>
-                  <Td textAlign='center'>{courseClass?.sessionsCount}</Td>
-                  <Td textAlign='center'>{status}</Td>
-                  {user?.role !== 'Teacher' && (
-                    <Td>
-                      {courseClass?.teacher?.firstName}{' '}
-                      {courseClass?.teacher?.lastName}
-                    </Td>
-                  )}
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
-      </TableContainer>
+      <Grid rowGap='3'>
+        <GridItem>
+          <Actions reload={getCourseClasses}></Actions>
+        </GridItem>
+        <GridItem>
+          {user && courseClasses && (
+            <List user={user} courseClasses={courseClasses}></List>
+          )}
+        </GridItem>
+      </Grid>
     </MainData>
-  );
-};
-
-const CourseClassList = () => {
-  return (
-    <Grid rowGap='3'>
-      <GridItem>
-        <Actions></Actions>
-      </GridItem>
-      <GridItem>
-        <List></List>
-      </GridItem>
-    </Grid>
   );
 };
 

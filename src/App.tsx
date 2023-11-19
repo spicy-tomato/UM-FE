@@ -1,4 +1,8 @@
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  ToastProviderProps,
+  extendTheme,
+} from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -25,6 +29,12 @@ const theme = extendTheme({
   },
 });
 
+const toastOptions: ToastProviderProps = {
+  defaultOptions: {
+    position: 'top-right',
+  },
+};
+
 const router = createBrowserRouter(routes);
 
 function App() {
@@ -36,7 +46,7 @@ function App() {
   }, []);
 
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={theme} toastOptions={toastOptions}>
       <RouterProvider router={router} />
     </ChakraProvider>
   );

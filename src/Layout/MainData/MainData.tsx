@@ -6,16 +6,16 @@ type MainDataProps<T> = {
 };
 
 const MainData = <T,>({ data, children }: MainDataProps<T>) => {
-  if (data === null || (Array.isArray(data) && data.length === 0)) {
-    return <>No data</>;
-  }
-
   if (data === undefined) {
     return (
       <Flex justify='center'>
         <Spinner />
       </Flex>
     );
+  }
+
+  if (data === null || (Array.isArray(data) && data.length === 0)) {
+    return <>No data</>;
   }
 
   return children;
