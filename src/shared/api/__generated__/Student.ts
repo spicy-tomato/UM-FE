@@ -22,7 +22,7 @@ export class Student<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetStudentData` Success
    */
   getStudent = (id: string, params: RequestParams = {}) =>
-    this.request<GetStudentData, any>({
+    this.request<GetStudentData>({
       path: `/Student/${id}/score`,
       method: "GET",
       ...params,
@@ -36,7 +36,7 @@ export class Student<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `ImportData` Success
    */
   import = (params: RequestParams = {}) =>
-    this.request<ImportData, any>({
+    this.request<ImportData>({
       path: `/Student/import`,
       method: "POST",
       ...params,

@@ -4,7 +4,7 @@ const path = require('path');
 const generateOperationId = require('./generateOperationId');
 
 generateApi({
-  input: path.resolve(__dirname, '../swagger.yaml'),
+  input: path.resolve(__dirname, './swagger.yaml'),
   output: path.resolve(__dirname, '../src/shared/api/__generated__'),
   httpClientType: 'axios',
   cleanOutput: true,
@@ -14,6 +14,7 @@ generateApi({
   extractResponseBody: true,
   extractResponseError: true,
   generateResponses: true,
+  templates: path.resolve(__dirname, './templates'),
   sortTypes: true,
   hooks: {
     onFormatRouteName: (routeInfo, templateRouteName) => {
@@ -27,7 +28,7 @@ generateApi({
       ...currentConfiguration,
       apiConfig: {
         ...currentConfiguration.apiConfig,
-        baseUrl: 'https://um-be.laptrinhkhongvui.com',
+        baseUrl: 'http://localhost:5123',
       },
     }),
   },

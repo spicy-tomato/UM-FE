@@ -32,7 +32,7 @@ export class Session<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetSessionData` Success
    */
   getSession = (query: GetSessionParams, params: RequestParams = {}) =>
-    this.request<GetSessionData, any>({
+    this.request<GetSessionData>({
       path: `/Session`,
       method: "GET",
       query: query,
@@ -47,7 +47,7 @@ export class Session<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetAllChangeRequestData` Success
    */
   getAllChangeRequest = (query: GetAllChangeRequestParams, params: RequestParams = {}) =>
-    this.request<GetAllChangeRequestData, any>({
+    this.request<GetAllChangeRequestData>({
       path: `/Session/change`,
       method: "GET",
       query: query,
@@ -62,7 +62,7 @@ export class Session<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `GetChangeRequestByIdData` Success
    */
   getChangeRequestById = (id: string, params: RequestParams = {}) =>
-    this.request<GetChangeRequestByIdData, any>({
+    this.request<GetChangeRequestByIdData>({
       path: `/Session/change/${id}`,
       method: "GET",
       ...params,
@@ -76,7 +76,7 @@ export class Session<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `ApproveData` Success
    */
   approve = (id: string, params: RequestParams = {}) =>
-    this.request<ApproveData, any>({
+    this.request<ApproveData>({
       path: `/Session/change/${id}/approve`,
       method: "POST",
       ...params,
@@ -90,7 +90,7 @@ export class Session<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `DenyData` Success
    */
   deny = (id: string, params: RequestParams = {}) =>
-    this.request<DenyData, any>({
+    this.request<DenyData>({
       path: `/Session/change/${id}/deny`,
       method: "POST",
       ...params,
@@ -108,7 +108,7 @@ export class Session<SecurityDataType = unknown> extends HttpClient<SecurityData
     data: UMApplicationChangeSessionRequestCommandsCreateCreateCommandData,
     params: RequestParams = {},
   ) =>
-    this.request<CreateChangeRequestData, any>({
+    this.request<CreateChangeRequestData>({
       path: `/Session/${id}/change`,
       method: "POST",
       body: data,

@@ -28,7 +28,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
    * @response `200` `GetMySummaryInfoData` Success
    */
   getMySummaryInfo = (params: RequestParams = {}) =>
-    this.request<GetMySummaryInfoData, any>({
+    this.request<GetMySummaryInfoData>({
       path: `/Auth`,
       method: "GET",
       ...params,
@@ -42,7 +42,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
    * @response `200` `UpdateInformationData` Success
    */
   updateInformation = (data: UMApplicationAuthCommandsUpdateMyInfoUpdateMyInfoCommand, params: RequestParams = {}) =>
-    this.request<UpdateInformationData, any>({
+    this.request<UpdateInformationData>({
       path: `/Auth`,
       method: "PATCH",
       body: data,
@@ -58,7 +58,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
    * @response `200` `LoginData` Success
    */
   login = (data: UMApplicationAuthCommandsLoginLoginCommand, params: RequestParams = {}) =>
-    this.request<LoginData, any>({
+    this.request<LoginData>({
       path: `/Auth/login`,
       method: "POST",
       body: data,

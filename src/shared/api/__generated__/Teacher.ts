@@ -22,7 +22,7 @@ export class Teacher<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @response `200` `PostTeacherData` Success
    */
   postTeacher = (data: UMApplicationTeacherCommandsCreateCreateCommand, params: RequestParams = {}) =>
-    this.request<PostTeacherData, any>({
+    this.request<PostTeacherData>({
       path: `/Teacher`,
       method: "POST",
       body: data,
