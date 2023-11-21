@@ -10,13 +10,13 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
+import { SideBarItem } from '@models';
+import { RootState } from '@redux';
+import { routeIcon, routesByRole } from '@routes';
 import { useEffect, useState } from 'react';
 import { AiFillHome } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
-import { NavLink as ReactRouterLink } from 'react-router-dom';
-import { RootState } from '../../redux/store';
-import { SideBarItem } from '../../shared/models';
-import { routeIcon, routesByRole } from '../../shared/routes';
+import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
 
 function SideBar() {
@@ -39,7 +39,6 @@ function SideBar() {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
     </>
   );
@@ -69,7 +68,7 @@ const SidebarContent = ({ onClose, ...rest }: any) => {
           <NavItem
             key={item.name}
             icon={routeIcon[item.url]}
-            as={ReactRouterLink}
+            as={NavLink}
             to={item.url}
             className='nav-item'
           >
@@ -103,13 +102,7 @@ const NavItem = ({ icon, children, ...rest }: any) => {
         }}
         {...rest}
       >
-        {icon && (
-          <Icon
-            as={icon}
-            mr='4'
-            fontSize='16'
-          />
-        )}
+        {icon && <Icon as={icon} mr='4' fontSize='16' />}
         {children}
       </Flex>
     </Box>
@@ -143,4 +136,4 @@ const MobileNav = ({ onOpen, ...rest }: any) => {
   );
 };
 
-export default SideBar;
+export { SideBar };

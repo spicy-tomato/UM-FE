@@ -1,3 +1,4 @@
+import { Auth } from '@api';
 import {
   Button,
   Checkbox,
@@ -9,14 +10,12 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react';
+import { RootState, updateToken } from '@redux';
 import { FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { updateToken } from '../../redux/feature/authSlice';
-import { RootState } from '../../redux/store';
-import { Auth } from '../../shared/api/__generated__/Auth';
 
-export default function SplitScreen() {
+const Login = () => {
   const token = useSelector((store: RootState) => store.auth.token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -92,4 +91,6 @@ export default function SplitScreen() {
       </Flex>
     </Stack>
   );
-}
+};
+
+export { Login };

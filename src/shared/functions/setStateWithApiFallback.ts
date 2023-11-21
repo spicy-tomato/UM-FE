@@ -1,6 +1,6 @@
+import { UMApplicationCommonModelsError } from '@api';
 import { AxiosResponse } from 'axios';
 import { Dispatch, SetStateAction } from 'react';
-import { UMApplicationCommonModelsError } from '../api';
 
 export async function setStateWithApiFallback<
   S,

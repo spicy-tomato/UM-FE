@@ -14,10 +14,9 @@ import {
   Spinner,
   Stack,
 } from '@chakra-ui/react';
+import { RootState, logOut } from '@redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logOut } from '../../redux/feature/authSlice';
-import { RootState } from '../../redux/store';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -100,4 +99,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export { Header };

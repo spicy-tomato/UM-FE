@@ -1,4 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import { RoleConstant, RoleConstantValue, ValidRoutes } from '@constants';
+import { Layout, ProtectedRoute } from '@layout';
+import { SideBarItem } from '@models';
 import { IconType } from 'react-icons';
 import {
   AiFillBook,
@@ -9,21 +12,16 @@ import {
 import { PiExamFill } from 'react-icons/pi';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Navigate, RouteObject } from 'react-router-dom';
-import Layout from '../Layout/Layout';
-import ProtectedRoute from '../Layout/ProtectedRoute/ProtectedRoute';
-import Calendar from '../Pages/Calendar/Calendar';
-import Course from '../Pages/Course/Course';
-import Home from '../Pages/Home/Home';
-import Login from '../Pages/Login/Login';
-import ManagementClassComponent from '../Pages/ManagementClass/ManagementClass';
-import PersonalInformation from '../Pages/PersonalInformation/PersonalInformation';
-import ProgramComponent from '../Pages/Program/Program';
-import Score from '../Pages/Score/Score';
-import { RoleConstant, RoleConstantValue, ValidRoutes } from './constants';
-import { SideBarItem } from './models';
-import CourseClassList from '../Pages/CourseClass/List/CourseClassList';
-import CourseClassDetails from '../Pages/CourseClass/Details/CourseClassDetails';
-import BackToPage from '../Layout/BackToPage/BackToPage';
+import { Calendar } from 'src/Pages/Calendar/Calendar';
+import { CourseComponent } from 'src/Pages/Course/Course';
+import { CourseClassDetails } from 'src/Pages/CourseClass/CourseClassDetails';
+import { CourseClassList } from 'src/Pages/CourseClass/CourseClassList';
+import { Home } from 'src/Pages/Home/Home';
+import { Login } from 'src/Pages/Login/Login';
+import { ManagementClassComponent } from 'src/Pages/ManagementClass/ManagementClass';
+import { PersonalInformation } from 'src/Pages/PersonalInformation/PersonalInformation';
+import { ProgramComponent } from 'src/Pages/Program/Program';
+import { Score } from 'src/Pages/Score/Score';
 
 export const routes: RouteObject[] = [
   {
@@ -52,7 +50,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'course',
-        element: <Course />,
+        element: <CourseComponent />,
       },
       {
         path: 'program',

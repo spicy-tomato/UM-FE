@@ -21,4 +21,4 @@ const MainData = <T,>({ data, children }: MainDataProps<T>) => {
   return children;
 };
 
-export default MainData;
+export { MainData };

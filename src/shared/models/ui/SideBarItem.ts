@@ -1,4 +1,4 @@
-import { ValidRoutes } from '../../constants';
+import { ValidRoutes } from '@constants';
 
 export type SideBarItem = {
   name: string;

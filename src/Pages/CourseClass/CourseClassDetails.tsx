@@ -1,4 +1,11 @@
 import {
+  CourseClass,
+  Teacher,
+  UMApplicationCourseClassCommandsUpdateUpdateCommandData,
+  UMApplicationCourseClassQueriesGetByIdGetByIdDto,
+  UMDomainEnumsCourseClassECourseClassStatus,
+} from '@api';
+import {
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
@@ -45,27 +52,18 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { SlotsName, ValidationMessage } from '@constants';
+import { setStateWithApiFallback } from '@functions';
+import { StringHelper } from '@helpers';
+import { useWaitUserInfo } from '@hooks';
+import { BackToPage, MainData } from '@layout';
+import { SelectItemType } from '@models';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { Select } from 'chakra-react-select';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import BackToPage from '../../../Layout/BackToPage/BackToPage';
-import MainData from '../../../Layout/MainData/MainData';
-import {
-  CourseClass,
-  Teacher,
-  UMApplicationCourseClassCommandsUpdateUpdateCommandData,
-  UMApplicationCourseClassQueriesGetByIdGetByIdDto,
-  UMApplicationCourseClassQueriesGetByIdGetByIdDtoSlot,
-  UMDomainEnumsCourseClassECourseClassStatus,
-} from '../../../shared/api';
-import { SlotsName, ValidationMessage } from '../../../shared/constants';
-import { setStateWithApiFallback } from '../../../shared/functions';
-import { StringHelper } from '../../../shared/helpers';
-import { useWaitUserInfo } from '../../../shared/hooks';
-import { SelectItemType } from '../../../shared/models';
 
 type ContentProps = {
   courseClass: UMApplicationCourseClassQueriesGetByIdGetByIdDto;
@@ -612,4 +610,4 @@ const CourseClassDetails = () => {
   );
 };
 
-export default CourseClassDetails;
+export { CourseClassDetails };

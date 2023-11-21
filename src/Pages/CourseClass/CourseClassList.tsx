@@ -1,4 +1,12 @@
 import {
+  Course,
+  CourseClass,
+  UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand,
+  UMApplicationCourseQueriesGetAllGetAllDto,
+  UMDomainDtosCourseClassICourseClass,
+  UMDomainEnumsCourseClassECourseClassStatus,
+} from '@api';
+import {
   Button,
   Flex,
   FormControl,
@@ -30,24 +38,16 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { ValidationMessage } from '@constants';
+import { setStateWithApiFallback } from '@functions';
+import { useWaitUserInfo } from '@hooks';
+import { MainData } from '@layout';
+import { User } from '@redux';
 import { AxiosResponse } from 'axios';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import MainData from '../../../Layout/MainData/MainData';
-import {
-  Course,
-  CourseClass,
-  UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand,
-  UMApplicationCourseQueriesGetAllGetAllDto,
-  UMDomainDtosCourseClassICourseClass,
-  UMDomainEnumsCourseClassECourseClassStatus,
-} from '../../../shared/api';
-import { ValidationMessage } from '../../../shared/constants';
-import { setStateWithApiFallback } from '../../../shared/functions';
-import { useWaitUserInfo } from '../../../shared/hooks';
-import { User } from '../../../redux/feature/authSlice';
 
 type CourseClassType = UMDomainDtosCourseClassICourseClass & {
   teacher: {
@@ -327,4 +327,4 @@ const CourseClassList = () => {
   );
 };
 
-export default CourseClassList;
+export { CourseClassList };

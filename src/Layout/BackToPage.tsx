@@ -23,4 +23,4 @@ const BackToPage = ({ url, text, rightContent, children }: BackToPageProps) => {
   );
 };
 
-export default BackToPage;
+export { BackToPage };

@@ -1,5 +1,4 @@
-import { Box, Button, Flex, Heading, Link } from '@chakra-ui/react';
-import './NotFound.css';
+import { Box, Flex, Heading, Link } from '@chakra-ui/react';
 
 const NotFound = () => {
   return (
@@ -43,4 +42,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export { NotFound };

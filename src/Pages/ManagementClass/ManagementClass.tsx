@@ -16,10 +16,10 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { ManagementClass } from '../../shared/api';
 import './ManagementClass.css';
+import { ManagementClass } from '@api';
 
-function ManagementClassComponent() {
+const ManagementClassComponent = () => {
   const [managementClass, setManagementClass] = useState<any[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
@@ -247,6 +247,6 @@ function ManagementClassComponent() {
       </table>
     </div>
   );
-}
+};
 
-export default ManagementClassComponent;
+export { ManagementClassComponent };

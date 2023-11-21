@@ -1,14 +1,11 @@
+import { Auth } from '@api';
 import { Grid, GridItem } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { Header, SideBar } from '@components';
+import { LocalStorageConstant } from '@constants';
+import { RootState, updateToken, updateUser } from '@redux';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
-import Header from '../Components/Header/Header';
-import SideBar from '../Components/SideBar/SideBar';
-import { updateToken, updateUser } from '../redux/feature/authSlice';
-import { RootState } from '../redux/store';
-import { Auth } from '../shared/api';
-import './Layout.css';
-import { LocalStorageConstant } from '../shared/constants';
 
 const Layout = () => {
   const dispatch = useDispatch();
@@ -54,4 +51,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export { Layout };
