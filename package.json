@@ -17,6 +17,7 @@
     "@vitejs/plugin-react": "^4.2.0",
     "axios": "^1.5.1",
     "chakra-dayzed-datepicker": "^0.2.10",
+    "chakra-react-select": "^4.7.6",
     "date-fns": "^2.30.0",
     "dayzed": "^3.2.3",
     "dotenv": "^16.3.1",

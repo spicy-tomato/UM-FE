@@ -105,6 +105,13 @@ export interface GetSessionParams {
 export type GetStudentData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto;
 
+export type GetTeacherData =
+  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationTeacherQueriesGetAllGetAllDto;
+
+export interface GetTeacherParams {
+  Query?: string;
+}
+
 export type ImportData = UMApplicationCommonModelsResultSystemBoolean;
 
 export type LoginData = UMApplicationCommonModelsResultUMDomainDtosGeneratedToken;
@@ -679,6 +686,12 @@ export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumera
   success?: boolean;
 }
 
+export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationTeacherQueriesGetAllGetAllDto {
+  data?: UMApplicationTeacherQueriesGetAllGetAllDto[];
+  errors?: UMApplicationCommonModelsError[] | null;
+  success?: boolean;
+}
+
 export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMDomainDtosCourseClassICourseClass {
   data?: UMDomainDtosCourseClassICourseClass[];
   errors?: UMApplicationCommonModelsError[] | null;
@@ -769,7 +782,6 @@ export interface UMApplicationCourseClassCommandsUpdateUpdateCommandData {
   slots?: string;
   /** @format date-time */
   startAt?: string;
-  teacherId?: string | null;
 }
 
 export interface UMApplicationCourseClassQueriesGetByIdGetByIdDto {
@@ -836,6 +848,8 @@ export interface UMApplicationCourseClassQueriesGetByIdGetByIdDtoSlotCourseClass
 
 export interface UMApplicationCourseClassQueriesGetByIdGetByIdDtoTeacher {
   firstName?: string;
+  /** @format uuid */
+  id?: string;
   isMale?: boolean;
   lastName?: string;
   middleName?: string;
@@ -1053,6 +1067,16 @@ export interface UMApplicationTeacherCommandsCreateCreateCommand {
   middleName?: string;
   teacherId?: string;
   userName?: string;
+}
+
+export interface UMApplicationTeacherQueriesGetAllGetAllDto {
+  firstName?: string;
+  /** @format uuid */
+  id?: string;
+  isMale?: boolean;
+  lastName?: string;
+  middleName?: string;
+  teacherId?: string;
 }
 
 export interface UMDomainDtosCourseClassICourseClass {

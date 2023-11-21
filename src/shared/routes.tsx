@@ -75,14 +75,7 @@ export const routes: RouteObject[] = [
           },
           {
             path: ':courseClassId',
-            element: (
-              <BackToPage
-                url='/course-class'
-                text='Back to course classes list'
-              >
-                <CourseClassDetails />
-              </BackToPage>
-            ),
+            element: <CourseClassDetails />,
           },
         ],
       },

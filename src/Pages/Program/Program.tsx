@@ -223,7 +223,6 @@ function ProgramComponent() {
         <tbody>
           {programs.map((program, idx) => (
             <tr key={program.id}>
-              {' '}
               {/* Thay đổi key thành program.id */}
               <td>{idx + 1}</td>
               <td>{program.programId}</td>

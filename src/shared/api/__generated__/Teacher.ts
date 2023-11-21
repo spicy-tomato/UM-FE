@@ -9,10 +9,30 @@
  * ---------------------------------------------------------------
  */
 
-import { PostTeacherData, UMApplicationTeacherCommandsCreateCreateCommand } from "./data-contracts";
+import {
+  GetTeacherData,
+  GetTeacherParams,
+  PostTeacherData,
+  UMApplicationTeacherCommandsCreateCreateCommand,
+} from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Teacher<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Teacher
+   * @name GetTeacher
+   * @request GET:/Teacher
+   * @response `200` `GetTeacherData` Success
+   */
+  getTeacher = (query: GetTeacherParams, params: RequestParams = {}) =>
+    this.request<GetTeacherData>({
+      path: `/Teacher`,
+      method: "GET",
+      query: query,
+      ...params,
+    });
   /**
    * No description
    *
