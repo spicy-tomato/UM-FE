@@ -83,7 +83,7 @@ export const routes: RouteObject[] = [
             element: <ManagementClassList />,
           },
           {
-            path: ':courseClassId',
+            path: ':managementClassId',
             element: <ManagementClassDetails />,
           },
         ],

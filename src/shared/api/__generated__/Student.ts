@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { GetStudentData, ImportData } from "./data-contracts";
+import { GetScoreData, GetStudentData, GetStudentParams, ImportData } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
 export class Student<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
@@ -18,11 +18,26 @@ export class Student<SecurityDataType = unknown> extends HttpClient<SecurityData
    *
    * @tags Student
    * @name GetStudent
-   * @request GET:/Student/{id}/score
+   * @request GET:/Student
    * @response `200` `GetStudentData` Success
    */
-  getStudent = (id: string, params: RequestParams = {}) =>
+  getStudent = (query: GetStudentParams, params: RequestParams = {}) =>
     this.request<GetStudentData>({
+      path: `/Student`,
+      method: "GET",
+      query: query,
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Student
+   * @name GetScore
+   * @request GET:/Student/{id}/score
+   * @response `200` `GetScoreData` Success
+   */
+  getScore = (id: string, params: RequestParams = {}) =>
+    this.request<GetScoreData>({
       path: `/Student/${id}/score`,
       method: "GET",
       ...params,

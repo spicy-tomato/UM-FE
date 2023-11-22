@@ -1,6 +1,6 @@
 import {
   ManagementClass,
-  Teacher,
+  Student,
   UMApplicationManagementClassCommandsUpdateUpdateCommandData,
   UMApplicationManagementClassQueriesGetByIdGetByIdDto,
 } from '@api';
@@ -11,7 +11,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Badge,
   Box,
   Button,
   Card,
@@ -32,11 +31,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Stack,
   StackDivider,
   Table,
@@ -46,20 +40,17 @@ import {
   Text,
   Th,
   Thead,
-  ThemeTypings,
   Tr,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { SlotsName, ValidationMessage } from '@constants';
-import { setStateWithApiFallback } from '@functions';
+import { ValidationMessage } from '@constants';
+import { getGender, setStateWithApiFallback } from '@functions';
 import { StringHelper } from '@helpers';
 import { useWaitUserInfo } from '@hooks';
 import { BackToPage, MainData } from '@layout';
 import { SelectItemType } from '@models';
-import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { Select } from 'chakra-react-select';
-import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -68,15 +59,12 @@ type ContentProps = {
   managementClass: UMApplicationManagementClassQueriesGetByIdGetByIdDto;
 };
 
-type AssignFormData = {
-  teacher: SelectItemType | null;
+type AddStudentsFormData = {
+  students: readonly SelectItemType[];
 };
 
 type EditFormData = {
   name: string;
-  startAt: Date;
-  sessionsCount: number;
-  slots: readonly SelectItemType[];
 };
 
 type ButtonProps = {
@@ -84,92 +72,73 @@ type ButtonProps = {
   managementClass: UMApplicationManagementClassQueriesGetByIdGetByIdDto;
 };
 
-const slotOptions: SelectItemType[] = Object.entries(SlotsName).map(
-  ([key, value]) => ({ value: key, label: value })
-);
-
-const assignFormDataDefaultValues = (
-  managementClass: UMApplicationManagementClassQueriesGetByIdGetByIdDto
-): AssignFormData => {
-  return {
-    teacher: managementClass.teacher
-      ? {
-          value: managementClass.teacher.id!,
-          label: StringHelper.shortName(managementClass.teacher),
-        }
-      : null,
-  };
+const addStudentsFormDataDefaultValues = (): AddStudentsFormData => {
+  return { students: [] };
 };
 
 const editFormDataDefaultValues = (
   managementClass: UMApplicationManagementClassQueriesGetByIdGetByIdDto
 ): EditFormData => {
-  return {
-    slots:
-      managementClass.slots?.map((s) => ({
-        value: `${s.weekDay}${s.daySlot}`,
-        label: SlotsName[`${s.weekDay}${s.daySlot}`],
-      })) ?? [],
-    name: managementClass.name!,
-    sessionsCount: managementClass.sessionsCount!,
-    startAt: new Date(managementClass.startAt!),
-  };
+  return { name: managementClass.name! };
 };
 
-const AssignButton = ({ reload, managementClass }: ButtonProps) => {
+const AddStudentsButton = ({ reload, managementClass }: ButtonProps) => {
   const {
     handleSubmit,
     register,
     setValue,
-    reset,
-    watch,
     formState: { errors },
-  } = useForm<AssignFormData>({
-    defaultValues: assignFormDataDefaultValues(managementClass),
+  } = useForm<AddStudentsFormData>({
+    defaultValues: addStudentsFormDataDefaultValues(),
   });
   const toast = useToast();
   const user = useWaitUserInfo();
-  const watchTeacher = watch('teacher');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [teacherOptions, setTeacherOptions] = useState<
+  const [studentOptions, setStudentOptions] = useState<
     SelectItemType[] | undefined
   >([]);
 
-  const getTeacherOptions = async () => {
+  const getStudentOptions = async () => {
     if (!user) return;
     try {
-      const res = await new Teacher().getTeacher({});
-      setTeacherOptions(
-        (res.data.data ?? []).map((t) => ({
-          value: t.id!,
-          label: StringHelper.shortName(t),
-        }))
+      const res = await new Student().getStudent({});
+      const filteredStudents = (res.data.data ?? []).filter(
+        (s) => s.managementClass?.id !== managementClass.id
+      );
+
+      setStudentOptions(
+        filteredStudents.map((t) => {
+          const managementClass = t.managementClass
+            ? t.managementClass.name
+            : 'Not assigned';
+          const name = StringHelper.shortNameWithMiddle(t);
+
+          return {
+            value: t.id!,
+            label: `${name} (${managementClass})`,
+          };
+        })
       );
     } catch {
       if (true) {
-        setTeacherOptions([]);
+        setStudentOptions([]);
       }
     }
   };
 
   useEffect(() => {
-    getTeacherOptions();
+    getStudentOptions();
   }, [user]);
 
-  useEffect(() => {
-    reset(assignFormDataDefaultValues(managementClass));
-  }, [managementClass]);
-
-  const onSubmit: SubmitHandler<AssignFormData> = async (data) => {
+  const onSubmit: SubmitHandler<AddStudentsFormData> = async (data) => {
     setIsSubmitting(true);
 
     try {
-      await new ManagementClass().assignToTeacher(
-        managementClass.id!,
-        data.teacher!.value
-      );
+      await new ManagementClass().addStudents(managementClass.id!, {
+        studentsId: data.students.map((s) => s.value),
+      });
 
       toast({
         title: 'Modified successfully',
@@ -191,25 +160,25 @@ const AssignButton = ({ reload, managementClass }: ButtonProps) => {
         Assign
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size='xl'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Assign course class to teacher</ModalHeader>
+          <ModalHeader>Add students to management class</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Flex direction='column' rowGap='3'>
-              <FormControl isInvalid={!!errors.teacher}>
-                <FormLabel>Teacher</FormLabel>
+              <FormControl isInvalid={!!errors.students}>
+                <FormLabel>Students</FormLabel>
                 <Select
-                  {...register('teacher', {
+                  isMulti
+                  {...register('students', {
                     required: ValidationMessage.required,
                   })}
-                  options={teacherOptions}
-                  value={watchTeacher}
-                  onChange={(option) => setValue('teacher', option)}
+                  options={studentOptions}
+                  onChange={(options) => setValue('students', options)}
                 />
                 <FormErrorMessage>
-                  {errors.teacher && errors.teacher.message}
+                  {errors.students && errors.students.message}
                 </FormErrorMessage>
               </FormControl>
             </Flex>
@@ -236,24 +205,18 @@ const EditButton = ({ reload, managementClass }: ButtonProps) => {
   const {
     handleSubmit,
     register,
-    setValue,
-    watch,
     reset,
     formState: { errors },
   } = useForm<EditFormData>({
     defaultValues: editFormDataDefaultValues(managementClass),
   });
   const toast = useToast();
-  const watchSlots = watch('slots');
-  const watchStartAt = watch('startAt');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [hasSessions, setHasSessions] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     reset(editFormDataDefaultValues(managementClass));
-    setHasSessions(!!managementClass.sessions?.length);
   }, [managementClass]);
 
   const onSubmit: SubmitHandler<EditFormData> = async (data) => {
@@ -261,8 +224,6 @@ const EditButton = ({ reload, managementClass }: ButtonProps) => {
 
     const body: UMApplicationManagementClassCommandsUpdateUpdateCommandData = {
       ...data,
-      startAt: moment(data.startAt).format('YYYY-MM-DDTHH:mm:ss.SSS'),
-      slots: data.slots.map((s) => s.value).join(','),
     };
 
     try {
@@ -295,12 +256,12 @@ const EditButton = ({ reload, managementClass }: ButtonProps) => {
       <Modal isOpen={isOpen} onClose={onClickClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit course class</ModalHeader>
+          <ModalHeader>Edit management class</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Flex direction='column' rowGap='3'>
               <FormControl isInvalid={!!errors.name}>
-                <FormLabel>Course</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <Input
                   {...register('name', {
                     required: ValidationMessage.required,
@@ -308,52 +269,6 @@ const EditButton = ({ reload, managementClass }: ButtonProps) => {
                 ></Input>
                 <FormErrorMessage>
                   {errors.name && errors.name.message}
-                </FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.startAt}>
-                <FormLabel>Start date</FormLabel>
-                <SingleDatepicker
-                  name='startAt'
-                  date={watchStartAt}
-                  onDateChange={(date) => setValue('startAt', date)}
-                  propsConfigs={{ inputProps: { isReadOnly: hasSessions } }}
-                />
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.sessionsCount}>
-                <FormLabel>Number of sessions</FormLabel>
-                <NumberInput min={1} isReadOnly={hasSessions}>
-                  <NumberInputField
-                    {...register('sessionsCount', {
-                      required: ValidationMessage.required,
-                    })}
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <FormErrorMessage>
-                  {errors.sessionsCount && errors.sessionsCount.message}
-                </FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.slots}>
-                <FormLabel>Slots</FormLabel>
-                <Select
-                  {...register('slots', {
-                    required: ValidationMessage.required,
-                  })}
-                  isMulti
-                  options={slotOptions}
-                  closeMenuOnSelect={false}
-                  value={watchSlots}
-                  onChange={(options) => setValue('slots', options)}
-                  isDisabled={hasSessions}
-                />
-                <FormErrorMessage>
-                  {errors.slots && errors.slots.message}
                 </FormErrorMessage>
               </FormControl>
             </Flex>
@@ -396,7 +311,7 @@ const DeleteButton = ({ managementClass }: ButtonProps) => {
       });
 
       onClose();
-      navigate('/course-class');
+      navigate('/management-class');
     } catch {
     } finally {
       setIsSubmitting(false);
@@ -417,7 +332,7 @@ const DeleteButton = ({ managementClass }: ButtonProps) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Delete course class
+              Delete management class
             </AlertDialogHeader>
 
             <AlertDialogBody>
@@ -452,7 +367,7 @@ type ActionsProps = {
 const Actions = ({ reload, managementClass }: ActionsProps) => {
   return (
     <Flex justify='end' columnGap='2'>
-      <AssignButton reload={reload} managementClass={managementClass} />
+      <AddStudentsButton reload={reload} managementClass={managementClass} />
       <EditButton reload={reload} managementClass={managementClass} />
       <DeleteButton managementClass={managementClass} />
     </Flex>
@@ -460,14 +375,18 @@ const Actions = ({ reload, managementClass }: ActionsProps) => {
 };
 
 const InfoCard = ({ managementClass }: ContentProps) => {
-  const info: { header: string; label?: string }[] = [
-    // {
-    //   header: 'Program',
-    //   label: `${course.name} (${course.courseId})`,
-    // },
+  const info: { header: string; label?: string | number }[] = [
+    {
+      header: 'Program',
+      label: managementClass.program?.name,
+    },
     {
       header: 'Academic year',
       label: managementClass.academicYear,
+    },
+    {
+      header: 'Number of students',
+      label: managementClass.students?.length,
     },
   ];
 
@@ -496,7 +415,8 @@ const InfoCard = ({ managementClass }: ContentProps) => {
 };
 
 const Students = ({ managementClass }: ContentProps) => {
-  if (!managementClass.sessions || managementClass.sessions.length === 0) {
+  const students = managementClass.students;
+  if (!students || students.length === 0) {
     return <></>;
   }
 
@@ -506,26 +426,24 @@ const Students = ({ managementClass }: ContentProps) => {
         <Thead>
           <Tr>
             <Th>#</Th>
-            <Th>Date</Th>
-            <Th textAlign='center'>Slot</Th>
-            <Th textAlign='center'>Start</Th>
-            <Th textAlign='center'>End</Th>
+            <Th>First Name</Th>
+            <Th>Middle Name</Th>
+            <Th>Last Name</Th>
+            <Th>Student ID</Th>
+            <Th>Gender</Th>
           </Tr>
         </Thead>
 
         <Tbody>
-          {managementClass.sessions.map((session, idx) => {
+          {students.map((student, idx) => {
             return (
               <Tr key={idx}>
                 <Td>{idx + 1}</Td>
-                <Td>{moment(session.startAt).format('DD-MM-YYYY')}</Td>
-                <Td textAlign='center'>{session?.slot}</Td>
-                <Td textAlign='center'>
-                  {moment(session.startAt).format('HH:mm')}
-                </Td>
-                <Td textAlign='center'>
-                  {moment(session.endAt).format('HH:mm')}
-                </Td>
+                <Td>{student.firstName}</Td>
+                <Td>{student.middleName}</Td>
+                <Td>{student.lastName}</Td>
+                <Td>{student.studentId}</Td>
+                <Td>{getGender(student.isMale)}</Td>
               </Tr>
             );
           })}
@@ -542,7 +460,7 @@ const Content = ({ managementClass }: ContentProps) => {
         <InfoCard managementClass={managementClass} />
       </GridItem>
       <GridItem>
-        {/* <Students managementClass={managementClass} /> */}
+        <Students managementClass={managementClass} />
       </GridItem>
     </Grid>
   );
@@ -556,7 +474,7 @@ const ManagementClassDetails = () => {
   >();
 
   const getManagementClass = () => {
-    const id = params.courseClassId;
+    const id = params.managementClassId;
 
     if (user && id) {
       setStateWithApiFallback(
@@ -573,11 +491,14 @@ const ManagementClassDetails = () => {
   return (
     <MainData data={managementClass}>
       <BackToPage
-        url='/course-class'
-        text='Back to course classes list'
-        // rightContent={
-        //   <Actions managementClass={managementClass!} reload={getManagementClass} />
-        // }
+        url='/management-class'
+        text='Back to management classes list'
+        rightContent={
+          <Actions
+            managementClass={managementClass!}
+            reload={getManagementClass}
+          />
+        }
       >
         <Content managementClass={managementClass!} />
       </BackToPage>

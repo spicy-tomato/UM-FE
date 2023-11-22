@@ -301,7 +301,7 @@ const EditButton = ({ reload, courseClass }: ButtonProps) => {
           <ModalBody>
             <Flex direction='column' rowGap='3'>
               <FormControl isInvalid={!!errors.name}>
-                <FormLabel>Course</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <Input
                   {...register('name', {
                     required: ValidationMessage.required,

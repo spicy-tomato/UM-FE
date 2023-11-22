@@ -85,6 +85,9 @@ export type GetProgramData =
 
 export type GetRecommendationsData = UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableSystemString;
 
+export type GetScoreData =
+  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto;
+
 export type GetScoresData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseClassQueriesGetScoresGetScoresDto;
 
@@ -103,7 +106,11 @@ export interface GetSessionParams {
 }
 
 export type GetStudentData =
-  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto;
+  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetAllGetAllDto;
+
+export interface GetStudentParams {
+  Query?: string;
+}
 
 export type GetTeacherData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationTeacherQueriesGetAllGetAllDto;
@@ -680,6 +687,12 @@ export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumera
   success?: boolean;
 }
 
+export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetAllGetAllDto {
+  data?: UMApplicationStudentQueriesGetAllGetAllDto[];
+  errors?: UMApplicationCommonModelsError[] | null;
+  success?: boolean;
+}
+
 export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationStudentQueriesGetScoresGetScoresDto {
   data?: UMApplicationStudentQueriesGetScoresGetScoresDto[];
   errors?: UMApplicationCommonModelsError[] | null;
@@ -945,7 +958,6 @@ export interface UMApplicationManagementClassQueriesGetAllGetAllDto {
 }
 
 export interface UMApplicationManagementClassQueriesGetAllGetAllDtoProgram {
-  academicYear?: string;
   /** @format uuid */
   id?: string;
   name?: string;
@@ -957,7 +969,15 @@ export interface UMApplicationManagementClassQueriesGetByIdGetByIdDto {
   /** @format uuid */
   id?: string;
   name?: string;
+  program?: UMApplicationManagementClassQueriesGetByIdGetByIdDtoProgram;
   students?: UMApplicationManagementClassQueriesGetByIdGetByIdDtoStudent[];
+}
+
+export interface UMApplicationManagementClassQueriesGetByIdGetByIdDtoProgram {
+  /** @format uuid */
+  id?: string;
+  name?: string;
+  programId?: string;
 }
 
 export interface UMApplicationManagementClassQueriesGetByIdGetByIdDtoStudent {
@@ -1024,6 +1044,23 @@ export interface UMApplicationSessionQueriesGetAllGetAllDtoCourse {
 
 export interface UMApplicationSessionQueriesGetAllGetAllDtoCourseClass {
   course?: UMApplicationSessionQueriesGetAllGetAllDtoCourse;
+  /** @format uuid */
+  id?: string;
+  name?: string;
+}
+
+export interface UMApplicationStudentQueriesGetAllGetAllDto {
+  firstName?: string;
+  /** @format uuid */
+  id?: string;
+  isMale?: boolean;
+  lastName?: string;
+  managementClass?: UMApplicationStudentQueriesGetAllGetAllDtoManagementClass;
+  middleName?: string;
+  studentId?: string;
+}
+
+export interface UMApplicationStudentQueriesGetAllGetAllDtoManagementClass {
   /** @format uuid */
   id?: string;
   name?: string;
