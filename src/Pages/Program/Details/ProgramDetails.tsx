@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Button as ChakraButton,
   Card,
   CardBody,
   CardHeader,
@@ -10,6 +11,16 @@ import {
   Text,
   StackDivider,
   useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  FormControl,
+  FormLabel,
+  Input,
+  ModalFooter,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import {
@@ -27,7 +38,7 @@ const InfoCard = ({ program }: ContentProps) => {
   return (
     <Card>
       <CardHeader>
-        <Heading>Program: {program?.name}</Heading>
+        <Heading>{program?.name}</Heading>
       </CardHeader>
 
       <CardBody>
@@ -37,12 +48,6 @@ const InfoCard = ({ program }: ContentProps) => {
               Program
             </Heading>
             <Text>{program?.name}</Text>
-          </Box>
-          <Box>
-            <Heading size="xs" textTransform="uppercase">
-              ID
-            </Heading>
-            <Text>{program?.programId}</Text>
           </Box>
         </Stack>
       </CardBody>
@@ -75,6 +80,56 @@ const ProgramDetails = () => {
   return (
     <div className="App">
       <InfoCard program={program!} />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Program Details</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Program ID:</FormLabel>
+              <Input
+                type="text"
+                id="programId"
+                name="programId"
+                value={program?.programId ?? undefined}
+                onChange={(e) =>
+                  setProgram({
+                    ...program,
+                    programId: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Program Name:</FormLabel>
+              <Input
+                type="text"
+                id="programName"
+                name="programName"
+                value={program?.name ?? undefined}
+                onChange={(e) =>
+                  setProgram({
+                    ...program,
+                    name: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <ModalFooter>
+              <ChakraButton
+                colorScheme="blue"
+                mr={3}
+                onClick={handleOpenDetail}
+              >
+                Save
+              </ChakraButton>
+              <ChakraButton onClick={handleOpenDetail}>Cancel</ChakraButton>
+            </ModalFooter>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
       <HStack sx={{ mt: 5 }} spacing="15px" justify="center">
         <Button onClick={() => handleOpenDetail(program)} colorScheme="cyan">
           Edit
