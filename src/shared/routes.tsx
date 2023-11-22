@@ -14,10 +14,12 @@ import { SiGoogleclassroom } from 'react-icons/si';
 import { Navigate, RouteObject } from 'react-router-dom';
 import { Calendar } from 'src/Pages/Calendar/Calendar';
 import { CourseComponent } from 'src/Pages/Course/Course';
-import { CourseClassDetails } from 'src/Pages/CourseClass/CourseClassDetails';
-import { CourseClassList } from 'src/Pages/CourseClass/CourseClassList';
+import { CourseClassDetails } from 'src/Pages/CourseClass/Details';
+import { CourseClassList } from 'src/Pages/CourseClass/List';
 import { Home } from 'src/Pages/Home/Home';
 import { Login } from 'src/Pages/Login/Login';
+import { ManagementClassDetails } from 'src/Pages/ManagementClass/Details';
+import { ManagementClassList } from 'src/Pages/ManagementClass/List';
 import { ManagementClassComponent } from 'src/Pages/ManagementClass/ManagementClass';
 import { PersonalInformation } from 'src/Pages/PersonalInformation/PersonalInformation';
 import { ProgramComponent } from 'src/Pages/Program/Program';
@@ -62,7 +64,16 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'management-class',
-        element: <ManagementClassComponent />,
+        children: [
+          {
+            path: '',
+            element: <ManagementClassList />,
+          },
+          {
+            path: ':courseClassId',
+            element: <ManagementClassDetails />,
+          },
+        ],
       },
       {
         path: 'course-class',

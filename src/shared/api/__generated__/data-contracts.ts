@@ -935,9 +935,21 @@ export interface UMApplicationManagementClassCommandsUpdateUpdateCommandData {
 }
 
 export interface UMApplicationManagementClassQueriesGetAllGetAllDto {
+  academicYear?: string;
   /** @format uuid */
   id?: string;
   name?: string;
+  program?: UMApplicationManagementClassQueriesGetAllGetAllDtoProgram;
+  /** @format int32 */
+  studentsCount?: number;
+}
+
+export interface UMApplicationManagementClassQueriesGetAllGetAllDtoProgram {
+  academicYear?: string;
+  /** @format uuid */
+  id?: string;
+  name?: string;
+  programId?: string;
 }
 
 export interface UMApplicationManagementClassQueriesGetByIdGetByIdDto {

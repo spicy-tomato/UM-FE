@@ -2155,6 +2155,26 @@ components:
           format: uuid
         name:
           type: string
+        academicYear:
+          type: string
+        program:
+          $ref: '#/components/schemas/UM.Application.ManagementClass.Queries.GetAll.GetAllDtoProgram'
+        studentsCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    UM.Application.ManagementClass.Queries.GetAll.GetAllDtoProgram:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        programId:
+          type: string
+        name:
+          type: string
+        academicYear:
+          type: string
       additionalProperties: false
     UM.Application.ManagementClass.Queries.GetById.GetByIdDto:
       type: object
