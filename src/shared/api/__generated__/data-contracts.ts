@@ -992,6 +992,7 @@ export interface UMApplicationProgramQueriesGetByIdGetByIdDto {
   /** @format uuid */
   id?: string;
   name?: string;
+  programId?: string;
 }
 
 export interface UMApplicationProgramQueriesGetByIdGetByIdDtoCourse {

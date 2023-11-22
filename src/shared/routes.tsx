@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { RoleConstant, RoleConstantValue, ValidRoutes } from '@constants';
-import { Layout, ProtectedRoute } from '@layout';
+import { BackToPage, Layout, ProtectedRoute } from '@layout';
 import { SideBarItem } from '@models';
 import { IconType } from 'react-icons';
 import {
@@ -20,8 +20,8 @@ import { Home } from 'src/Pages/Home/Home';
 import { Login } from 'src/Pages/Login/Login';
 import { ManagementClassDetails } from 'src/Pages/ManagementClass/Details';
 import { ManagementClassList } from 'src/Pages/ManagementClass/List';
-import { ManagementClassComponent } from 'src/Pages/ManagementClass/ManagementClass';
 import { PersonalInformation } from 'src/Pages/PersonalInformation/PersonalInformation';
+import ProgramDetails from 'src/Pages/Program/Details/ProgramDetails';
 import { ProgramComponent } from 'src/Pages/Program/Program';
 import { Score } from 'src/Pages/Score/Score';
 
@@ -56,11 +56,24 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'program',
-        element: (
-          <ProtectedRoute role='Admin'>
-            <ProgramComponent />
-          </ProtectedRoute>
-        ),
+        children: [
+          {
+            path: '',
+            element: (
+              <ProtectedRoute role='Admin'>
+                <ProgramComponent />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: ':programId',
+            element: (
+              <BackToPage url='/program' text='Back to program list'>
+                <ProgramDetails />
+              </BackToPage>
+            ),
+          },
+        ],
       },
       {
         path: 'management-class',

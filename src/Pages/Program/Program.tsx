@@ -1,11 +1,12 @@
 import { Program, UMApplicationProgramQueriesGetAllGetAllDto } from '@api';
 import {
-  Button,
   Button as ChakraButton,
   FormControl,
   FormLabel,
-  HStack,
+  Grid,
+  GridItem,
   Input,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,10 +14,18 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 function ProgramComponent() {
   const initialRef = React.useRef(null);
@@ -44,6 +53,11 @@ function ProgramComponent() {
     getPrograms();
   }, []);
 
+  useEffect(() => {
+    console.log(selectedProgram);
+    // console.log();
+  }, [isOpen]);
+
   const handleAddProgram = async () => {
     try {
       const response = await new Program().postProgram({
@@ -55,7 +69,8 @@ function ProgramComponent() {
         getPrograms();
         setProgramId('');
         setProgramName('');
-        onClose();
+        handleCloseModal();
+        //TODO: toast successed
       }
     } catch (error) {
       console.error('Error adding program:', error);
@@ -81,7 +96,7 @@ function ProgramComponent() {
 
       if (response.status === 200) {
         getPrograms();
-        onClose();
+        handleCloseModal();
       }
     } catch (error) {
       console.error('Error editing program:', error);
@@ -95,7 +110,8 @@ function ProgramComponent() {
 
         if (response.status === 200) {
           getPrograms();
-          onClose();
+          handleCloseModal();
+          //TODO: add toast
         }
       } catch (error) {
         console.error('Error deleting program:', error);
@@ -108,142 +124,158 @@ function ProgramComponent() {
     onOpen();
   };
 
+  const handleCloseModal = () => {
+    onClose();
+    setSelectedProgram(null);
+  };
+
   return (
     <div className='App'>
-      <div className='search-bar-1'>
-        <div className='search-container'>
-          <input type='text' className='search-input' placeholder='Search...' />
-          <i>
-            <AiOutlineSearch />
-          </i>
-        </div>
-        <div className='add-btn'>
-          <ChakraButton onClick={onOpen} colorScheme='blue'>
-            Add Program
-          </ChakraButton>
-        </div>
-      </div>
-      <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {selectedProgram ? 'Program Details' : 'Create Program'}
-          </ModalHeader>
-          <ModalCloseButton />
-          {selectedProgram ? (
-            <ModalBody pb={6}>
-              <FormControl>
-                <FormLabel>Program ID:</FormLabel>
-                <Input
-                  type='text'
-                  id='programId'
-                  name='programId'
-                  value={selectedProgram.programId ?? undefined}
-                  onChange={(e) =>
-                    setSelectedProgram({
-                      ...selectedProgram,
-                      programId: e.target.value,
-                    })
-                  }
-                />
-              </FormControl>
-              <FormControl mt={4}>
-                <FormLabel>Program Name:</FormLabel>
-                <Input
-                  type='text'
-                  id='programName'
-                  name='programName'
-                  value={selectedProgram.name ?? undefined}
-                  onChange={(e) =>
-                    setSelectedProgram({
-                      ...selectedProgram,
-                      name: e.target.value,
-                    })
-                  }
-                />
-              </FormControl>
-              <ModalFooter>
-                <ChakraButton colorScheme='blue' mr={3} onClick={handleEdit}>
-                  Save
-                </ChakraButton>
-                <ChakraButton onClick={onClose}>Cancel</ChakraButton>
-              </ModalFooter>
-            </ModalBody>
-          ) : (
-            <ModalBody pb={6}>
-              <FormControl>
-                <FormLabel>Program ID:</FormLabel>
-                <Input
-                  ref={initialRef}
-                  type='text'
-                  id='programId'
-                  name='programId'
-                  value={programId}
-                  placeholder='IT'
-                  onChange={(e) => setProgramId(e.target.value)}
-                />
-              </FormControl>
-              <FormControl mt={4}>
-                <FormLabel>Program Name:</FormLabel>
-                <Input
-                  type='text'
-                  id='programName'
-                  name='programName'
-                  value={programName}
-                  placeholder='Information Technology'
-                  onChange={(e) => setProgramName(e.target.value)}
-                />
-              </FormControl>
-              <ModalFooter>
-                <ChakraButton
-                  colorScheme='blue'
-                  mr={3}
-                  onClick={handleSaveProgram}
-                >
-                  Save
-                </ChakraButton>
-                <ChakraButton onClick={onClose}>Cancel</ChakraButton>
-              </ModalFooter>
-            </ModalBody>
-          )}
-        </ModalContent>
-      </Modal>
-      <table className='teacher-table'>
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>ID</th>
-            <th>Program Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {programs.map((program, idx) => (
-            <tr key={program.id}>
-              {/* Thay đổi key thành program.id */}
-              <td>{idx + 1}</td>
-              <td>{program.programId}</td>
-              <td>{program.name}</td>
-              <td>
-                <HStack spacing='15px' justify='center'>
-                  <Button
-                    onClick={() => handleOpenDetail(program)}
-                    colorScheme='cyan'
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    onClick={() => handleDelete(program.id)}
-                    colorScheme='red'
-                  >
-                    Delete
-                  </Button>
-                </HStack>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Grid>
+        <GridItem>
+          <div className='search-bar-1'>
+            <div className='search-container'>
+              <input
+                type='text'
+                className='search-input'
+                placeholder='Search...'
+              />
+              <i>
+                <AiOutlineSearch />
+              </i>
+            </div>
+            <div className='add-btn'>
+              <ChakraButton onClick={onOpen} colorScheme='blue'>
+                Add Program
+              </ChakraButton>
+            </div>
+          </div>
+          <Modal
+            initialFocusRef={initialRef}
+            isOpen={isOpen}
+            onClose={handleCloseModal}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>
+                {selectedProgram ? 'Program Details' : 'Create Program'}
+              </ModalHeader>
+              <ModalCloseButton />
+              {selectedProgram ? (
+                <ModalBody pb={6}>
+                  <FormControl>
+                    <FormLabel>Program ID:</FormLabel>
+                    <Input
+                      type='text'
+                      id='programId'
+                      name='programId'
+                      value={selectedProgram.programId ?? undefined}
+                      onChange={(e) =>
+                        setSelectedProgram({
+                          ...selectedProgram,
+                          programId: e.target.value,
+                        })
+                      }
+                    />
+                  </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel>Program Name:</FormLabel>
+                    <Input
+                      type='text'
+                      id='programName'
+                      name='programName'
+                      value={selectedProgram.name ?? undefined}
+                      onChange={(e) =>
+                        setSelectedProgram({
+                          ...selectedProgram,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                  </FormControl>
+                  <ModalFooter>
+                    <ChakraButton
+                      colorScheme='blue'
+                      mr={3}
+                      onClick={handleEdit}
+                    >
+                      Save
+                    </ChakraButton>
+                    <ChakraButton onClick={handleCloseModal}>
+                      Cancel
+                    </ChakraButton>
+                  </ModalFooter>
+                </ModalBody>
+              ) : (
+                <ModalBody pb={6}>
+                  <FormControl>
+                    <FormLabel>Program ID:</FormLabel>
+                    <Input
+                      ref={initialRef}
+                      type='text'
+                      id='programId'
+                      name='programId'
+                      value={programId}
+                      placeholder='IT'
+                      onChange={(e) => setProgramId(e.target.value)}
+                    />
+                  </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel>Program Name:</FormLabel>
+                    <Input
+                      type='text'
+                      id='programName'
+                      name='programName'
+                      value={programName}
+                      placeholder='Information Technology'
+                      onChange={(e) => setProgramName(e.target.value)}
+                    />
+                  </FormControl>
+                  <ModalFooter>
+                    <ChakraButton
+                      colorScheme='blue'
+                      mr={3}
+                      onClick={handleSaveProgram}
+                    >
+                      Save
+                    </ChakraButton>
+                    <ChakraButton onClick={handleCloseModal}>
+                      Cancel
+                    </ChakraButton>
+                  </ModalFooter>
+                </ModalBody>
+              )}
+            </ModalContent>
+          </Modal>
+        </GridItem>
+        <GridItem>
+          <TableContainer>
+            <Table variant={'striped'} size={'sm'} className='teacher-table'>
+              <Thead>
+                <Tr>
+                  <Th>STT</Th>
+                  <Th>ID</Th>
+                  <Th>Program Name</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {programs.map((program, idx) => (
+                  <Tr key={program.id}>
+                    {/* Thay đổi key thành program.id */}
+                    <Td>{idx + 1}</Td>
+                    <Td>
+                      <Link as={ReactRouterLink} to={program.id}>
+                        {program?.programId}
+                      </Link>
+                    </Td>
+                    <Td>{program.name}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </GridItem>
+      </Grid>
     </div>
   );
 }

@@ -2243,6 +2243,8 @@ components:
           format: uuid
         name:
           type: string
+        programId:
+          type: string
         courses:
           type: array
           items:
