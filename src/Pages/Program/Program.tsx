@@ -1,12 +1,10 @@
 import { Program, UMApplicationProgramQueriesGetAllGetAllDto } from '@api';
 import {
-  Button,
   Button as ChakraButton,
   FormControl,
   FormLabel,
   Grid,
   GridItem,
-  HStack,
   Input,
   Link,
   Modal,
@@ -24,22 +22,18 @@ import {
   Thead,
   Tr,
   useDisclosure,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
-import {
-  Program,
-  UMApplicationProgramQueriesGetAllGetAllDto,
-} from "../../shared/api";
-import { Link as ReactRouterLink } from "react-router-dom";
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 function ProgramComponent() {
   const initialRef = React.useRef(null);
   const [programs, setPrograms] = useState<
     UMApplicationProgramQueriesGetAllGetAllDto[]
   >([]);
-  const [programId, setProgramId] = useState("");
-  const [programName, setProgramName] = useState("");
+  const [programId, setProgramId] = useState('');
+  const [programName, setProgramName] = useState('');
   const [selectedProgram, setSelectedProgram] =
     useState<UMApplicationProgramQueriesGetAllGetAllDto | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,7 +45,7 @@ function ProgramComponent() {
         setPrograms(response.data.data);
       }
     } catch (e) {
-      console.error("Error getting programs:", e);
+      console.error('Error getting programs:', e);
     }
   };
 
@@ -73,13 +67,13 @@ function ProgramComponent() {
 
       if (response.status === 200) {
         getPrograms();
-        setProgramId("");
-        setProgramName("");
+        setProgramId('');
+        setProgramName('');
         handleCloseModal();
         //TODO: toast successed
       }
     } catch (error) {
-      console.error("Error adding program:", error);
+      console.error('Error adding program:', error);
     }
   };
 
@@ -105,12 +99,12 @@ function ProgramComponent() {
         handleCloseModal();
       }
     } catch (error) {
-      console.error("Error editing program:", error);
+      console.error('Error editing program:', error);
     }
   };
 
   const handleDelete = async (id: any) => {
-    if (window.confirm("Are you sure you want to delete this program?")) {
+    if (window.confirm('Are you sure you want to delete this program?')) {
       try {
         const response = await new Program().deleteProgram(id);
 
@@ -120,7 +114,7 @@ function ProgramComponent() {
           //TODO: add toast
         }
       } catch (error) {
-        console.error("Error deleting program:", error);
+        console.error('Error deleting program:', error);
       }
     }
   };
@@ -136,22 +130,22 @@ function ProgramComponent() {
   };
 
   return (
-    <div className="App">
+    <div className='App'>
       <Grid>
         <GridItem>
-          <div className="search-bar-1">
-            <div className="search-container">
+          <div className='search-bar-1'>
+            <div className='search-container'>
               <input
-                type="text"
-                className="search-input"
-                placeholder="Search..."
+                type='text'
+                className='search-input'
+                placeholder='Search...'
               />
               <i>
                 <AiOutlineSearch />
               </i>
             </div>
-            <div className="add-btn">
-              <ChakraButton onClick={onOpen} colorScheme="blue">
+            <div className='add-btn'>
+              <ChakraButton onClick={onOpen} colorScheme='blue'>
                 Add Program
               </ChakraButton>
             </div>
@@ -164,7 +158,7 @@ function ProgramComponent() {
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>
-                {selectedProgram ? "Program Details" : "Create Program"}
+                {selectedProgram ? 'Program Details' : 'Create Program'}
               </ModalHeader>
               <ModalCloseButton />
               {selectedProgram ? (
@@ -172,9 +166,9 @@ function ProgramComponent() {
                   <FormControl>
                     <FormLabel>Program ID:</FormLabel>
                     <Input
-                      type="text"
-                      id="programId"
-                      name="programId"
+                      type='text'
+                      id='programId'
+                      name='programId'
                       value={selectedProgram.programId ?? undefined}
                       onChange={(e) =>
                         setSelectedProgram({
@@ -187,9 +181,9 @@ function ProgramComponent() {
                   <FormControl mt={4}>
                     <FormLabel>Program Name:</FormLabel>
                     <Input
-                      type="text"
-                      id="programName"
-                      name="programName"
+                      type='text'
+                      id='programName'
+                      name='programName'
                       value={selectedProgram.name ?? undefined}
                       onChange={(e) =>
                         setSelectedProgram({
@@ -201,7 +195,7 @@ function ProgramComponent() {
                   </FormControl>
                   <ModalFooter>
                     <ChakraButton
-                      colorScheme="blue"
+                      colorScheme='blue'
                       mr={3}
                       onClick={handleEdit}
                     >
@@ -218,28 +212,28 @@ function ProgramComponent() {
                     <FormLabel>Program ID:</FormLabel>
                     <Input
                       ref={initialRef}
-                      type="text"
-                      id="programId"
-                      name="programId"
+                      type='text'
+                      id='programId'
+                      name='programId'
                       value={programId}
-                      placeholder="IT"
+                      placeholder='IT'
                       onChange={(e) => setProgramId(e.target.value)}
                     />
                   </FormControl>
                   <FormControl mt={4}>
                     <FormLabel>Program Name:</FormLabel>
                     <Input
-                      type="text"
-                      id="programName"
-                      name="programName"
+                      type='text'
+                      id='programName'
+                      name='programName'
                       value={programName}
-                      placeholder="Information Technology"
+                      placeholder='Information Technology'
                       onChange={(e) => setProgramName(e.target.value)}
                     />
                   </FormControl>
                   <ModalFooter>
                     <ChakraButton
-                      colorScheme="blue"
+                      colorScheme='blue'
                       mr={3}
                       onClick={handleSaveProgram}
                     >
@@ -256,7 +250,7 @@ function ProgramComponent() {
         </GridItem>
         <GridItem>
           <TableContainer>
-            <Table variant={"striped"} size={"sm"} className="teacher-table">
+            <Table variant={'striped'} size={'sm'} className='teacher-table'>
               <Thead>
                 <Tr>
                   <Th>STT</Th>
