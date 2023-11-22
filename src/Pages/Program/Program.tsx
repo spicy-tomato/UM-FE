@@ -1,3 +1,4 @@
+import { Program, UMApplicationProgramQueriesGetAllGetAllDto } from '@api';
 import {
   Button,
   Button as ChakraButton,
@@ -16,10 +17,6 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
-import {
-  Program,
-  UMApplicationProgramQueriesGetAllGetAllDto,
-} from '../../shared/api';
 
 function ProgramComponent() {
   const initialRef = React.useRef(null);
@@ -223,7 +220,6 @@ function ProgramComponent() {
         <tbody>
           {programs.map((program, idx) => (
             <tr key={program.id}>
-              {' '}
               {/* Thay đổi key thành program.id */}
               <td>{idx + 1}</td>
               <td>{program.programId}</td>
@@ -252,4 +248,4 @@ function ProgramComponent() {
   );
 }
 
-export default ProgramComponent;
+export { ProgramComponent };

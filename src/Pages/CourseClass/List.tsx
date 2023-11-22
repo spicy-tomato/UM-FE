@@ -1,4 +1,12 @@
 import {
+  Course,
+  CourseClass,
+  UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand,
+  UMApplicationCourseQueriesGetAllGetAllDto,
+  UMDomainDtosCourseClassICourseClass,
+  UMDomainEnumsCourseClassECourseClassStatus,
+} from '@api';
+import {
   Button,
   Flex,
   FormControl,
@@ -30,24 +38,16 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { ValidationMessage } from '@constants';
+import { setStateWithApiFallback } from '@functions';
+import { useWaitUserInfo } from '@hooks';
+import { MainData } from '@layout';
+import { User } from '@redux';
 import { AxiosResponse } from 'axios';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import MainData from '../../../Layout/MainData/MainData';
-import {
-  Course,
-  CourseClass,
-  UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand,
-  UMApplicationCourseQueriesGetAllGetAllDto,
-  UMDomainDtosCourseClassICourseClass,
-  UMDomainEnumsCourseClassECourseClassStatus,
-} from '../../../shared/api';
-import { ValidationMessage } from '../../../shared/constants';
-import { setStateWithApiFallback } from '../../../shared/functions';
-import { useWaitUserInfo } from '../../../shared/hooks';
-import { User } from '../../../redux/feature/authSlice';
 
 type CourseClassType = UMDomainDtosCourseClassICourseClass & {
   teacher: {
@@ -244,50 +244,52 @@ type ListProps = {
 
 const List = ({ courseClasses, user }: ListProps) => {
   return (
-    <TableContainer>
-      <Table variant='striped' size='sm'>
-        <Thead>
-          <Tr>
-            <Th>#</Th>
-            <Th>Class name</Th>
-            <Th>Course code</Th>
-            <Th>Course name</Th>
-            <Th textAlign='center'>Sessions</Th>
-            <Th textAlign='center'>Status</Th>
-            {user?.role !== 'Teacher' && <Th>Teacher</Th>}
-          </Tr>
-        </Thead>
+    <MainData data={courseClasses}>
+      <TableContainer>
+        <Table variant='striped' size='sm'>
+          <Thead>
+            <Tr>
+              <Th>#</Th>
+              <Th>Class name</Th>
+              <Th>Course code</Th>
+              <Th>Course name</Th>
+              <Th textAlign='center'>Sessions</Th>
+              <Th textAlign='center'>Status</Th>
+              {user?.role !== 'Teacher' && <Th>Teacher</Th>}
+            </Tr>
+          </Thead>
 
-        <Tbody>
-          {courseClasses?.map((courseClass, idx) => {
-            const status = courseClass.status
-              ? UMDomainEnumsCourseClassECourseClassStatus[courseClass.status]
-              : null;
+          <Tbody>
+            {courseClasses?.map((courseClass, idx) => {
+              const status = courseClass.status
+                ? UMDomainEnumsCourseClassECourseClassStatus[courseClass.status]
+                : null;
 
-            return (
-              <Tr key={idx}>
-                <Td>{idx + 1}</Td>
-                <Td>
-                  <Link as={ReactRouterLink} to={courseClass.id}>
-                    {courseClass?.name}
-                  </Link>
-                </Td>
-                <Td>{courseClass.course?.courseId}</Td>
-                <Td>{courseClass.course?.name}</Td>
-                <Td textAlign='center'>{courseClass?.sessionsCount}</Td>
-                <Td textAlign='center'>{status}</Td>
-                {user?.role !== 'Teacher' && (
+              return (
+                <Tr key={idx}>
+                  <Td>{idx + 1}</Td>
                   <Td>
-                    {courseClass?.teacher?.firstName}{' '}
-                    {courseClass?.teacher?.lastName}
+                    <Link as={ReactRouterLink} to={courseClass.id}>
+                      {courseClass?.name}
+                    </Link>
                   </Td>
-                )}
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-    </TableContainer>
+                  <Td>{courseClass.course?.courseId}</Td>
+                  <Td>{courseClass.course?.name}</Td>
+                  <Td textAlign='center'>{courseClass?.sessionsCount}</Td>
+                  <Td textAlign='center'>{status}</Td>
+                  {user?.role !== 'Teacher' && (
+                    <Td>
+                      {courseClass?.teacher?.firstName}{' '}
+                      {courseClass?.teacher?.lastName}
+                    </Td>
+                  )}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </MainData>
   );
 };
 
@@ -312,19 +314,17 @@ const CourseClassList = () => {
   }, [user]);
 
   return (
-    <MainData data={courseClasses}>
-      <Grid rowGap='3'>
-        <GridItem>
-          <Actions reload={getCourseClasses}></Actions>
-        </GridItem>
-        <GridItem>
-          {user && courseClasses && (
-            <List user={user} courseClasses={courseClasses}></List>
-          )}
-        </GridItem>
-      </Grid>
-    </MainData>
+    <Grid rowGap='3'>
+      <GridItem>
+        <Actions reload={getCourseClasses}></Actions>
+      </GridItem>
+      <GridItem>
+        {user && courseClasses && (
+          <List user={user} courseClasses={courseClasses}></List>
+        )}
+      </GridItem>
+    </Grid>
   );
 };
 
-export default CourseClassList;
+export { CourseClassList };

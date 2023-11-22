@@ -1168,6 +1168,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
   /Teacher:
+    get:
+      tags:
+        - Teacher
+      parameters:
+        - name: Query
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.Teacher.Queries.GetAll.GetAllDto]]'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.Teacher.Queries.GetAll.GetAllDto]]'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.Teacher.Queries.GetAll.GetAllDto]]'
     post:
       tags:
         - Teacher
@@ -1703,6 +1724,21 @@ components:
             $ref: '#/components/schemas/UM.Application.Common.Models.Error'
           nullable: true
       additionalProperties: false
+    'UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.Teacher.Queries.GetAll.GetAllDto]]':
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UM.Application.Teacher.Queries.GetAll.GetAllDto'
+        success:
+          type: boolean
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/UM.Application.Common.Models.Error'
+          nullable: true
+      additionalProperties: false
     'UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Domain.Dtos.CourseClass.ICourseClass]]':
       type: object
       properties:
@@ -1943,9 +1979,6 @@ components:
         sessionsCount:
           type: integer
           format: int32
-        teacherId:
-          type: string
-          nullable: true
         slots:
           type: string
       additionalProperties: false
@@ -2034,6 +2067,9 @@ components:
     UM.Application.CourseClass.Queries.GetById.GetByIdDtoTeacher:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         teacherId:
           type: string
         firstName:
@@ -2118,6 +2154,26 @@ components:
           type: string
           format: uuid
         name:
+          type: string
+        academicYear:
+          type: string
+        program:
+          $ref: '#/components/schemas/UM.Application.ManagementClass.Queries.GetAll.GetAllDtoProgram'
+        studentsCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    UM.Application.ManagementClass.Queries.GetAll.GetAllDtoProgram:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        programId:
+          type: string
+        name:
+          type: string
+        academicYear:
           type: string
       additionalProperties: false
     UM.Application.ManagementClass.Queries.GetById.GetByIdDto:
@@ -2320,6 +2376,23 @@ components:
           type: string
         teacherId:
           type: string
+      additionalProperties: false
+    UM.Application.Teacher.Queries.GetAll.GetAllDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        teacherId:
+          type: string
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        isMale:
+          type: boolean
       additionalProperties: false
     UM.Domain.Dtos.CourseClass.ICourseClass:
       type: object

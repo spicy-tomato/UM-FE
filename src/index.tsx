@@ -1,11 +1,10 @@
 import { createStandaloneToast } from '@chakra-ui/react';
+import { store } from '@redux';
 import { registerLicense } from '@syncfusion/ej2-base';
-import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import './index.css';
-import { store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
 
 const { ToastContainer } = createStandaloneToast();
@@ -16,12 +15,10 @@ registerLicense(
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-      <ToastContainer />
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <App />
+    <ToastContainer />
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,9 +1,6 @@
+import { LocalStorageConstant, RoleConstantValue } from '@constants';
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {
-  LocalStorageConstant,
-  RoleConstantValue,
-} from '../../shared/constants';
 
 export type User = {
   extraData: Record<string, string>;

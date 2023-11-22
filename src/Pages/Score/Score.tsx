@@ -1,4 +1,9 @@
 import {
+  Account,
+  UMApplicationStudentQueriesGetScoresGetScoresDto,
+  UMDomainEnumsCourseClassECourseClassStatus,
+} from '@api';
+import {
   Table,
   TableContainer,
   Tbody,
@@ -7,13 +12,8 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import { useWaitUserInfo } from '@hooks';
 import { useState } from 'react';
-import {
-  Account,
-  UMApplicationStudentQueriesGetScoresGetScoresDto,
-  UMDomainEnumsCourseClassECourseClassStatus,
-} from '../../shared/api';
-import { useWaitUserInfo } from '../../shared/hooks';
 
 const Score = () => {
   const [scores, setScores] = useState<
@@ -77,4 +77,4 @@ const Score = () => {
   );
 };
 
-export default Score;
+export { Score };

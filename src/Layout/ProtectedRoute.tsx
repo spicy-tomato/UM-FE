@@ -1,9 +1,8 @@
-import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { RootState } from '../../redux/store';
-import NotFound from '../../Pages/Errors/NotFound/NotFound';
-import { RoleConstantValue } from '../../shared/constants';
 import { Spinner } from '@chakra-ui/react';
+import { NotFound } from '@components';
+import { RoleConstantValue } from '@constants';
+import { RootState } from '@redux';
+import { useSelector } from 'react-redux';
 
 type ProtectedRouteProps =
   | {
@@ -32,4 +31,4 @@ const ProtectedRoute = (props: ProtectedRouteProps) => {
   return <NotFound />;
 };
 
-export default ProtectedRoute;
+export { ProtectedRoute };

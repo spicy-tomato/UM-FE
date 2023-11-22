@@ -1,3 +1,5 @@
+import { Session, UMApplicationSessionQueriesGetAllGetAllDto } from '@api';
+import { RootState } from '@redux';
 import {
   Agenda,
   Day,
@@ -5,18 +7,12 @@ import {
   FieldModel,
   Inject,
   Month,
-  PopupOpenEventArgs,
   ScheduleComponent,
   Week,
   WorkWeek,
 } from '@syncfusion/ej2-react-schedule';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import {
-  Session,
-  UMApplicationSessionQueriesGetAllGetAllDto,
-} from '../../shared/api';
 import './Calendar.css';
 
 const fieldsData: FieldModel = {
@@ -72,4 +68,4 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+export { Calendar };

@@ -4,4 +4,4 @@ const PersonalInformation = () => {
   return <Card></Card>;
 };
 
-export default PersonalInformation;
+export { PersonalInformation };
