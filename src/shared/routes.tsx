@@ -27,11 +27,11 @@ import { Score } from 'src/Pages/Score/Score';
 
 export const routes: RouteObject[] = [
   {
-    path: '',
-    element: <Navigate to='login' />,
+    path: "",
+    element: <Navigate to="login" />,
   },
   {
-    path: 'login',
+    path: "login",
     element: (
       <ChakraProvider>
         <Login />
@@ -39,15 +39,15 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/',
+    path: "/",
     element: <Layout />,
     children: [
       {
-        path: 'home',
+        path: "home",
         element: <Home />,
       },
       {
-        path: 'calendar',
+        path: "calendar",
         element: <Calendar />,
       },
       {
@@ -55,12 +55,25 @@ export const routes: RouteObject[] = [
         element: <CourseComponent />,
       },
       {
-        path: 'program',
-        element: (
-          <ProtectedRoute role='Admin'>
-            <ProgramComponent />
-          </ProtectedRoute>
-        ),
+        path: "program",
+        children: [
+          {
+            path: "",
+            element: (
+              <ProtectedRoute role="Admin">
+                <ProgramComponent />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: ":programId",
+            element: (
+              <BackToPage url="/program" text="Back to program list">
+                <ProgramDetails />
+              </BackToPage>
+            ),
+          },
+        ],
       },
       {
         path: 'management-class',
@@ -76,10 +89,10 @@ export const routes: RouteObject[] = [
         ],
       },
       {
-        path: 'course-class',
+        path: "course-class",
         children: [
           {
-            path: '',
+            path: "",
             element: <CourseClassList />,
           },
           {
@@ -89,13 +102,13 @@ export const routes: RouteObject[] = [
         ],
       },
       {
-        path: 'me',
+        path: "me",
         element: <PersonalInformation />,
       },
       {
-        path: 'score',
+        path: "score",
         element: (
-          <ProtectedRoute role='Student'>
+          <ProtectedRoute role="Student">
             <Score />
           </ProtectedRoute>
         ),
@@ -106,34 +119,34 @@ export const routes: RouteObject[] = [
 
 export const routesByRole: Record<RoleConstantValue, SideBarItem[]> = {
   [RoleConstant.admin]: [
-    { name: 'Home', url: '/home' },
-    { name: 'Calendar', url: '/calendar' },
-    { name: 'Program', url: '/program' },
-    { name: 'Course', url: '/course' },
-    { name: 'Course class', url: '/course-class' },
-    { name: 'Management class', url: '/management-class' },
+    { name: "Home", url: "/home" },
+    { name: "Calendar", url: "/calendar" },
+    { name: "Program", url: "/program" },
+    { name: "Course", url: "/course" },
+    { name: "Course class", url: "/course-class" },
+    { name: "Management class", url: "/management-class" },
   ],
   [RoleConstant.student]: [
-    { name: 'Home', url: '/home' },
-    { name: 'Calendar', url: '/calendar' },
-    { name: 'Course class', url: '/course-class' },
-    { name: 'Management class', url: '/management-class' },
-    { name: 'Score', url: '/score' },
+    { name: "Home", url: "/home" },
+    { name: "Calendar", url: "/calendar" },
+    { name: "Course class", url: "/course-class" },
+    { name: "Management class", url: "/management-class" },
+    { name: "Score", url: "/score" },
   ],
   [RoleConstant.teacher]: [
-    { name: 'Home', url: '/home' },
-    { name: 'Calendar', url: '/calendar' },
-    { name: 'Course class', url: '/course-class' },
-    { name: 'Management class', url: '/management-class' },
+    { name: "Home", url: "/home" },
+    { name: "Calendar", url: "/calendar" },
+    { name: "Course class", url: "/course-class" },
+    { name: "Management class", url: "/management-class" },
   ],
 };
 
 export const routeIcon: Record<ValidRoutes, IconType> = {
-  '/home': AiFillHome,
-  '/calendar': AiFillCalendar,
-  '/course': AiFillGold,
-  '/program': AiFillBook,
-  '/management-class': SiGoogleclassroom,
-  '/course-class': SiGoogleclassroom,
-  '/score': PiExamFill,
+  "/home": AiFillHome,
+  "/calendar": AiFillCalendar,
+  "/course": AiFillGold,
+  "/program": AiFillBook,
+  "/management-class": SiGoogleclassroom,
+  "/course-class": SiGoogleclassroom,
+  "/score": PiExamFill,
 };
