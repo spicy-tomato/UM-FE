@@ -443,7 +443,7 @@ const Students = ({ managementClass }: ContentProps) => {
                 <Td>{student.middleName}</Td>
                 <Td>{student.lastName}</Td>
                 <Td>{student.studentId}</Td>
-                <Td>{getGender(student.isMale)}</Td>
+                <Td>{getGender(student)}</Td>
               </Tr>
             );
           })}

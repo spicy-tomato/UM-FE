@@ -2,8 +2,10 @@ import { CourseClass, ManagementClass, Teacher } from '@api';
 import { StringHelper } from '@helpers';
 import { createListenerMiddleware } from '@reduxjs/toolkit';
 import {
+  courseClassDetailsGetScores,
   courseClassDetailsUpdateCourseClass,
   courseClassDetailsUpdateManagementClassOptions,
+  courseClassDetailsUpdateScores,
   courseClassDetailsUpdateStudentOptions,
   courseClassDetailsUpdateTeacherOptions,
 } from '../feature/courseClassDetailsSlice';
@@ -19,44 +21,49 @@ courseClassDetailsMiddleware.startListening({
 
     const prev = listenerApi.getOriginalState().courseClassDetails.courseClass;
     const curr = listenerApi.getState().courseClassDetails.courseClass;
+    const isAdmin = listenerApi.getState().auth.user?.role === 'Admin';
 
     if (prev?.id !== curr?.id) {
-      new ManagementClass()
-        .getManagementClass({})
-        .then((res) => {
-          listenerApi.dispatch(
-            courseClassDetailsUpdateManagementClassOptions(
-              (res.data.data ?? []).map((t) => ({
-                value: t.id!,
-                label: t.name!,
-              }))
-            )
-          );
-        })
-        .catch(() => {
-          listenerApi.dispatch(
-            courseClassDetailsUpdateManagementClassOptions([])
-          );
-        });
+      if (isAdmin) {
+        new ManagementClass()
+          .getManagementClass({})
+          .then((res) => {
+            listenerApi.dispatch(
+              courseClassDetailsUpdateManagementClassOptions(
+                (res.data.data ?? []).map((t) => ({
+                  value: t.id!,
+                  label: t.name!,
+                }))
+              )
+            );
+          })
+          .catch(() => {
+            listenerApi.dispatch(
+              courseClassDetailsUpdateManagementClassOptions([])
+            );
+          });
 
-      new Teacher()
-        .getTeacher({})
-        .then((res) => {
-          listenerApi.dispatch(
-            courseClassDetailsUpdateTeacherOptions(
-              (res.data.data ?? []).map((t) => ({
-                value: t.id!,
-                label: StringHelper.shortName(t),
-              }))
-            )
-          );
-        })
-        .catch(() => {
-          listenerApi.dispatch(courseClassDetailsUpdateTeacherOptions([]));
-        });
+        new Teacher()
+          .getTeacher({})
+          .then((res) => {
+            listenerApi.dispatch(
+              courseClassDetailsUpdateTeacherOptions(
+                (res.data.data ?? []).map((t) => ({
+                  value: t.id!,
+                  label: StringHelper.shortName(t),
+                }))
+              )
+            );
+          })
+          .catch(() => {
+            listenerApi.dispatch(courseClassDetailsUpdateTeacherOptions([]));
+          });
+      }
+
+      listenerApi.dispatch(courseClassDetailsGetScores());
     }
 
-    if (prev !== curr) {
+    if (prev !== curr && isAdmin) {
       new CourseClass()
         .getCourseRecommendationStudents(curr?.id!)
         .then((res) => {
@@ -73,5 +80,25 @@ courseClassDetailsMiddleware.startListening({
           listenerApi.dispatch(courseClassDetailsUpdateStudentOptions([]));
         });
     }
+  },
+});
+
+courseClassDetailsMiddleware.startListening({
+  actionCreator: courseClassDetailsGetScores,
+  effect: async (_, listenerApi) => {
+    listenerApi.cancelActiveListeners();
+
+    const curr = listenerApi.getState().courseClassDetails.courseClass;
+
+    new CourseClass()
+      .getScores(curr?.id!)
+      .then((res) => {
+        listenerApi.dispatch(
+          courseClassDetailsUpdateScores(res.data.data ?? [])
+        );
+      })
+      .catch(() => {
+        listenerApi.dispatch(courseClassDetailsUpdateTeacherOptions([]));
+      });
   },
 });

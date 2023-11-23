@@ -1,4 +1,7 @@
-export function getGender(isMale?: boolean, useCapitalized = true): string {
+export function getGender(
+  { isMale }: { isMale?: boolean },
+  useCapitalized = true
+): string {
   let result = isMale ? 'male' : 'female';
 
   if (!useCapitalized) return result;

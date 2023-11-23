@@ -3,6 +3,7 @@ import {
   UMApplicationCourseClassCommandsUpdateUpdateCommandData,
   UMApplicationCourseClassQueriesGetByIdGetByIdDto,
   UMDomainEnumsCourseClassECourseClassStatus,
+  UpdateScorePayload,
 } from '@api';
 import {
   AlertDialog,
@@ -37,6 +38,7 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Spinner,
   Stack,
   StackDivider,
   Tab,
@@ -57,31 +59,27 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { SlotsName, ValidationMessage } from '@constants';
-import { setStateWithApiFallback } from '@functions';
+import { getGender, setStateWithApiFallback } from '@functions';
 import { StringHelper } from '@helpers';
 import { useWaitUserInfo } from '@hooks';
-import { BackToPage, MainData } from '@layout';
+import { BackToPage, MainData, ProtectedComponent } from '@layout';
 import { SelectItemType } from '@models';
 import {
+  RootState,
+  courseClassDetailsGetScores,
+  courseClassDetailsReset,
   courseClassDetailsUpdateCourseClass,
-  courseClassDetailsUpdateManagementClassOptions,
-  courseClassDetailsUpdateStudentOptions,
-  courseClassDetailsUpdateTeacherOptions,
 } from '@redux';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { Select } from 'chakra-react-select';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DetailsAssignManagementClassForm } from './DetailsAssignManagementClassForm';
 import { DetailsAssignStudentsForm } from './DetailsAssignStudentsForm';
 import { DetailsAssignTeacherForm } from './DetailsAssignTeacherForm';
-import { useDispatch } from 'react-redux';
-
-type ContentProps = {
-  courseClass: UMApplicationCourseClassQueriesGetByIdGetByIdDto;
-};
 
 type EditFormData = {
   name: string;
@@ -116,10 +114,6 @@ const editFormDataDefaultValues = (
 
 const AssignButton = ({ reload, courseClass }: ButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    // console.log(courseClass)
-  }, [courseClass]);
 
   return (
     <>
@@ -384,10 +378,21 @@ const DeleteButton = ({ courseClass }: ButtonProps) => {
 
 type ActionsProps = {
   reload: () => void;
-  courseClass: UMApplicationCourseClassQueriesGetByIdGetByIdDto;
 };
 
-const Actions = ({ reload, courseClass }: ActionsProps) => {
+const Actions = ({ reload }: ActionsProps) => {
+  const courseClass = useSelector(
+    (store: RootState) => store.courseClassDetails.courseClass
+  );
+
+  if (!courseClass) {
+    return (
+      <Flex justify='end'>
+        <Spinner />
+      </Flex>
+    );
+  }
+
   return (
     <Flex justify='end' columnGap='2'>
       <AssignButton reload={reload} courseClass={courseClass} />
@@ -397,7 +402,16 @@ const Actions = ({ reload, courseClass }: ActionsProps) => {
   );
 };
 
-const InfoCard = ({ courseClass }: ContentProps) => {
+const InfoCard = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const courseClass = useSelector(
+    (store: RootState) => store.courseClassDetails.courseClass
+  );
+
+  if (!courseClass) {
+    return <></>;
+  }
+
   const course = courseClass.course!;
   const status = UMDomainEnumsCourseClassECourseClassStatus[
     courseClass.status!
@@ -408,7 +422,7 @@ const InfoCard = ({ courseClass }: ContentProps) => {
     Finished: 'blackAlpha',
   };
 
-  const info: { header: string; label: string | JSX.Element }[] = [
+  const info: { header: string; label?: string | JSX.Element }[] = [
     {
       header: 'Course',
       label: `${course.name} (${course.courseId})`,
@@ -419,7 +433,7 @@ const InfoCard = ({ courseClass }: ContentProps) => {
     },
     {
       header: 'Academic year',
-      label: courseClass.academicYear ?? '',
+      label: courseClass.academicYear,
     },
     {
       header: 'Teacher',
@@ -451,60 +465,218 @@ const InfoCard = ({ courseClass }: ContentProps) => {
               )}
             </Box>
           ))}
+
+          <Box>
+            <Heading size='xs' textTransform='uppercase'>
+              Sessions
+            </Heading>
+            <Flex mt='2' fontSize='sm' align='center'>
+              <Text>{courseClass.sessions?.length}</Text>
+
+              {courseClass.sessions?.length ? (
+                <>
+                  <Button size='xs' colorScheme='teal' ml='3' onClick={onOpen}>
+                    Show all
+                  </Button>
+
+                  <Modal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    size='3xl'
+                    scrollBehavior='inside'
+                  >
+                    <ModalOverlay />
+                    <ModalContent>
+                      <ModalHeader>Assign course class</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
+                        <TableContainer>
+                          <Table variant='striped' size='sm'>
+                            <Thead>
+                              <Tr>
+                                <Th>#</Th>
+                                <Th>Date</Th>
+                                <Th textAlign='center'>Slot</Th>
+                                <Th textAlign='center'>Start</Th>
+                                <Th textAlign='center'>End</Th>
+                              </Tr>
+                            </Thead>
+
+                            <Tbody>
+                              {courseClass.sessions.map((session, idx) => {
+                                return (
+                                  <Tr key={idx}>
+                                    <Td>{idx + 1}</Td>
+                                    <Td>
+                                      {moment(session.startAt).format(
+                                        'DD-MM-YYYY'
+                                      )}
+                                    </Td>
+                                    <Td textAlign='center'>{session?.slot}</Td>
+                                    <Td textAlign='center'>
+                                      {moment(session.startAt).format('HH:mm')}
+                                    </Td>
+                                    <Td textAlign='center'>
+                                      {moment(session.endAt).format('HH:mm')}
+                                    </Td>
+                                  </Tr>
+                                );
+                              })}
+                            </Tbody>
+                          </Table>
+                        </TableContainer>
+                      </ModalBody>
+                    </ModalContent>
+                  </Modal>
+                </>
+              ) : (
+                <></>
+              )}
+            </Flex>
+          </Box>
         </Stack>
       </CardBody>
     </Card>
   );
 };
 
-const Sessions = ({ courseClass }: ContentProps) => {
-  if (!courseClass.sessions || courseClass.sessions.length === 0) {
+const Score = () => {
+  const courseClassId = useSelector(
+    (store: RootState) => store.courseClassDetails.courseClass?.id
+  );
+  const scores = useSelector(
+    (store: RootState) => store.courseClassDetails.scores
+  );
+
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const [status, setStatus] = useState<'read' | 'edit' | 'submit'>('read');
+  const { register, handleSubmit, reset } = useForm<UpdateScorePayload>({});
+
+  const formDefaultValues =
+    scores?.reduce<Record<string, number | undefined>>((acc, curr) => {
+      acc[curr.student?.id!] = curr.score ?? undefined;
+      return acc;
+    }, {}) ?? {};
+
+  const onSubmit: SubmitHandler<UpdateScorePayload> = async (data) => {
+    setStatus('submit');
+
+    try {
+      if (!courseClassId) return;
+      await new CourseClass().updateScore(courseClassId, data);
+
+      toast({
+        title: 'Updated successfully',
+        status: 'success',
+        isClosable: true,
+      });
+
+      dispatch(courseClassDetailsGetScores());
+    } catch {
+    } finally {
+      setStatus('read');
+    }
+  };
+
+  useEffect(() => {
+    if (scores?.length) {
+      reset(formDefaultValues);
+    }
+  }, [scores]);
+
+  if (!scores) {
+    return <Spinner />;
+  }
+
+  if (!scores.length) {
     return <></>;
   }
 
   return (
-    <TableContainer>
-      <Table variant='striped' size='sm'>
-        <Thead>
-          <Tr>
-            <Th>#</Th>
-            <Th>Date</Th>
-            <Th textAlign='center'>Slot</Th>
-            <Th textAlign='center'>Start</Th>
-            <Th textAlign='center'>End</Th>
-          </Tr>
-        </Thead>
+    <Box>
+      <Flex justify='space-between'>
+        <Heading size='lg'>Score table</Heading>
+        <ProtectedComponent role='Teacher' hideFallback>
+          <Flex columnGap='2'>
+            {status === 'read' && (
+              <Button onClick={() => setStatus('edit')} colorScheme='blue'>
+                Input scores
+              </Button>
+            )}
+            {status === 'edit' && (
+              <Button onClick={() => setStatus('read')}>Cancel</Button>
+            )}
+            {status !== 'read' && (
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                isLoading={status === 'submit'}
+                colorScheme='green'
+              >
+                Save
+              </Button>
+            )}
+          </Flex>
+        </ProtectedComponent>
+      </Flex>
+      <TableContainer mt='3'>
+        <Table variant='striped' size='sm'>
+          <Thead>
+            <Tr>
+              <Th>#</Th>
+              <Th>First name</Th>
+              <Th>Last name</Th>
+              <Th>Middle name</Th>
+              <Th>Gender</Th>
+              <Th>Management class</Th>
+              <Th>Number score</Th>
+              <Th>Letter score</Th>
+            </Tr>
+          </Thead>
 
-        <Tbody>
-          {courseClass.sessions.map((session, idx) => {
-            return (
-              <Tr key={idx}>
-                <Td>{idx + 1}</Td>
-                <Td>{moment(session.startAt).format('DD-MM-YYYY')}</Td>
-                <Td textAlign='center'>{session?.slot}</Td>
-                <Td textAlign='center'>
-                  {moment(session.startAt).format('HH:mm')}
-                </Td>
-                <Td textAlign='center'>
-                  {moment(session.endAt).format('HH:mm')}
-                </Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-    </TableContainer>
+          <Tbody>
+            {scores.map((score, idx) => {
+              return (
+                <Tr key={idx}>
+                  <Td>{idx + 1}</Td>
+                  <Td>{score.student?.firstName}</Td>
+                  <Td>{score.student?.middleName}</Td>
+                  <Td>{score.student?.lastName}</Td>
+                  <Td>{getGender(score.student!)}</Td>
+                  <Td>{score.student?.managementClass?.name}</Td>
+                  <Td>
+                    {status === 'read' ? (
+                      score.score
+                    ) : (
+                      <NumberInput min={0} max={10} size='xs'>
+                        <NumberInputField
+                          readOnly={status === 'submit'}
+                          {...register(score.student?.id!, {
+                            required: ValidationMessage.required,
+                          })}
+                        />
+                      </NumberInput>
+                    )}
+                  </Td>
+                  <Td>{score.letterScore}</Td>
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 
-const Content = ({ courseClass }: ContentProps) => {
+const Content = () => {
   return (
     <Grid rowGap='3'>
       <GridItem>
-        <InfoCard courseClass={courseClass} />
+        <InfoCard />
       </GridItem>
       <GridItem>
-        <Sessions courseClass={courseClass} />
+        <Score />
       </GridItem>
     </Grid>
   );
@@ -530,8 +702,10 @@ const CourseClassDetails = () => {
   };
 
   useEffect(() => {
-    getCourseClass();
-  }, [user, params]);
+    return () => {
+      dispatch(courseClassDetailsReset());
+    };
+  }, []);
 
   useEffect(() => {
     if (courseClass) {
@@ -539,16 +713,22 @@ const CourseClassDetails = () => {
     }
   }, [courseClass]);
 
+  useEffect(() => {
+    getCourseClass();
+  }, [user, params]);
+
   return (
     <MainData data={courseClass}>
       <BackToPage
         url='/course-class'
         text='Back to course classes list'
         rightContent={
-          <Actions courseClass={courseClass!} reload={getCourseClass} />
+          <ProtectedComponent role='Admin' hideFallback>
+            <Actions reload={getCourseClass} />
+          </ProtectedComponent>
         }
       >
-        <Content courseClass={courseClass!} />
+        <Content />
       </BackToPage>
     </MainData>
   );

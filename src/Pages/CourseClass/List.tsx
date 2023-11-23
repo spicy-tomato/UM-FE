@@ -41,7 +41,7 @@ import {
 import { ValidationMessage } from '@constants';
 import { setStateWithApiFallback } from '@functions';
 import { useWaitUserInfo } from '@hooks';
-import { MainData } from '@layout';
+import { MainData, ProtectedComponent } from '@layout';
 import { User } from '@redux';
 import { AxiosResponse } from 'axios';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
@@ -316,7 +316,9 @@ const CourseClassList = () => {
   return (
     <Grid rowGap='3'>
       <GridItem>
-        <Actions reload={getCourseClasses}></Actions>
+        <ProtectedComponent role='Admin' hideFallback>
+          <Actions reload={getCourseClasses}></Actions>
+        </ProtectedComponent>
       </GridItem>
       <GridItem>
         {user && courseClasses && (

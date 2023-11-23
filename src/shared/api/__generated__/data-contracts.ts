@@ -792,11 +792,6 @@ export interface UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand {
   startAt?: string;
 }
 
-export interface UMApplicationCourseClassCommandsUpdateScoreUpdateScoreCommandData {
-  /** @format double */
-  score?: number;
-}
-
 export interface UMApplicationCourseClassCommandsUpdateUpdateCommandData {
   name?: string;
   /** @format int32 */
@@ -1209,3 +1204,5 @@ export enum UMDomainEnumsCourseClassECourseClassStatus {
 export type UpdateInformationData = UMApplicationCommonModelsResultSystemBoolean;
 
 export type UpdateScoreData = UMApplicationCommonModelsResultSystemBoolean;
+
+export type UpdateScorePayload = Record<string, number>;

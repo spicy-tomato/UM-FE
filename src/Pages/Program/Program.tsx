@@ -53,11 +53,6 @@ function ProgramComponent() {
     getPrograms();
   }, []);
 
-  useEffect(() => {
-    console.log(selectedProgram);
-    // console.log();
-  }, [isOpen]);
-
   const handleAddProgram = async () => {
     try {
       const response = await new Program().postProgram({

@@ -24,9 +24,9 @@ import {
   UMApplicationCourseClassCommandsAssignToManagementClassesAssignToManagementClassesCommandData,
   UMApplicationCourseClassCommandsAssignToStudentsAssignToStudentsCommandData,
   UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand,
-  UMApplicationCourseClassCommandsUpdateScoreUpdateScoreCommandData,
   UMApplicationCourseClassCommandsUpdateUpdateCommandData,
   UpdateScoreData,
+  UpdateScorePayload,
 } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
@@ -162,6 +162,22 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
    * No description
    *
    * @tags CourseClass
+   * @name UpdateScore
+   * @request PUT:/CourseClass/{id}/score
+   * @response `200` `UpdateScoreData` Success
+   */
+  updateScore = (id: string, data: UpdateScorePayload, params: RequestParams = {}) =>
+    this.request<UpdateScoreData>({
+      path: `/CourseClass/${id}/score`,
+      method: "PUT",
+      body: data,
+      type: ContentType.Json,
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags CourseClass
    * @name AssignToStudents
    * @request POST:/CourseClass/{id}/student
    * @response `200` `AssignToStudentsData` Success
@@ -174,27 +190,6 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
     this.request<AssignToStudentsData>({
       path: `/CourseClass/${id}/student`,
       method: "POST",
-      body: data,
-      type: ContentType.Json,
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags CourseClass
-   * @name UpdateScore
-   * @request PUT:/CourseClass/{id}/student/{studentId}
-   * @response `200` `UpdateScoreData` Success
-   */
-  updateScore = (
-    id: string,
-    studentId: string,
-    data: UMApplicationCourseClassCommandsUpdateScoreUpdateScoreCommandData,
-    params: RequestParams = {},
-  ) =>
-    this.request<UpdateScoreData>({
-      path: `/CourseClass/${id}/student/${studentId}`,
-      method: "PUT",
       body: data,
       type: ContentType.Json,
       ...params,

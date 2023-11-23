@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { RoleConstant, RoleConstantValue, ValidRoutes } from '@constants';
-import { BackToPage, Layout, ProtectedRoute } from '@layout';
+import { BackToPage, Layout, ProtectedComponent } from '@layout';
 import { SideBarItem } from '@models';
 import { IconType } from 'react-icons';
 import {
@@ -60,9 +60,9 @@ export const routes: RouteObject[] = [
           {
             path: '',
             element: (
-              <ProtectedRoute role='Admin'>
+              <ProtectedComponent role='Admin'>
                 <ProgramComponent />
-              </ProtectedRoute>
+              </ProtectedComponent>
             ),
           },
           {
@@ -108,9 +108,9 @@ export const routes: RouteObject[] = [
       {
         path: 'score',
         element: (
-          <ProtectedRoute role='Student'>
+          <ProtectedComponent role='Student'>
             <Score />
-          </ProtectedRoute>
+          </ProtectedComponent>
         ),
       },
     ],

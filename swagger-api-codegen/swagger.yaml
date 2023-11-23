@@ -567,6 +567,55 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.CourseClass.Queries.GetScores.GetScoresDto]]'
+    put:
+      tags:
+        - CourseClass
+      operationId: UpdateScore
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: object
+              additionalProperties:
+                type: number
+                format: double
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: number
+                format: double
+          text/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: number
+                format: double
+          application/*+json:
+            schema:
+              type: object
+              additionalProperties:
+                type: number
+                format: double
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
   '/CourseClass/{id}/student':
     post:
       tags:
@@ -592,49 +641,6 @@ paths:
           application/*+json:
             schema:
               $ref: '#/components/schemas/UM.Application.CourseClass.Commands.AssignToStudents.AssignToStudentsCommandData'
-      responses:
-        '200':
-          description: Success
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
-  '/CourseClass/{id}/student/{studentId}':
-    put:
-      tags:
-        - CourseClass
-      operationId: UpdateScore
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: studentId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UM.Application.CourseClass.Commands.UpdateScore.UpdateScoreCommandData'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UM.Application.CourseClass.Commands.UpdateScore.UpdateScoreCommandData'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UM.Application.CourseClass.Commands.UpdateScore.UpdateScoreCommandData'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/UM.Application.CourseClass.Commands.UpdateScore.UpdateScoreCommandData'
       responses:
         '200':
           description: Success
@@ -2058,13 +2064,6 @@ components:
           format: int32
         slots:
           type: string
-      additionalProperties: false
-    UM.Application.CourseClass.Commands.UpdateScore.UpdateScoreCommandData:
-      type: object
-      properties:
-        score:
-          type: number
-          format: double
       additionalProperties: false
     UM.Application.CourseClass.Queries.GetById.GetByIdDto:
       type: object
