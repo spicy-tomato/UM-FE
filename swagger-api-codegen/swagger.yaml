@@ -519,6 +519,30 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Boolean]'
+  '/CourseClass/{id}/recommendations/student':
+    get:
+      tags:
+        - CourseClass
+      operationId: GetCourseRecommendationStudents
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDto]]'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDto]]'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDto]]'
   '/CourseClass/{id}/score':
     get:
       tags:
@@ -1672,6 +1696,21 @@ components:
             $ref: '#/components/schemas/UM.Application.Common.Models.Error'
           nullable: true
       additionalProperties: false
+    'UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDto]]':
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDto'
+        success:
+          type: boolean
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/UM.Application.Common.Models.Error'
+          nullable: true
+      additionalProperties: false
     'UM.Application.Common.Models.Result[System.Collections.Generic.IEnumerable[UM.Application.CourseClass.Queries.GetScores.GetScoresDto]]':
       type: object
       properties:
@@ -2118,6 +2157,34 @@ components:
           type: string
         isMale:
           type: boolean
+      additionalProperties: false
+    UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        studentId:
+          type: string
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        isMale:
+          type: boolean
+        managementClass:
+          $ref: '#/components/schemas/UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDtoManagementClass'
+      additionalProperties: false
+    UM.Application.CourseClass.Queries.GetRecommendationStudents.GetRecommendationStudentsDtoManagementClass:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
       additionalProperties: false
     UM.Application.CourseClass.Queries.GetScores.GetScoresDto:
       type: object

@@ -1,6 +1,5 @@
 import {
   CourseClass,
-  Teacher,
   UMApplicationCourseClassCommandsUpdateUpdateCommandData,
   UMApplicationCourseClassQueriesGetByIdGetByIdDto,
   UMDomainEnumsCourseClassECourseClassStatus,
@@ -40,8 +39,13 @@ import {
   NumberInputStepper,
   Stack,
   StackDivider,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
   Table,
   TableContainer,
+  Tabs,
   Tbody,
   Td,
   Text,
@@ -58,19 +62,25 @@ import { StringHelper } from '@helpers';
 import { useWaitUserInfo } from '@hooks';
 import { BackToPage, MainData } from '@layout';
 import { SelectItemType } from '@models';
+import {
+  courseClassDetailsUpdateCourseClass,
+  courseClassDetailsUpdateManagementClassOptions,
+  courseClassDetailsUpdateStudentOptions,
+  courseClassDetailsUpdateTeacherOptions,
+} from '@redux';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { Select } from 'chakra-react-select';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DetailsAssignManagementClassForm } from './DetailsAssignManagementClassForm';
+import { DetailsAssignStudentsForm } from './DetailsAssignStudentsForm';
+import { DetailsAssignTeacherForm } from './DetailsAssignTeacherForm';
+import { useDispatch } from 'react-redux';
 
 type ContentProps = {
   courseClass: UMApplicationCourseClassQueriesGetByIdGetByIdDto;
-};
-
-type AssignFormData = {
-  teacher: SelectItemType | null;
 };
 
 type EditFormData = {
@@ -89,19 +99,6 @@ const slotOptions: SelectItemType[] = Object.entries(SlotsName).map(
   ([key, value]) => ({ value: key, label: value })
 );
 
-const assignFormDataDefaultValues = (
-  courseClass: UMApplicationCourseClassQueriesGetByIdGetByIdDto
-): AssignFormData => {
-  return {
-    teacher: courseClass.teacher
-      ? {
-          value: courseClass.teacher.id!,
-          label: StringHelper.shortName(courseClass.teacher),
-        }
-      : null,
-  };
-};
-
 const editFormDataDefaultValues = (
   courseClass: UMApplicationCourseClassQueriesGetByIdGetByIdDto
 ): EditFormData => {
@@ -118,73 +115,11 @@ const editFormDataDefaultValues = (
 };
 
 const AssignButton = ({ reload, courseClass }: ButtonProps) => {
-  const {
-    handleSubmit,
-    register,
-    setValue,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm<AssignFormData>({
-    defaultValues: assignFormDataDefaultValues(courseClass),
-  });
-  const toast = useToast();
-  const user = useWaitUserInfo();
-  const watchTeacher = watch('teacher');
-
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [teacherOptions, setTeacherOptions] = useState<
-    SelectItemType[] | undefined
-  >([]);
-
-  const getTeacherOptions = async () => {
-    if (!user) return;
-    try {
-      const res = await new Teacher().getTeacher({});
-      setTeacherOptions(
-        (res.data.data ?? []).map((t) => ({
-          value: t.id!,
-          label: StringHelper.shortName(t),
-        }))
-      );
-    } catch {
-      if (true) {
-        setTeacherOptions([]);
-      }
-    }
-  };
 
   useEffect(() => {
-    getTeacherOptions();
-  }, [user]);
-
-  useEffect(() => {
-    reset(assignFormDataDefaultValues(courseClass));
+    // console.log(courseClass)
   }, [courseClass]);
-
-  const onSubmit: SubmitHandler<AssignFormData> = async (data) => {
-    setIsSubmitting(true);
-
-    try {
-      await new CourseClass().assignToTeacher(
-        courseClass.id!,
-        data.teacher!.value
-      );
-
-      toast({
-        title: 'Modified successfully',
-        status: 'success',
-        isClosable: true,
-      });
-
-      onClose();
-      reload?.();
-    } catch {
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <>
@@ -192,41 +127,43 @@ const AssignButton = ({ reload, courseClass }: ButtonProps) => {
         Assign
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size='3xl'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Assign course class to teacher</ModalHeader>
+          <ModalHeader>Assign course class</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Flex direction='column' rowGap='3'>
-              <FormControl isInvalid={!!errors.teacher}>
-                <FormLabel>Teacher</FormLabel>
-                <Select
-                  {...register('teacher', {
-                    required: ValidationMessage.required,
-                  })}
-                  options={teacherOptions}
-                  value={watchTeacher}
-                  onChange={(option) => setValue('teacher', option)}
-                />
-                <FormErrorMessage>
-                  {errors.teacher && errors.teacher.message}
-                </FormErrorMessage>
-              </FormControl>
-            </Flex>
+            <Tabs size='md' variant='enclosed'>
+              <TabList>
+                <Tab>Assign to teacher</Tab>
+                <Tab>Assign to management class</Tab>
+                <Tab>Assign to students</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <DetailsAssignTeacherForm
+                    close={onClose}
+                    reload={reload}
+                    courseClass={courseClass}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <DetailsAssignManagementClassForm
+                    close={onClose}
+                    reload={reload}
+                    courseClass={courseClass}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <DetailsAssignStudentsForm
+                    close={onClose}
+                    reload={reload}
+                    courseClass={courseClass}
+                  />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button
-              colorScheme='green'
-              ml='3'
-              isLoading={isSubmitting}
-              onClick={handleSubmit(onSubmit)}
-            >
-              Confirm
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
@@ -576,6 +513,7 @@ const Content = ({ courseClass }: ContentProps) => {
 const CourseClassDetails = () => {
   const params = useParams();
   const user = useWaitUserInfo();
+  const dispatch = useDispatch();
   const [courseClass, setCourseClass] = useState<
     UMApplicationCourseClassQueriesGetByIdGetByIdDto | null | undefined
   >();
@@ -594,6 +532,12 @@ const CourseClassDetails = () => {
   useEffect(() => {
     getCourseClass();
   }, [user, params]);
+
+  useEffect(() => {
+    if (courseClass) {
+      dispatch(courseClassDetailsUpdateCourseClass(courseClass));
+    }
+  }, [courseClass]);
 
   return (
     <MainData data={courseClass}>

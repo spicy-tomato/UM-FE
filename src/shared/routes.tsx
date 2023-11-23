@@ -14,7 +14,7 @@ import { SiGoogleclassroom } from 'react-icons/si';
 import { Navigate, RouteObject } from 'react-router-dom';
 import { Calendar } from 'src/Pages/Calendar/Calendar';
 import { CourseComponent } from 'src/Pages/Course/Course';
-import { CourseClassDetails } from 'src/Pages/CourseClass/Details';
+import { CourseClassDetails } from 'src/Pages/CourseClass/Details/Details';
 import { CourseClassList } from 'src/Pages/CourseClass/List';
 import { Home } from 'src/Pages/Home/Home';
 import { Login } from 'src/Pages/Login/Login';

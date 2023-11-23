@@ -63,6 +63,9 @@ export interface GetCourseClassParams {
 export type GetCourseData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseQueriesGetAllGetAllDto;
 
+export type GetCourseRecommendationStudentsData =
+  UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseClassQueriesGetRecommendationStudentsGetRecommendationStudentsDto;
+
 export type GetManagementClassByIdData =
   UMApplicationCommonModelsResultUMApplicationManagementClassQueriesGetByIdGetByIdDto;
 
@@ -657,6 +660,12 @@ export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumera
   success?: boolean;
 }
 
+export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseClassQueriesGetRecommendationStudentsGetRecommendationStudentsDto {
+  data?: UMApplicationCourseClassQueriesGetRecommendationStudentsGetRecommendationStudentsDto[];
+  errors?: UMApplicationCommonModelsError[] | null;
+  success?: boolean;
+}
+
 export interface UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseClassQueriesGetScoresGetScoresDto {
   data?: UMApplicationCourseClassQueriesGetScoresGetScoresDto[];
   errors?: UMApplicationCommonModelsError[] | null;
@@ -867,6 +876,23 @@ export interface UMApplicationCourseClassQueriesGetByIdGetByIdDtoTeacher {
   lastName?: string;
   middleName?: string;
   teacherId?: string;
+}
+
+export interface UMApplicationCourseClassQueriesGetRecommendationStudentsGetRecommendationStudentsDto {
+  firstName?: string;
+  /** @format uuid */
+  id?: string;
+  isMale?: boolean;
+  lastName?: string;
+  managementClass?: UMApplicationCourseClassQueriesGetRecommendationStudentsGetRecommendationStudentsDtoManagementClass;
+  middleName?: string;
+  studentId?: string;
+}
+
+export interface UMApplicationCourseClassQueriesGetRecommendationStudentsGetRecommendationStudentsDtoManagementClass {
+  /** @format uuid */
+  id?: string;
+  name?: string;
 }
 
 export interface UMApplicationCourseClassQueriesGetScoresGetScoresDto {

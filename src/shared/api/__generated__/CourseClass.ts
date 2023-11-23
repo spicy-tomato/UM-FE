@@ -17,6 +17,7 @@ import {
   GetCourseClassByIdData,
   GetCourseClassData,
   GetCourseClassParams,
+  GetCourseRecommendationStudentsData,
   GetScoresData,
   PostCourseClassData,
   PutCourseClassData,
@@ -127,6 +128,20 @@ export class CourseClass<SecurityDataType = unknown> extends HttpClient<Security
       method: "POST",
       body: data,
       type: ContentType.Json,
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags CourseClass
+   * @name GetCourseRecommendationStudents
+   * @request GET:/CourseClass/{id}/recommendations/student
+   * @response `200` `GetCourseRecommendationStudentsData` Success
+   */
+  getCourseRecommendationStudents = (id: string, params: RequestParams = {}) =>
+    this.request<GetCourseRecommendationStudentsData>({
+      path: `/CourseClass/${id}/recommendations/student`,
+      method: "GET",
       ...params,
     });
   /**

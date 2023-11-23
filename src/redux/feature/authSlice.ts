@@ -1,25 +1,9 @@
-import { LocalStorageConstant, RoleConstantValue } from '@constants';
+import { LocalStorageConstant } from '@constants';
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { AuthState } from '../states/authState';
 
-export type User = {
-  extraData: Record<string, string>;
-  id: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  isMale: boolean;
-  address: string | null;
-  role: RoleConstantValue;
-  phoneNumber: string | null;
-};
-
-type State = {
-  token: string | null;
-  user: User | null;
-};
-
-const initialState: State = {
+const initialState: AuthState = {
   token: null,
   user: null,
 };
