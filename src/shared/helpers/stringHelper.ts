@@ -17,6 +17,13 @@ export class StringHelper {
     return `${firstName} ${middleName[0]}. ${lastName}`;
   }
 
+  static fullName(name: Name): string {
+    if (!name.middleName) return this.shortNameWithMiddle(name);
+
+    const { firstName, middleName, lastName } = this.normalize(name);
+    return `${firstName} ${middleName} ${lastName}`;
+  }
+
   private static normalize(name: Name): Required<Name> {
     const firstName = name.firstName ?? '';
     const middleName = name.middleName ?? '';

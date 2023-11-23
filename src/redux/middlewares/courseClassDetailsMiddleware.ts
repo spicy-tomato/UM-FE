@@ -21,7 +21,8 @@ courseClassDetailsMiddleware.startListening({
 
     const prev = listenerApi.getOriginalState().courseClassDetails.courseClass;
     const curr = listenerApi.getState().courseClassDetails.courseClass;
-    const isAdmin = listenerApi.getState().auth.user?.role === 'Admin';
+    const role = listenerApi.getState().auth.user?.role;
+    const isAdmin = role === 'Admin';
 
     if (prev?.id !== curr?.id) {
       if (isAdmin) {
@@ -60,7 +61,9 @@ courseClassDetailsMiddleware.startListening({
           });
       }
 
-      listenerApi.dispatch(courseClassDetailsGetScores());
+      if (role === 'Admin' || role === 'Teacher') {
+        listenerApi.dispatch(courseClassDetailsGetScores());
+      }
     }
 
     if (prev !== curr && isAdmin) {

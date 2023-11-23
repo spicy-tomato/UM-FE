@@ -1,7 +1,7 @@
 import { RoleConstantValue } from '@constants';
 
 export type User = {
-  extraData: Record<string, string>;
+  extraData: Record<string, string> | null;
   id: string;
   firstName: string;
   middleName: string;

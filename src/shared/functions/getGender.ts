@@ -1,5 +1,5 @@
 export function getGender(
-  { isMale }: { isMale?: boolean },
+  { isMale }: { isMale?: boolean | null },
   useCapitalized = true
 ): string {
   let result = isMale ? 'male' : 'female';

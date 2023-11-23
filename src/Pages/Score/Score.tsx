@@ -31,7 +31,7 @@ const Score = () => {
 
   return (
     <TableContainer>
-      <Table variant='striped' colorScheme='cyan' size='sm'>
+      <Table variant='striped' size='sm'>
         <Thead>
           <Tr>
             <Th>#</Th>
@@ -40,9 +40,9 @@ const Score = () => {
             <Th>Course name</Th>
             <Th textAlign='center'>Sessions</Th>
             <Th textAlign='center'>Status</Th>
+            <Th>Teacher</Th>
             <Th textAlign='center'>Number score</Th>
             <Th textAlign='center'>Letter score</Th>
-            <Th>Teacher</Th>
           </Tr>
         </Thead>
 
@@ -62,12 +62,12 @@ const Score = () => {
                 <Td>{course?.name}</Td>
                 <Td textAlign='center'>{courseClass?.sessionsCount}</Td>
                 <Td textAlign='center'>{status}</Td>
-                <Td textAlign='center'>{score.score}</Td>
-                <Td textAlign='center'>{score.letterScore}</Td>
                 <Td>
                   {courseClass?.teacher?.firstName}{' '}
                   {courseClass?.teacher?.lastName}
                 </Td>
+                <Td textAlign='center'>{score.score}</Td>
+                <Td textAlign='center'>{score.letterScore}</Td>
               </Tr>
             );
           })}

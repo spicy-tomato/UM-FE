@@ -41,7 +41,7 @@ const DetailsAssignStudentsForm = ({
   const toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const studentOptions = useSelector(
-    (store: RootState) => store.courseClassDetails.teacherOptions
+    (store: RootState) => store.courseClassDetails.studentOptions
   );
 
   useEffect(() => {

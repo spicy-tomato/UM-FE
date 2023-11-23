@@ -11,18 +11,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Grid,
   GridItem,
-  Heading,
   Input,
   Modal,
   ModalBody,
@@ -31,19 +26,17 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
-  StackDivider,
   Table,
   TableContainer,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { DataCard } from '@components';
 import { ValidationMessage } from '@constants';
 import { getGender, setStateWithApiFallback } from '@functions';
 import { StringHelper } from '@helpers';
@@ -157,7 +150,7 @@ const AddStudentsButton = ({ reload, managementClass }: ButtonProps) => {
   return (
     <>
       <Button colorScheme='blue' onClick={onOpen}>
-        Assign
+        Add students
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size='xl'>
@@ -375,7 +368,7 @@ const Actions = ({ reload, managementClass }: ActionsProps) => {
 };
 
 const InfoCard = ({ managementClass }: ContentProps) => {
-  const info: { header: string; label?: string | number }[] = [
+  const data: { header: string; label?: string | number }[] = [
     {
       header: 'Program',
       label: managementClass.program?.name,
@@ -390,28 +383,7 @@ const InfoCard = ({ managementClass }: ContentProps) => {
     },
   ];
 
-  return (
-    <Card>
-      <CardHeader>
-        <Heading size='md'>Class {managementClass.name}</Heading>
-      </CardHeader>
-
-      <CardBody>
-        <Stack divider={<StackDivider />} spacing='4'>
-          {info.map((row, idx) => (
-            <Box key={idx}>
-              <Heading size='xs' textTransform='uppercase'>
-                {row.header}
-              </Heading>
-              <Text mt='2' fontSize='sm'>
-                {row.label}
-              </Text>
-            </Box>
-          ))}
-        </Stack>
-      </CardBody>
-    </Card>
-  );
+  return <DataCard heading={`Class ${managementClass.name}`} data={data} />;
 };
 
 const Students = ({ managementClass }: ContentProps) => {

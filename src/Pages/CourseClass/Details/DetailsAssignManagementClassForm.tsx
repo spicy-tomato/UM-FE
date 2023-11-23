@@ -41,7 +41,7 @@ const DetailsAssignManagementClassForm = ({
   const toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const managementClassOptions = useSelector(
-    (store: RootState) => store.courseClassDetails.teacherOptions
+    (store: RootState) => store.courseClassDetails.managementClassOptions
   );
 
   useEffect(() => {

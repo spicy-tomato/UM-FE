@@ -1,8 +1,7 @@
-import { Auth } from '@api';
 import { Grid, GridItem } from '@chakra-ui/react';
 import { Header, SideBar } from '@components';
 import { LocalStorageConstant } from '@constants';
-import { RootState, updateToken, updateUser } from '@redux';
+import { RootState, getUser, updateToken } from '@redux';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -23,13 +22,7 @@ const Layout = () => {
       return;
     }
 
-    try {
-      const response = await new Auth().getMySummaryInfo();
-      dispatch(updateUser(response.data.data));
-    } catch (e) {
-      dispatch(updateToken(null));
-      navigate('/login');
-    }
+    dispatch(getUser());
   };
 
   useEffect(() => {

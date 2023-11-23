@@ -676,7 +676,9 @@ const Content = () => {
         <InfoCard />
       </GridItem>
       <GridItem>
-        <Score />
+        <ProtectedComponent roles={['Admin', 'Teacher']} hideFallback>
+          <Score />
+        </ProtectedComponent>
       </GridItem>
     </Grid>
   );

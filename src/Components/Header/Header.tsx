@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { RootState, logOut } from '@redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const Header = () => {
       bg='gray.100'
     >
       <Box h='full' py={1}>
-        <Link href='/'>
+        <Link as={ReactRouterLink} to='/home'>
           <Image
             src='https://cdn.haitrieu.com/wp-content/uploads/2022/12/Logo-Truong-Dai-hoc-Greenwich-Viet-Nam.png'
             h='full'
@@ -87,7 +87,7 @@ const Header = () => {
               )}
 
               <MenuDivider />
-              <MenuItem as='a' href='/me'>
+              <MenuItem as={ReactRouterLink} to='/me'>
                 My information
               </MenuItem>
               <MenuItem onClick={onClickLogOut}>Logout</MenuItem>

@@ -77,6 +77,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'management-class',
+        element: <ProtectedComponent role='Admin' />,
         children: [
           {
             path: '',
@@ -130,14 +131,12 @@ export const routesByRole: Record<RoleConstantValue, SideBarItem[]> = {
     { name: 'Home', url: '/home' },
     { name: 'Calendar', url: '/calendar' },
     { name: 'Course class', url: '/course-class' },
-    { name: 'Management class', url: '/management-class' },
     { name: 'Score', url: '/score' },
   ],
   [RoleConstant.teacher]: [
     { name: 'Home', url: '/home' },
     { name: 'Calendar', url: '/calendar' },
     { name: 'Course class', url: '/course-class' },
-    { name: 'Management class', url: '/management-class' },
   ],
 };
 
