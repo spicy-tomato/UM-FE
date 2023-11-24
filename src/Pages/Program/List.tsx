@@ -29,6 +29,9 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { setStateWithApiFallback } from '@functions';
+import { MainData } from '@layout';
+import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -136,24 +139,57 @@ const Actions = ({ reload }: ActionsProps) => {
   );
 };
 
+type ProgramType = {
+  id: string;
+  programId: string;
+  name: string;
+};
+
+const ListProgram = ({ programs }: { programs: ProgramType[] }) => {
+  return (
+    <MainData data={programs}>
+      <TableContainer>
+        <Table variant={'striped'} size={'sm'} className='teacher-table'>
+          <Thead>
+            <Tr>
+              <Th>STT</Th>
+              <Th>ID</Th>
+              <Th>Program Name</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {programs?.map((program, idx) => (
+              <Tr key={program.id}>
+                <Td>{idx + 1}</Td>
+                <Td>
+                  <Link as={ReactRouterLink} to={program.id}>
+                    {program?.programId}
+                  </Link>
+                </Td>
+                <Td>{program.name}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </MainData>
+  );
+};
+
 function ProgramComponent() {
-  const [programs, setPrograms] = useState<
-    UMApplicationProgramQueriesGetAllGetAllDto[]
-  >([]);
+  const [programs, setPrograms] = useState<ProgramType[] | undefined>();
 
   const getPrograms = async () => {
-    try {
-      const response = await new Program().getProgram();
-      if (response.data.data) {
-        setPrograms(response.data.data);
-      }
-    } catch (e) {
-      console.error('Error getting programs:', e);
-    }
+    setStateWithApiFallback(
+      new Program().getProgram({}) as Promise<AxiosResponse<any>>,
+      setPrograms,
+      []
+    );
   };
 
   useEffect(() => {
     getPrograms();
+    console.log(programs);
   }, []);
 
   return (
@@ -163,31 +199,7 @@ function ProgramComponent() {
           <Actions reload={getPrograms}></Actions>
         </GridItem>
         <GridItem>
-          <TableContainer>
-            <Table variant={'striped'} size={'sm'} className='teacher-table'>
-              <Thead>
-                <Tr>
-                  <Th>STT</Th>
-                  <Th>ID</Th>
-                  <Th>Program Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {programs.map((program, idx) => (
-                  <Tr key={program.id}>
-                    {/* Thay đổi key thành program.id */}
-                    <Td>{idx + 1}</Td>
-                    <Td>
-                      <Link as={ReactRouterLink} to={program.id}>
-                        {program?.programId}
-                      </Link>
-                    </Td>
-                    <Td>{program.name}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          {programs && <ListProgram programs={programs}></ListProgram>}
         </GridItem>
       </Grid>
     </div>
