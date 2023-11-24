@@ -21,8 +21,8 @@ import { Login } from 'src/Pages/Login/Login';
 import { ManagementClassDetails } from 'src/Pages/ManagementClass/Details';
 import { ManagementClassList } from 'src/Pages/ManagementClass/List';
 import { PersonalInformation } from 'src/Pages/PersonalInformation/PersonalInformation';
-import ProgramDetails from 'src/Pages/Program/Details/ProgramDetails';
-import { ProgramComponent } from 'src/Pages/Program/Program';
+import ProgramDetails from 'src/Pages/Program/Details';
+import { ProgramComponent } from 'src/Pages/Program/List';
 import { Score } from 'src/Pages/Score/Score';
 
 export const routes: RouteObject[] = [
@@ -67,11 +67,7 @@ export const routes: RouteObject[] = [
           },
           {
             path: ':programId',
-            element: (
-              <BackToPage url='/program' text='Back to program list'>
-                <ProgramDetails />
-              </BackToPage>
-            ),
+            element: <ProgramDetails />,
           },
         ],
       },
