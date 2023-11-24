@@ -2,11 +2,12 @@ import { Flex, Spinner } from '@chakra-ui/react';
 
 type MainDataProps<T> = {
   data: T | T[] | null | undefined;
-  children: JSX.Element;
+  children: JSX.Element | null;
+  showSpinner: boolean;
 };
 
-const MainData = <T,>({ data, children }: MainDataProps<T>) => {
-  if (data === undefined) {
+const MainData = <T,>({ data, children, showSpinner }: MainDataProps<T>) => {
+  if (data === undefined || showSpinner) {
     return (
       <Flex justify='center'>
         <Spinner />

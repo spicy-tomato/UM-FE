@@ -1,20 +1,17 @@
 import {
-  Course,
   CourseClass,
   UMApplicationCourseClassCommandsBulkCreateBulkCreateCommand,
-  UMApplicationCourseQueriesGetAllGetAllDto,
-  UMDomainDtosCourseClassICourseClass,
-  UMDomainEnumsCourseClassECourseClassStatus,
 } from '@api';
 import {
+  Box,
   Button,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Grid,
-  GridItem,
-  Link,
+  Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -28,42 +25,18 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
+  Spinner,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { ValidationMessage } from '@constants';
-import { setStateWithApiFallback } from '@functions';
-import { useWaitUserInfo } from '@hooks';
-import { MainData, ProtectedComponent } from '@layout';
-import { User } from '@redux';
-import { AxiosResponse } from 'axios';
+import { CourseClassList_Get, CourseClassList_Reset, RootState } from '@redux';
+import { useDebounce } from '@uidotdev/usehooks';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link as ReactRouterLink } from 'react-router-dom';
-
-type CourseClassType = UMDomainDtosCourseClassICourseClass & {
-  teacher: {
-    id: string;
-    teacherId: string;
-    firstName: string;
-    middleName: string;
-    lastName: string;
-    isMale: boolean;
-  };
-  course: {
-    id: string;
-    name: string;
-    courseId: string;
-  };
-};
+import { AiOutlineSearch } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
 
 type CreateFormData = {
   courseId: string;
@@ -72,11 +45,46 @@ type CreateFormData = {
   sessionsCount: number;
 };
 
-type AddButtonProps = {
-  reload: () => void;
+const Search = () => {
+  const status = useSelector(
+    (store: RootState) => store.courseClassList.status
+  );
+  const [searchText, setSearchText] = useState('');
+  const dispatch = useDispatch();
+  const debouncedSearch = useDebounce(searchText, 300);
+  const first = useRef(true);
+
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+
+    const searchHN = async () => {
+      dispatch(CourseClassList_Get({ q: debouncedSearch }));
+    };
+
+    searchHN();
+  }, [debouncedSearch]);
+
+  return (
+    <InputGroup>
+      <Input
+        onChange={(e) => setSearchText(e.target.value)}
+        placeholder='Search...'
+      />
+      <InputRightElement>
+        {status === 'loading' ? <Spinner /> : <AiOutlineSearch />}
+      </InputRightElement>
+    </InputGroup>
+  );
 };
 
-const AddButton = ({ reload }: AddButtonProps) => {
+const AddButton = () => {
+  const courses = useSelector(
+    (state: RootState) => state.courseClassList.courses
+  );
+
   const {
     handleSubmit,
     register,
@@ -86,19 +94,11 @@ const AddButton = ({ reload }: AddButtonProps) => {
     formState: { errors },
   } = useForm<CreateFormData>();
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useDispatch();
   const watchStartAt = watch('startAt');
-  const user = useWaitUserInfo();
-  const [courses, setCourses] = useState<
-    UMApplicationCourseQueriesGetAllGetAllDto[] | undefined
-  >([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      setStateWithApiFallback(new Course().getCourse(), setCourses, []);
-    }
-  }, [user]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit: SubmitHandler<CreateFormData> = async (data) => {
     setIsSubmitting(true);
@@ -117,7 +117,7 @@ const AddButton = ({ reload }: AddButtonProps) => {
         isClosable: true,
       });
       onClickClose();
-      reload();
+      dispatch(CourseClassList_Get({}));
     } catch {
     } finally {
       setIsSubmitting(false);
@@ -225,108 +225,15 @@ const AddButton = ({ reload }: AddButtonProps) => {
   );
 };
 
-type ActionsProps = {
-  reload: () => void;
-};
-
-const Actions = ({ reload }: ActionsProps) => {
+const Actions = () => {
   return (
-    <Flex justify='end'>
-      <AddButton reload={reload}></AddButton>
+    <Flex justify='space-between'>
+      <Box w='50%' maxW='500px'>
+        <Search />
+      </Box>
+      <AddButton />
     </Flex>
   );
 };
 
-type ListProps = {
-  courseClasses: CourseClassType[];
-  user: User;
-};
-
-const List = ({ courseClasses, user }: ListProps) => {
-  return (
-    <MainData data={courseClasses}>
-      <TableContainer>
-        <Table variant='striped' size='sm'>
-          <Thead>
-            <Tr>
-              <Th>#</Th>
-              <Th>Class name</Th>
-              <Th>Course code</Th>
-              <Th>Course name</Th>
-              <Th textAlign='center'>Sessions</Th>
-              <Th textAlign='center'>Status</Th>
-              {user?.role !== 'Teacher' && <Th>Teacher</Th>}
-            </Tr>
-          </Thead>
-
-          <Tbody>
-            {courseClasses?.map((courseClass, idx) => {
-              const status = courseClass.status
-                ? UMDomainEnumsCourseClassECourseClassStatus[courseClass.status]
-                : null;
-
-              return (
-                <Tr key={idx}>
-                  <Td>{idx + 1}</Td>
-                  <Td>
-                    <Link as={ReactRouterLink} to={courseClass.id}>
-                      {courseClass?.name}
-                    </Link>
-                  </Td>
-                  <Td>{courseClass.course?.courseId}</Td>
-                  <Td>{courseClass.course?.name}</Td>
-                  <Td textAlign='center'>{courseClass?.sessionsCount}</Td>
-                  <Td textAlign='center'>{status}</Td>
-                  {user?.role !== 'Teacher' && (
-                    <Td>
-                      {courseClass?.teacher?.firstName}{' '}
-                      {courseClass?.teacher?.lastName}
-                    </Td>
-                  )}
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </MainData>
-  );
-};
-
-const CourseClassList = () => {
-  const user = useWaitUserInfo();
-  const [courseClasses, setCourseClasses] = useState<
-    CourseClassType[] | undefined
-  >();
-
-  const getCourseClasses = () => {
-    setStateWithApiFallback(
-      new CourseClass().getCourseClass({}) as Promise<AxiosResponse<any>>,
-      setCourseClasses,
-      []
-    );
-  };
-
-  useEffect(() => {
-    if (user) {
-      getCourseClasses();
-    }
-  }, [user]);
-
-  return (
-    <Grid rowGap='3'>
-      <GridItem>
-        <ProtectedComponent role='Admin' hideFallback>
-          <Actions reload={getCourseClasses}></Actions>
-        </ProtectedComponent>
-      </GridItem>
-      <GridItem>
-        {user && courseClasses && (
-          <List user={user} courseClasses={courseClasses}></List>
-        )}
-      </GridItem>
-    </Grid>
-  );
-};
-
-export { CourseClassList };
+export { Actions };

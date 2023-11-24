@@ -55,9 +55,10 @@ export type GetCourseClassData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMDomainDtosCourseClassICourseClass;
 
 export interface GetCourseClassParams {
-  AcademicYear?: string;
+  academicYear?: string;
+  q?: string;
   /** @format int32 */
-  Status?: number;
+  status?: number;
 }
 
 export type GetCourseData =
