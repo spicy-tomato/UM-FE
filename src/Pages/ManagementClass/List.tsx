@@ -60,13 +60,11 @@ const AddButton = ({ reload }: AddButtonProps) => {
   const {
     handleSubmit,
     register,
-    watch,
     reset,
     formState: { errors },
   } = useForm<CreateFormData>();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const watchStartAt = watch();
   const user = useWaitUserInfo();
   const [programs, setPrograms] = useState<
     UMApplicationProgramQueriesGetAllGetAllDto[] | undefined

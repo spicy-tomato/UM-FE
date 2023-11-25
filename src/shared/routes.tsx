@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { RoleConstant, RoleConstantValue, ValidRoutes } from '@constants';
-import { BackToPage, Layout, ProtectedComponent } from '@layout';
+import { Layout, ProtectedComponent } from '@layout';
 import { SideBarItem } from '@models';
 import { IconType } from 'react-icons';
 import {
@@ -21,8 +21,8 @@ import { Login } from 'src/Pages/Login/Login';
 import { ManagementClassDetails } from 'src/Pages/ManagementClass/Details';
 import { ManagementClassList } from 'src/Pages/ManagementClass/List';
 import { PersonalInformation } from 'src/Pages/PersonalInformation/PersonalInformation';
-import ProgramDetails from 'src/Pages/Program/Details';
-import { ProgramComponent } from 'src/Pages/Program/List';
+import { ProgramDetails } from 'src/Pages/Program/Details';
+import { ProgramList } from 'src/Pages/Program/List';
 import { Score } from 'src/Pages/Score/Score';
 
 export const routes: RouteObject[] = [
@@ -61,7 +61,7 @@ export const routes: RouteObject[] = [
             path: '',
             element: (
               <ProtectedComponent role='Admin'>
-                <ProgramComponent />
+                <ProgramList />
               </ProtectedComponent>
             ),
           },

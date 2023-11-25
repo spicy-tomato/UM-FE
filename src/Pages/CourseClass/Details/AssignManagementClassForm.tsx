@@ -14,17 +14,17 @@ import { Select } from 'chakra-react-select';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { DetailsButtonProps } from './DetailsShared';
+import { DetailsButtonProps } from './shared';
 
 type AssignFormData = {
-  students: readonly SelectItemType[];
+  managementClasses: readonly SelectItemType[];
 };
 
 const assignFormDataDefaultValues = (): AssignFormData => {
-  return { students: [] };
+  return { managementClasses: [] };
 };
 
-const DetailsAssignStudentsForm = ({
+const DetailsAssignManagementClassForm = ({
   close,
   reload,
   courseClass,
@@ -40,8 +40,8 @@ const DetailsAssignStudentsForm = ({
   });
   const toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const studentOptions = useSelector(
-    (store: RootState) => store.courseClassDetails.studentOptions
+  const managementClassOptions = useSelector(
+    (store: RootState) => store.courseClassDetails.managementClassOptions
   );
 
   useEffect(() => {
@@ -52,8 +52,8 @@ const DetailsAssignStudentsForm = ({
     setIsSubmitting(true);
 
     try {
-      await new CourseClass().assignToStudents(courseClass.id!, {
-        studentsId: data.students.map((s) => s.value),
+      await new CourseClass().assignToManagementClasses(courseClass.id!, {
+        managementClassesId: data.managementClasses.map((s) => s.value),
       });
 
       toast({
@@ -73,16 +73,18 @@ const DetailsAssignStudentsForm = ({
   return (
     <>
       <Flex direction='column' rowGap='3'>
-        <FormControl isInvalid={!!errors.students}>
-          <FormLabel>Students</FormLabel>
+        <FormControl isInvalid={!!errors.managementClasses}>
+          <FormLabel>Management classes</FormLabel>
           <Select
             isMulti
-            {...register('students', { required: ValidationMessage.required })}
-            options={studentOptions}
-            onChange={(option) => setValue('students', option)}
+            {...register('managementClasses', {
+              required: ValidationMessage.required,
+            })}
+            options={managementClassOptions}
+            onChange={(option) => setValue('managementClasses', option)}
           />
           <FormErrorMessage>
-            {errors.students && errors.students.message}
+            {errors.managementClasses && errors.managementClasses.message}
           </FormErrorMessage>
         </FormControl>
       </Flex>
@@ -101,4 +103,4 @@ const DetailsAssignStudentsForm = ({
   );
 };
 
-export { DetailsAssignStudentsForm };
+export { DetailsAssignManagementClassForm };

@@ -44,7 +44,8 @@
       "@hooks": ["./src/shared/hooks"],
       "@models": ["./src/shared/models"],
       "@redux": ["./src/redux"],
-      "@routes": ["./src/shared/routes"]
+      "@routes": ["./src/shared/routes"],
+      "@types": ["./src/shared/types"],
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */

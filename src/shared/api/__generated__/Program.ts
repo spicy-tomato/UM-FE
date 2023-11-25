@@ -13,6 +13,7 @@ import {
   DeleteProgramData,
   GetProgramByIdData,
   GetProgramData,
+  GetProgramParams,
   PostProgramData,
   PutProgramData,
   UMApplicationProgramCommandsCreateCreateCommand,
@@ -29,10 +30,11 @@ export class Program<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @request GET:/Program
    * @response `200` `GetProgramData` Success
    */
-  getProgram = (params: RequestParams = {}) =>
+  getProgram = (query: GetProgramParams, params: RequestParams = {}) =>
     this.request<GetProgramData>({
       path: `/Program`,
       method: "GET",
+      query: query,
       ...params,
     });
   /**

@@ -1,7 +1,4 @@
-import {
-  CourseClass,
-  UMApplicationCourseClassQueriesGetByIdGetByIdDto,
-} from '@api';
+import { CourseClass } from '@api';
 import {
   Button,
   Flex,
@@ -11,33 +8,23 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ValidationMessage } from '@constants';
-import { StringHelper } from '@helpers';
 import { SelectItemType } from '@models';
 import { RootState } from '@redux';
 import { Select } from 'chakra-react-select';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { DetailsButtonProps } from './DetailsShared';
+import { DetailsButtonProps } from './shared';
 
 type AssignFormData = {
-  teacher: SelectItemType | null;
+  students: readonly SelectItemType[];
 };
 
-const assignFormDataDefaultValues = (
-  courseClass: UMApplicationCourseClassQueriesGetByIdGetByIdDto
-): AssignFormData => {
-  return {
-    teacher: courseClass.teacher
-      ? {
-          value: courseClass.teacher.id!,
-          label: StringHelper.shortName(courseClass.teacher),
-        }
-      : null,
-  };
+const assignFormDataDefaultValues = (): AssignFormData => {
+  return { students: [] };
 };
 
-const DetailsAssignTeacherForm = ({
+const DetailsAssignStudentsForm = ({
   close,
   reload,
   courseClass,
@@ -47,30 +34,27 @@ const DetailsAssignTeacherForm = ({
     register,
     setValue,
     reset,
-    watch,
     formState: { errors },
   } = useForm<AssignFormData>({
-    defaultValues: assignFormDataDefaultValues(courseClass),
+    defaultValues: assignFormDataDefaultValues(),
   });
   const toast = useToast();
-  const watchTeacher = watch('teacher');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const teacherOptions = useSelector(
-    (store: RootState) => store.courseClassDetails.teacherOptions
+  const studentOptions = useSelector(
+    (store: RootState) => store.courseClassDetails.studentOptions
   );
 
   useEffect(() => {
-    reset(assignFormDataDefaultValues(courseClass));
+    reset(assignFormDataDefaultValues());
   }, [courseClass]);
 
   const onSubmit: SubmitHandler<AssignFormData> = async (data) => {
     setIsSubmitting(true);
 
     try {
-      await new CourseClass().assignToTeacher(
-        courseClass.id!,
-        data.teacher!.value
-      );
+      await new CourseClass().assignToStudents(courseClass.id!, {
+        studentsId: data.students.map((s) => s.value),
+      });
 
       toast({
         title: 'Modified successfully',
@@ -89,18 +73,16 @@ const DetailsAssignTeacherForm = ({
   return (
     <>
       <Flex direction='column' rowGap='3'>
-        <FormControl isInvalid={!!errors.teacher}>
-          <FormLabel>Teacher</FormLabel>
+        <FormControl isInvalid={!!errors.students}>
+          <FormLabel>Students</FormLabel>
           <Select
-            {...register('teacher', {
-              required: ValidationMessage.required,
-            })}
-            options={teacherOptions}
-            value={watchTeacher}
-            onChange={(option) => setValue('teacher', option)}
+            isMulti
+            {...register('students', { required: ValidationMessage.required })}
+            options={studentOptions}
+            onChange={(option) => setValue('students', option)}
           />
           <FormErrorMessage>
-            {errors.teacher && errors.teacher.message}
+            {errors.students && errors.students.message}
           </FormErrorMessage>
         </FormControl>
       </Flex>
@@ -119,4 +101,4 @@ const DetailsAssignTeacherForm = ({
   );
 };
 
-export { DetailsAssignTeacherForm };
+export { DetailsAssignStudentsForm };

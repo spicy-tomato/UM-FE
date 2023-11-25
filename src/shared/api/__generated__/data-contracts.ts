@@ -87,6 +87,10 @@ export type GetProgramByIdData = UMApplicationCommonModelsResultUMApplicationPro
 export type GetProgramData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationProgramQueriesGetAllGetAllDto;
 
+export interface GetProgramParams {
+  q?: string;
+}
+
 export type GetRecommendationsData = UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableSystemString;
 
 export type GetScoreData =

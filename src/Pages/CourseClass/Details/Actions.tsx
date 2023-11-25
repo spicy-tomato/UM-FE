@@ -47,9 +47,9 @@ import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { DetailsAssignManagementClassForm } from 'src/Pages/CourseClass/Details/DetailsAssignManagementClassForm';
-import { DetailsAssignStudentsForm } from 'src/Pages/CourseClass/Details/DetailsAssignStudentsForm';
-import { DetailsAssignTeacherForm } from 'src/Pages/CourseClass/Details/DetailsAssignTeacherForm';
+import { DetailsAssignManagementClassForm } from 'src/Pages/CourseClass/Details/AssignManagementClassForm';
+import { DetailsAssignStudentsForm } from 'src/Pages/CourseClass/Details/AssignStudentsForm';
+import { DetailsAssignTeacherForm } from 'src/Pages/CourseClass/Details/AssignTeacherForm';
 
 type EditFormData = {
   name: string;

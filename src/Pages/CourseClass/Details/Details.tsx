@@ -13,9 +13,9 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Actions } from './DetailsActions';
-import { InfoCard } from './DetailsInfoCard';
-import { Score } from './DetailsScore';
+import { Actions } from './Actions';
+import { InfoCard } from './InfoCard';
+import { Score } from './Score';
 
 const CourseClassDetails = () => {
   const params = useParams();

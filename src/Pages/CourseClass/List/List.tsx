@@ -9,8 +9,8 @@ import {
 } from '@redux';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions } from './ListActions';
-import { ListTable } from './ListTable';
+import { Actions } from './Actions';
+import { ListTable } from './Table';
 
 const CourseClassList = () => {
   const dispatch = useDispatch();

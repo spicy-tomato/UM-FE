@@ -4,7 +4,9 @@
     "Chakra",
     "dayzed",
     "Googleclassroom",
-    "reduxjs"
+    "reduxjs",
+    "uidotdev",
+    "usehooks"
   ],
   "prettier.singleQuote": true,
   "prettier.jsxSingleQuote": true,

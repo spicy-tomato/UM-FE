@@ -1,60 +1,18 @@
-import {
-  Box,
-  Button,
-  Button as ChakraButton,
-  Card,
-  CardBody,
-  CardHeader,
-  HStack,
-  Heading,
-  Stack,
-  Text,
-  StackDivider,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  FormControl,
-  FormLabel,
-  Input,
-  ModalFooter,
-  useToast,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Flex,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  Program,
-  UMApplicationProgramQueriesGetByIdGetByIdDto,
-  UMApplicationProgramQueriesGetByIdGetByIdDtoCourse,
-} from '../../shared/api';
-import { useNavigate, useParams } from 'react-router-dom';
-import { setStateWithApiFallback } from '../../shared/functions';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { BackToPage, MainData } from '@layout';
+import { Program, UMApplicationProgramQueriesGetByIdGetByIdDto } from '@api';
+import { useToast, useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Flex, FormControl, FormLabel, Input, FormErrorMessage, ModalFooter, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter } from '@chakra-ui/react';
+import { ValidationMessage } from '@constants';
+import { useState, useEffect, useRef } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
-type ContentProps = {
+type ButtonProps = {
+  reload?: () => void;
   program: UMApplicationProgramQueriesGetByIdGetByIdDto;
 };
 
 type EditFormData = {
   name: string;
   programId: string;
-};
-
-type ButtonProps = {
-  reload?: () => void;
-  program: UMApplicationProgramQueriesGetByIdGetByIdDto;
 };
 
 const editFormDataDefaultValues = (
@@ -65,8 +23,8 @@ const editFormDataDefaultValues = (
 
 const EditButton = ({ reload, program }: ButtonProps) => {
   const {
+    register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm<EditFormData>({
@@ -116,37 +74,46 @@ const EditButton = ({ reload, program }: ButtonProps) => {
           <ModalHeader>Program Details</ModalHeader>
           <ModalCloseButton />
 
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Program ID:</FormLabel>
-              <Input
-                type='text'
-                name='programId'
-                defaultValue={program?.programId ?? undefined}
-                onChange={(e) => setValue('programId', e.target.value)}
-              />
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel>Program Name:</FormLabel>
-              <Input
-                type='text'
-                name='name'
-                defaultValue={program?.name ?? undefined}
-                onChange={(e) => setValue('name', e.target.value)}
-              />
-            </FormControl>
-            <ModalFooter>
-              <ChakraButton onClick={onClickClose}>Cancel</ChakraButton>
-              <ChakraButton
-                colorScheme='blue'
-                ml={3}
-                onClick={handleSubmit(onSubmit)}
-                isLoading={isSubmitting}
-              >
-                Save
-              </ChakraButton>
-            </ModalFooter>
+          <ModalBody>
+            <Flex direction='column' rowGap='3'>
+              <FormControl isInvalid={!!errors.programId}>
+                <FormLabel>Program ID:</FormLabel>
+                <Input
+                  {...register('programId', {
+                    required: ValidationMessage.required,
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.programId && errors.programId.message}
+                </FormErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.name}>
+                <FormLabel>Program Name:</FormLabel>
+                <Input
+                  {...register('name', {
+                    required: ValidationMessage.required,
+                  })}
+                  autoComplete='off'
+                />
+                <FormErrorMessage>
+                  {errors.name && errors.name.message}
+                </FormErrorMessage>
+              </FormControl>
+            </Flex>
           </ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onClickClose}>Cancel</Button>
+            <Button
+              colorScheme='blue'
+              ml={3}
+              onClick={handleSubmit(onSubmit)}
+              isLoading={isSubmitting}
+            >
+              Save
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
@@ -233,66 +200,4 @@ const Actions = ({ reload, program }: ActionsProps) => {
   );
 };
 
-const InfoCard = ({ program }: ContentProps) => {
-  return (
-    <Card>
-      <CardHeader>
-        <Heading>{program?.name}</Heading>
-      </CardHeader>
-
-      <CardBody>
-        <Stack divider={<StackDivider />} spacing='4'>
-          <Box>
-            <Heading size='xs' textTransform='uppercase'>
-              Program
-            </Heading>
-            <Text>
-              {program?.name} ({program.programId})
-            </Text>
-          </Box>
-        </Stack>
-      </CardBody>
-    </Card>
-  );
-};
-
-const Content = ({ program }: ContentProps) => {
-  return (
-    <Grid rowGap={3}>
-      <GridItem>
-        <InfoCard program={program} />
-      </GridItem>
-    </Grid>
-  );
-};
-
-const ProgramDetails = () => {
-  const params = useParams();
-  const [program, setProgram] = useState<
-    UMApplicationProgramQueriesGetByIdGetByIdDto | null | undefined
-  >();
-
-  const getProgram = () => {
-    const id = params.programId;
-    if (id) {
-      setStateWithApiFallback(new Program().getProgramById(id), setProgram);
-    }
-  };
-  useEffect(() => {
-    getProgram();
-  }, [params]);
-
-  return (
-    <MainData data={program}>
-      <BackToPage
-        url='/program'
-        text='Back to program list'
-        rightContent={<Actions reload={getProgram} program={program!} />}
-      >
-        <Content program={program!} />
-      </BackToPage>
-    </MainData>
-  );
-};
-
-export default ProgramDetails;
+export { Actions };

@@ -863,6 +863,11 @@ paths:
     get:
       tags:
         - Program
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
       responses:
         '200':
           description: Success

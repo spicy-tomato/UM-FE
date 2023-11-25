@@ -1,9 +1,9 @@
 import { Flex, Spinner } from '@chakra-ui/react';
 
 type MainDataProps<T> = {
-  data: T | T[] | null | undefined;
+  data?: T | T[] | null;
   children: JSX.Element | null;
-  showSpinner: boolean;
+  showSpinner?: boolean;
 };
 
 const MainData = <T,>({ data, children, showSpinner }: MainDataProps<T>) => {
