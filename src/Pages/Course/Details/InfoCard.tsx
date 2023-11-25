@@ -1,4 +1,4 @@
-import { GetProgramByIdData } from '@api';
+import { GetCourseByIdData } from '@api';
 import {
   Box,
   Card,
@@ -11,26 +11,24 @@ import {
 } from '@chakra-ui/react';
 import { RetrieveData } from '@types';
 
-const InfoCard = ({
-  program,
-}: {
-  program: RetrieveData<GetProgramByIdData>;
-}) => {
+const InfoCard = ({ course }: { course: RetrieveData<GetCourseByIdData> }) => {
   return (
     <Card>
       <CardHeader>
-        <Heading>{program.name}</Heading>
+        <Heading>
+          {course.name} ({course.courseId})
+        </Heading>
       </CardHeader>
 
       <CardBody>
         <Stack divider={<StackDivider />} spacing='4'>
           <Box>
-            <Heading size='xs' textTransform='uppercase'>
-              Program ID
+            {/* <Heading size='xs' textTransform='uppercase'>
+              Program
             </Heading>
             <Text>
-              {program.name} ({program.programId})
-            </Text>
+              {course?.name} ({course.courseId})
+            </Text> */}
           </Box>
         </Stack>
       </CardBody>

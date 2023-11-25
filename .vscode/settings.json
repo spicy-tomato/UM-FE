@@ -6,7 +6,8 @@
     "Googleclassroom",
     "reduxjs",
     "uidotdev",
-    "usehooks"
+    "usehooks",
+    "varnames"
   ],
   "prettier.singleQuote": true,
   "prettier.jsxSingleQuote": true,

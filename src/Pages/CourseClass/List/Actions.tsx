@@ -30,7 +30,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ValidationMessage } from '@constants';
-import { CourseClassList_Get, CourseClassList_Reset, RootState } from '@redux';
+import { CourseClassList_Get, RootState } from '@redux';
 import { useDebounce } from '@uidotdev/usehooks';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { useEffect, useRef, useState } from 'react';

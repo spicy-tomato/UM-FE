@@ -1,4 +1,4 @@
-import { GetProgramByIdData, Program } from '@api';
+import { Course, GetCourseByIdData } from '@api';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -23,7 +23,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ValidationMessage } from '@constants';
-import { ProgramDetails_Reload } from '@redux';
+import { CourseDetails_Reset } from '@redux';
 import { RetrieveData } from '@types';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -31,44 +31,43 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 type ButtonProps = {
-  program: RetrieveData<GetProgramByIdData>;
+  course: RetrieveData<GetCourseByIdData>;
 };
 
 type EditFormData = {
   name: string;
-  programId: string;
+  courseId: string;
 };
 
 const editFormDataDefaultValues = (
-  program: RetrieveData<GetProgramByIdData>
+  course: RetrieveData<GetCourseByIdData>
 ): EditFormData => {
-  return { name: program.name!, programId: program.programId! };
+  return { name: course.name!, courseId: course.courseId! };
 };
 
-const EditButton = ({ program }: ButtonProps) => {
+const EditButton = ({ course }: ButtonProps) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<EditFormData>({
-    defaultValues: editFormDataDefaultValues(program),
+    defaultValues: editFormDataDefaultValues(course),
   });
-
   const toast = useToast();
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    reset(editFormDataDefaultValues(program));
-  }, [program]);
+    reset(editFormDataDefaultValues(course));
+  }, [course]);
 
   const onSubmit: SubmitHandler<EditFormData> = async (data) => {
     setIsSubmitting(true);
 
     try {
-      await new Program().putProgram(program.id!, data);
+      await new Course().putCourse(course.id!, data);
 
       toast({
         title: 'Modified successfully',
@@ -77,7 +76,7 @@ const EditButton = ({ program }: ButtonProps) => {
       });
       onClickClose();
 
-      dispatch(ProgramDetails_Reload());
+      dispatch(CourseDetails_Reset());
     } catch {
     } finally {
       setIsSubmitting(false);
@@ -98,25 +97,25 @@ const EditButton = ({ program }: ButtonProps) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Program Details</ModalHeader>
+          <ModalHeader>Course Details</ModalHeader>
           <ModalCloseButton />
 
           <ModalBody>
             <Flex direction='column' rowGap='3'>
-              <FormControl isInvalid={!!errors.programId}>
-                <FormLabel>Program ID:</FormLabel>
+              <FormControl isInvalid={!!errors.courseId}>
+                <FormLabel>Course ID:</FormLabel>
                 <Input
-                  {...register('programId', {
+                  {...register('courseId', {
                     required: ValidationMessage.required,
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.programId && errors.programId.message}
+                  {errors.courseId && errors.courseId.message}
                 </FormErrorMessage>
               </FormControl>
 
               <FormControl isInvalid={!!errors.name}>
-                <FormLabel>Program Name:</FormLabel>
+                <FormLabel>Course Name:</FormLabel>
                 <Input
                   {...register('name', {
                     required: ValidationMessage.required,
@@ -147,7 +146,7 @@ const EditButton = ({ program }: ButtonProps) => {
   );
 };
 
-const DeleteButton = ({ program }: ButtonProps) => {
+const DeleteButton = ({ course }: ButtonProps) => {
   const toast = useToast();
   const navigate = useNavigate();
   const cancelRef = useRef(null);
@@ -158,15 +157,15 @@ const DeleteButton = ({ program }: ButtonProps) => {
     setIsSubmitting(true);
 
     try {
-      await new Program().deleteProgram(program.id!);
+      await new Course().deleteCourse(course.id!);
 
       toast({
-        title: 'Deleted program successfully!',
+        title: 'Deleted course successfully!',
         status: 'success',
         isClosable: true,
       });
       onClose();
-      navigate('/program');
+      navigate('/course');
     } catch {
     } finally {
       setIsSubmitting(false);
@@ -186,7 +185,7 @@ const DeleteButton = ({ program }: ButtonProps) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Delete program
+              Delete course
             </AlertDialogHeader>
 
             <AlertDialogBody>
@@ -214,14 +213,14 @@ const DeleteButton = ({ program }: ButtonProps) => {
 };
 
 type ActionsProps = {
-  program: RetrieveData<GetProgramByIdData>;
+  course: RetrieveData<GetCourseByIdData>;
 };
 
-const Actions = ({ program }: ActionsProps) => {
+const Actions = ({ course }: ActionsProps) => {
   return (
     <Flex justify='end' columnGap={2}>
-      <EditButton program={program} />
-      <DeleteButton program={program} />
+      <EditButton course={course} />
+      <DeleteButton course={course} />
     </Flex>
   );
 };

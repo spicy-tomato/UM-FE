@@ -1,34 +1,40 @@
-import { Program, UMApplicationProgramQueriesGetByIdGetByIdDto } from '@api';
 import { Grid, GridItem } from '@chakra-ui/react';
-import { setStateWithApiFallback } from '@functions';
+import { useWaitUserInfo } from '@hooks';
 import { BackToPage, MainData } from '@layout';
-import { useEffect, useState } from 'react';
+import { ProgramDetails_Get, ProgramDetails_Reset, RootState } from '@redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Actions } from './Actions';
 import { InfoCard } from './InfoCard';
 
 const ProgramDetails = () => {
-  const params = useParams();
-  const [program, setProgram] = useState<
-    UMApplicationProgramQueriesGetByIdGetByIdDto | null | undefined
-  >();
+  const program = useSelector((s: RootState) => s.programDetails.program);
 
-  const getProgram = () => {
-    const id = params.programId;
-    if (id) {
-      setStateWithApiFallback(new Program().getProgramById(id), setProgram);
-    }
-  };
+  const params = useParams();
+  const user = useWaitUserInfo();
+  const dispatch = useDispatch();
+
+  const programId = params.programId;
+
   useEffect(() => {
-    getProgram();
-  }, [params]);
+    return () => {
+      dispatch(ProgramDetails_Reset());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user && programId) {
+      dispatch(ProgramDetails_Get(programId));
+    }
+  }, [user, programId]);
 
   return (
     <MainData data={program}>
       <BackToPage
         url='/program'
         text='Back to program list'
-        rightContent={<Actions reload={getProgram} program={program!} />}
+        rightContent={<Actions program={program!} />}
       >
         <Grid rowGap={3}>
           <GridItem>

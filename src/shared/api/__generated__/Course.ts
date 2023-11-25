@@ -13,6 +13,7 @@ import {
   DeleteCourseData,
   GetCourseByIdData,
   GetCourseData,
+  GetCourseParams,
   PostCourseData,
   PutCourseData,
   UMApplicationCourseCommandsCreateCreateCommand,
@@ -29,10 +30,11 @@ export class Course<SecurityDataType = unknown> extends HttpClient<SecurityDataT
    * @request GET:/Course
    * @response `200` `GetCourseData` Success
    */
-  getCourse = (params: RequestParams = {}) =>
+  getCourse = (query: GetCourseParams, params: RequestParams = {}) =>
     this.request<GetCourseData>({
       path: `/Course`,
       method: "GET",
+      query: query,
       ...params,
     });
   /**

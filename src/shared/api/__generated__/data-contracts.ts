@@ -64,6 +64,10 @@ export interface GetCourseClassParams {
 export type GetCourseData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseQueriesGetAllGetAllDto;
 
+export interface GetCourseParams {
+  q?: string;
+}
+
 export type GetCourseRecommendationStudentsData =
   UMApplicationCommonModelsResultSystemCollectionsGenericIEnumerableUMApplicationCourseClassQueriesGetRecommendationStudentsGetRecommendationStudentsDto;
 

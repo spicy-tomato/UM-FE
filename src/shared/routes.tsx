@@ -13,7 +13,8 @@ import { PiExamFill } from 'react-icons/pi';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Navigate, RouteObject } from 'react-router-dom';
 import { Calendar } from 'src/Pages/Calendar/Calendar';
-import { CourseComponent } from 'src/Pages/Course/Course';
+import { CourseDetails } from 'src/Pages/Course/Details';
+import { CourseList } from 'src/Pages/Course/List';
 import { CourseClassDetails } from 'src/Pages/CourseClass/Details';
 import { CourseClassList } from 'src/Pages/CourseClass/List';
 import { Home } from 'src/Pages/Home/Home';
@@ -52,7 +53,20 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'course',
-        element: <CourseComponent />,
+        children: [
+          {
+            path: '',
+            element: (
+              <ProtectedComponent role='Admin'>
+                <CourseList />
+              </ProtectedComponent>
+            ),
+          },
+          {
+            path: ':courseId',
+            element: <CourseDetails />,
+          },
+        ],
       },
       {
         path: 'program',

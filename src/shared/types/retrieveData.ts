@@ -5,4 +5,8 @@ export type RetrievableData<D> = {
 export type RetrieveData<
   T extends RetrievableData<D>,
   D = any,
-> = T['data'] extends (infer K)[] | undefined ? K[] : never;
+> = T['data'] extends (infer K)[] | undefined
+  ? K[]
+  : T['data'] extends infer K | undefined
+  ? K
+  : never;
